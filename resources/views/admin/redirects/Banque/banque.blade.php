@@ -200,6 +200,8 @@ Banque | Log Dist Du Nord
 @section('script')
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
+            const backendUrl = "{{ app('backendUrl') }}";
+
         // import swal from 'sweetalert';
 
         function showModel(nom,id){
@@ -214,7 +216,7 @@ Banque | Log Dist Du Nord
 
         //      function displaydatabank(){
         // //     $.ajax({
-        // //         url: 'https://iker.wiicode.tech/api/bank',
+        // //         url: backendUrl + '/bank',
         // //         type: 'GET',
         // //         dataType: 'json',
         // //         success: function(data) {
@@ -291,7 +293,7 @@ Banque | Log Dist Du Nord
             const COMMENTAIRE = $("#Commentaire").val();
 
             $.ajax({
-                url: "https://iker.wiicode.tech/api/bank",
+                url: backendUrl + "/bank",
                 type: "POST",
                 data: {
                     nomBank: NOMBANK,
@@ -340,7 +342,7 @@ Banque | Log Dist Du Nord
             $("#myLargeModalLabel").text('Edit banque');
 
             $.ajax({
-                url: 'https://iker.wiicode.tech/api/bank/' + id,
+                url: backendUrl + '/bank/' + id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -369,7 +371,7 @@ Banque | Log Dist Du Nord
 
             $.ajax({
 
-                url: "https://iker.wiicode.tech/api/bank/ " + ID,
+                url: backendUrl + "/bank/ " + ID,
                 type: "put",
                 data: {
                     nomBank: NOMBANK,
@@ -418,7 +420,7 @@ Banque | Log Dist Du Nord
               $(this).val('');
             });
             $.ajax({
-                url: 'https://iker.wiicode.tech/api/bank/' + id,
+                url: backendUrl + '/bank/' + id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -445,7 +447,7 @@ Banque | Log Dist Du Nord
         var motif = $('#motif').val();
 
         $.ajax({
-            url: "https://iker.wiicode.tech/api/withdraw",
+            url: backendUrl + "/withdraw",
             type: 'POST',
             data: {
                 type: typetransaction,
@@ -482,7 +484,7 @@ Banque | Log Dist Du Nord
             if (willDelete) {
                            
             $.ajax({
-            url: "https://iker.wiicode.tech/api/bank/ " + id ,
+            url: backendUrl + "/bank/ " + id ,
             type: "delete",
                 dataType: "json",
                 success: function(response) {

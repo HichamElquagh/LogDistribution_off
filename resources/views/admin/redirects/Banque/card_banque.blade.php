@@ -161,6 +161,8 @@
   {{-- <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script> <!-- Replace "your-fontawesome-kit" with your own Font Awesome kit ID --> --}}
 
   <script>
+        const backendUrl = "{{ app('backendUrl') }}";
+
     $(document).ready(function() {
       cardbank();
       loadOperations();
@@ -169,7 +171,7 @@
 
     function cardbank() {
       $.ajax({
-        url: "https://iker.wiicode.tech/api/bank",
+        url: backendUrl +"/bank",
         type: "GET",
         dataType: "json",
         success: function(data) {
@@ -193,7 +195,7 @@
 
     function loadOperations() {
     $.ajax({
-      url: "https://iker.wiicode.tech/api/opbank",
+      url: backendUrl +"/opbank",
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -334,7 +336,7 @@ motifElement.addClass("text-sm-start text-md-center text-lg-end");
 
 function loadTransactions() {
   $.ajax({
-    url: "https://iker.wiicode.tech/api/trbank",
+    url: backendUrl +"/trbank",
     type: "GET",
     dataType: "json",
     success: function(data) {

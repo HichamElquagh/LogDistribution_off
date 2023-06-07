@@ -170,7 +170,15 @@
                         <li>
                             <a href="{{ route('secteurVendeur') }}" class="waves-effect">
                                 <i class="ri-user-location-line"></i>
-                                <span>Vendeur</span>
+                               <span>Vendeur</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('secteurCamion') }}" class="waves-effect">
+                                 <i class="ri-truck-line"></i>  
+
+                                <span>Camion</span>
                             </a>
                         </li>
 
@@ -234,6 +242,12 @@
                     <a href="{{ route('adminwarehouse') }}" class="waves-effect">
                         <i class="ri-building-line"></i>
                         <span>Entrepôt</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('adminentreprise') }}" class="waves-effect">
+                        <i class="fas fa-building"></i>
+                        <span>Entreprise</span>
                     </a>
                 </li>
             

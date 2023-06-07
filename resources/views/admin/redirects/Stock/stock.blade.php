@@ -161,6 +161,8 @@ Stock | Log Dist Du Nord
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         // import swal from 'sweetalert';
+        const backendUrl = "{{ app('backendUrl') }}";
+
 
         function showModel(nom,id){
             document.querySelector("#category").value = nom;
@@ -174,7 +176,7 @@ Stock | Log Dist Du Nord
     
 function displaydatastock() {
     $.ajax({
-        url: "https://iker.wiicode.tech/api/inventories",
+        url: backendUrl + "/inventories",
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -253,7 +255,7 @@ function displaydatastock() {
         $("#decrease-btn").hide();
         $("#addto-btn").show();
         $.ajax({
-                url: "https://iker.wiicode.tech/api/inventories/" + id,
+                url: backendUrl + "/inventories/" + id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -288,7 +290,7 @@ function displaydatastock() {
         $("#addto-btn").hide();
         $("#decrease-btn").show();
         $.ajax({
-                url: "https://iker.wiicode.tech/api/inventories/" + id,
+                url: backendUrl + "/inventories/" + id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -315,7 +317,7 @@ function displaydatastock() {
             const Total_stock = $("#calcul_total_stock").val();
               if (Total_stock >=0) {
                 $.ajax({
-                url: "https://iker.wiicode.tech/api/inventories/" + ID,
+                url: backendUrl + "/inventories/" + ID,
                 type: "put",
                  data: {
                     actual_stock : Total_stock,
@@ -362,7 +364,7 @@ function displaydatastock() {
           
               } else if ( checkDecrease_stock <= check_Actul_stock ) {
                 $.ajax({
-                url: "https://iker.wiicode.tech/api/inventories/" + ID,
+                url: backendUrl + "/inventories/" + ID,
                 type: "put",
                  data: {
                     actual_stock : Total_stock,
@@ -429,7 +431,7 @@ function displaydatastock() {
     const actual_stock = $("#actual_stock").val();
 
     $.ajax({
-        url: "https://iker.wiicode.tech/api/inventories",
+        url: backendUrl + "/inventories",
         type: "POST",
         data: {
             article_id: nomArticle,
@@ -462,7 +464,7 @@ function displaydatastock() {
             $("#decrease-btn").hide();
 
             $.ajax({
-                url: "https://iker.wiicode.tech/api/inventories/" + id,
+                url: backendUrl + "/inventories/" + id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -486,7 +488,7 @@ function displaydatastock() {
             const Actual_Stock = $("#actual_stock").val();
             if (Actual_Stock >= 0) {
                 $.ajax({
-                url: "https://iker.wiicode.tech/api/inventories/" + ID,
+                url: backendUrl + "/inventories/" + ID,
                 type: "put",
                  data: {
                     actual_stock : Actual_Stock,
@@ -526,7 +528,7 @@ function displaydatastock() {
             if (willDelete) {
                            
             $.ajax({
-            url: "https://iker.wiicode.tech/api/inventories/" + id ,
+            url: backendUrl + "/inventories/" + id ,
             type: "delete",
                 dataType: "json",
                 success: function(response) {

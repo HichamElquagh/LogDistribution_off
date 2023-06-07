@@ -177,6 +177,8 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
+      
+      const backendUrl = "{{ app('backendUrl') }}";
   $(document).ready(function(){
     displaydataArticles();
   });
@@ -200,7 +202,7 @@
 
   function displaydataArticles() {
     $.ajax({
-      url: "https://iker.wiicode.tech/api/articles",
+      url: backendUrl + "/articles",
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -251,7 +253,7 @@
     var articlePA = $('#articlepa').val();
 
     $.ajax({
-        url: "https://iker.wiicode.tech/api/articles",  
+        url: backendUrl + "/articles",  
       type: 'POST',
         data: {
             article_libelle: articleLibelle,
@@ -291,7 +293,7 @@ function editArticle(id){
    $("#update-btn").show()
    $("#myLargeModalLabel").text('Edit Article');
    $.ajax({
-    url: "https://iker.wiicode.tech/api/articles/" + id,
+    url: backendUrl + "/articles/" + id,
        type: 'GET',
        dataType: 'json',
       success: function(data) {
@@ -332,7 +334,7 @@ function updateArticle() {
     var articlePA = $('#articlepa').val();
 
     $.ajax({
-        url: "https://iker.wiicode.tech/api/articles/" + articleId,  
+        url: backendUrl + "/articles/" + articleId,  
         type: 'PUT',  // Use 'PUT' for update operation
         data: {
             article_libelle: articleLibelle,
@@ -378,7 +380,7 @@ function updateArticle() {
             if (willDelete) {
                            
             $.ajax({
-                url: "https://iker.wiicode.tech/api/articles/" + id,  
+                url: backendUrl + "/articles/" + id,  
                 type: "delete",
                 dataType: "json",
                 success: function(response) {

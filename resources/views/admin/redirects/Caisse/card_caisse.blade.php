@@ -169,6 +169,8 @@
   {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script> --}}
 
   <script>
+        const backendUrl = "{{ app('backendUrl') }}";
+
     $(document).ready(function() {
       displayCaisseCards();
       loadOperations();
@@ -177,7 +179,7 @@
 
     function displayCaisseCards() {
       $.ajax({
-        url: "https://iker.wiicode.tech/api/caisse",
+        url: backendUrl +"/caisse",
         type: "GET",
         dataType: "json",
         success: function(data) {
@@ -201,7 +203,7 @@
     }
     function loadOperations() {
       $.ajax({
-        url: "https://iker.wiicode.tech/api/opcaisse",
+        url: backendUrl +"/opcaisse",
         type: "GET",
         dataType: "json",
         success: function(data) {
@@ -340,7 +342,7 @@ motifElement.addClass("text-sm-start text-md-center text-lg-end");
 
 function loadTransactions() {
   $.ajax({
-    url: "https://iker.wiicode.tech/api/trcaisse",
+    url: backendUrl +"/trcaisse",
     type: "GET",
     dataType: "json",
     success: function(data) {

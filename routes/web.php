@@ -19,6 +19,8 @@ use App\Http\Controllers\admin\Personnel\EmployesController;
 use App\Http\Controllers\admin\Secteur\BonSecteurController;
 use App\Http\Controllers\admin\Vente\FactureVenteController;
 use App\Http\Controllers\Admin\Personnel\MagaziniersController;
+use App\Http\Controllers\admin\Secteur\CamionController;
+use App\Http\Controllers\EntrepriseController;
 
 Route::controller(DashboardController::class)->group(function() {
     Route::get('/', 'Index')->name('adminDashboard');
@@ -132,6 +134,9 @@ Route::controller(App\Http\Controllers\Admin\Vente\PaiementController::class)->g
 Route::controller(VendeurController::class)->group(function() {
     Route::get('/vendeurs', 'ListeVendeur')->name('secteurVendeur');
 });
+Route::controller(CamionController::class)->group(function() {
+    Route::get('/Camion', 'Index')->name('secteurCamion');
+});
 
 Route::controller(BonSortieController::class)->group(function() {
     Route::prefix('/bon-sortie-secteur')->group(function() {
@@ -178,4 +183,7 @@ Route::controller(DepenseController::class)->group(function() {
      Route::get('/depense/{id}', 'EditDepense')->name('editBanque');
      Route::put('/depense/{id?}', 'updateDepense')->name('updatedepense');
     Route::delete('/depense/{id}', 'Deletedepense')->name('deletedepense');
+});
+Route::controller(EntrepriseController::class)->group(function() {
+    Route::get('/Entreprise', 'Index')->name('adminentreprise');
 });

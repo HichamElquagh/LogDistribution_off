@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 class VendeurController extends Controller
 {
     public function ListeVendeur(){
+
+        
         return view('admin.secteur.vendeur');
     }
 }
