@@ -135,6 +135,8 @@ Depenses | Log Dist Du Nord
 @section('script')
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
+            const backendUrl = "{{ app('backendUrl') }}";
+
         function showModel(nom,tax,id){
             document.querySelector("#Depense").value = nom;
             document.querySelector("#DepenseId").value = id;
@@ -151,7 +153,7 @@ Depenses | Log Dist Du Nord
         function displaydatadepense(){
 
         $.ajax({
-           url : "https://iker.wiicode.tech/api/depense",
+           url :  backendUrl + "/depense",
            type : 'GET',
            dataType : 'json',
            success: function(data) {
@@ -185,7 +187,7 @@ Depenses | Log Dist Du Nord
             var depense_tax = $('#add_depense_Tax').val();
 
     $.ajax({
-        url: "https://iker.wiicode.tech/api/depense",
+        url:  backendUrl + "/depense",
         type: 'POST',
         data: {
             depense : name_depense,
@@ -216,7 +218,7 @@ Depenses | Log Dist Du Nord
 
             $.ajax({
         
-                url : "https://iker.wiicode.tech/api/depense/" + id,
+                url :  backendUrl + "/depense/" + id,
             type : 'GET',
             dataType : 'json',
                 success: function(response){
@@ -237,7 +239,7 @@ Depenses | Log Dist Du Nord
             var upDepenseTax = $('#editDepenseTax').val();
               
              $.ajax({
-                url : "https://iker.wiicode.tech/api/depense/" + upDepenseId,
+                url :  backendUrl + "/depense/" + upDepenseId,
            type : 'put',
            data : {
             depense : upDepensename,
@@ -271,7 +273,7 @@ Depenses | Log Dist Du Nord
             if (willDelete) {
                            
             $.ajax({
-            url: "https://iker.wiicode.tech/api/depense/"  + id ,
+            url:  backendUrl + "/depense/"  + id ,
             type: "delete",
                 dataType: "json",
                 success: function(response) {

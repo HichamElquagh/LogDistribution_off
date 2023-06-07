@@ -170,7 +170,15 @@
                         <li>
                             <a href="{{ route('secteurVendeur') }}" class="waves-effect">
                                 <i class="ri-user-location-line"></i>
-                                <span>Vendeur</span>
+                               <span>Vendeur</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('secteurCamion') }}" class="waves-effect">
+                                 <i class="ri-truck-line"></i>  
+
+                                <span>Camion</span>
                             </a>
                         </li>
 

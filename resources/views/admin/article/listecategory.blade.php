@@ -125,6 +125,8 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
+            const backendUrl = "{{ app('backendUrl') }}";
+
         function showModel(nom,id){
             document.querySelector("#category").value = nom;
             document.querySelector("#categoryId").value = id;
@@ -137,7 +139,7 @@
 
       function displaydatacategory(){
         $.ajax({
-            url: "https://iker.wiicode.tech/api/categories",
+                url: backendUrl +"/categories",
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -170,7 +172,7 @@
   function storecategory() {
     var category_name = $('#stotecategoryname').val();
     $.ajax({
-        url: "https://iker.wiicode.tech/api/categories",
+        url: backendUrl +"/categories",
       type: 'POST',
         data: {
             category:category_name,
@@ -194,7 +196,7 @@
     console.log(id);
    $(".categoryModal").modal('show')
    $.ajax({
-    url: "https://iker.wiicode.tech/api/categories/"  + + id,
+    url: backendUrl +"/categories/"  + + id,
        type: 'GET',
        dataType: 'json',
       success: function(data) {
@@ -217,7 +219,7 @@
            var category_name = $('#categoryname').val();
 
     $.ajax({
-        url: "https://iker.wiicode.tech/api/categories/"  + categoryId,  
+        url: backendUrl +"/categories/"  + categoryId,  
         type: 'PUT',  // Use 'PUT' for update operation
         data: {
             category: category_name,
@@ -252,7 +254,7 @@
             if (willDelete) {
                            
             $.ajax({
-                url: "https://iker.wiicode.tech/api/categories/" + id,  
+                url: backendUrl +"/categories/" + id,  
                 type: "delete",
                 dataType: "json",
                 success: function(response) {

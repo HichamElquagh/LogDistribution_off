@@ -173,6 +173,8 @@ Caisse | Log Dist Du Nord
 @section('script')
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
+            const backendUrl = "{{ app('backendUrl') }}";
+
         // import swal from 'sweetalert';
 
         function showModel(nom,id){
@@ -188,7 +190,7 @@ Caisse | Log Dist Du Nord
 
 //   function getData() {
 //     $.ajax({
-//       url: 'https://iker.wiicode.tech/api/caisse', // Endpoint URL
+//       url:  backendUrl +'/caisse', // Endpoint URL
 //       type: 'GET',
 //       dataType: 'json',
 //       success: function(response) {
@@ -261,7 +263,7 @@ Caisse | Log Dist Du Nord
        var TypeData = $('#type').val();
 
   $.ajax({
-    url: 'https://iker.wiicode.tech/api/caisse', // Endpoint URL
+    url:  backendUrl +'/caisse', // Endpoint URL
     type: 'POST',
     data: {
         solde : SoldeData,
@@ -324,7 +326,7 @@ function addsoldecaisse(id) {
         var motif = $('#motif').val();
 
         $.ajax({
-            url: "https://iker.wiicode.tech/api/withdraw",
+            url:  backendUrl +"/withdraw",
             type: 'POST',
             data: {
                 type: typetransaction,

@@ -119,6 +119,8 @@ wireHouse| Log Dist Du Nord
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
+        const backendUrl = "{{ app('backendUrl') }}";
+
 
 $(document).ready(function(){
     displaydatarole();
@@ -136,9 +138,9 @@ $(document).ready(function(){
             $("#update-btn").hide()
             $("#myLargeModalLabel").text('Ajouter un Role');
        }
-       function displaydatarole() {
+    function displaydatarole() {
     $.ajax({
-        url: "https://iker.wiicode.tech/api/emprole",
+        url: backendUrl +"/emprole",
         type: "GET",
         dataType: "json",
         success: function(data) {
@@ -171,7 +173,7 @@ $(document).ready(function(){
       var  nom_role =  $('input[name="nom_role"]').val()
 
     $.ajax({
-        url: "https://iker.wiicode.tech/api/emprole" ,  // Replace with your API endpoint to store a new role
+        url: backendUrl +"/emprole" ,  // Replace with your API endpoint to store a new role
         type: 'POST',
         dataType: 'json',
         data: {
@@ -201,7 +203,7 @@ function editrole(roleId) {
 
     // Retrieve the role data from the API using AJAX
     $.ajax({
-        url: "https://iker.wiicode.tech/api/emprole/" + roleId,
+        url: backendUrl +"/emprole/" + roleId,
         type: "GET",
         dataType: "json",
         success: function(data) {
@@ -220,7 +222,7 @@ function updaterole() {
     var nomRole = $("#nom_role").val();
     // Send the AJAX request to update the role
     $.ajax({
-        url: "https://iker.wiicode.tech/api/emprole/" + roleId ,
+        url: backendUrl +"/emprole/" + roleId ,
         type: "PUT",
         dataType: "json",
         data: {
@@ -254,7 +256,7 @@ function deleterole(id){
             if (willDelete) {
                            
             $.ajax({
-                url: "https://iker.wiicode.tech/api/emprole/"+ id,  
+                url: backendUrl +"/emprole/"+ id,  
                 type: "delete",
                 dataType: "json",
                 success: function(response) {

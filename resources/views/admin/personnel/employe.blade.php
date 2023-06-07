@@ -168,6 +168,8 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
+        const backendUrl = "{{ app('backendUrl') }}";
+
  
 
  $(document).ready(function(){
@@ -176,37 +178,39 @@
   
  function displaydataEmploye() {
     $.ajax({
-      url: "https://iker.wiicode.tech/api/employee",
+      url:  backendUrl +"/employee",
       type: "GET",
       dataType: "json",
       success: function(data) {
-            var dataEmploye = data.data ;
-            var tbody = $(".table tbody");
-            tbody.empty(); // Clear the existing table body
+    var dataEmploye = data.data;
+    var tbody = $(".table tbody");
+    tbody.empty(); // Clear the existing table body
 
-            for (var i = 0; i < dataEmploye.length; i++) {
-                var employe = dataEmploye[i];
-                var row = $("<tr></tr>");
-                row.append('<td class="text-warning fw-bold">#' + employe.id + '</td>');
-                row.append('<td>' + employe.Nom + '</td>');
-                row.append('<td>' + employe["Code Employee"] + '</td>');
-                row.append('<td>' + employe.CIN + '</td>');
-                row.append('<td>' + employe.Matricule + '</td>');
-                row.append('<td>' + employe.role_name + '</td>');
-                row.append('<td>' + employe.Adresse.substring(0, 20) + '</td>');
-                row.append('<td>' + employe.Mail + '</td>');
-                row.append('<td>' + employe.Telephone + '</td>');
-                row.append('<td>' + moment(employe["Date Embauche"]).format("LL") + '</td>');
-                row.append('<td class="d-flex ">' +
-                '<button onclick="editEmploye(' + employe.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                '<i class="ri-edit-line"></i></button>' +
-                '<div class="mx-1"><button onclick="deleteEmploye(' + employe.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div>' +
-                '</td>');
+    for (var i = 0; i < dataEmploye.length; i++) {
+        var employe = dataEmploye[i];
+        var row = $("<tr></tr>");
 
-                tbody.append(row);
-            }   
+        row.append('<td class="text-warning fw-bold">#' + employe.id + '</td>');
+        row.append('<td>' + employe.Nom + '</td>');
+        row.append('<td>' + employe.code_employee + '</td>');
+        row.append('<td>' + employe.CIN_employee + '</td>');
+        row.append('<td>' + employe.matricule_employee + '</td>');
+        row.append('<td>' + employe.role_name + '</td>');
+        row.append('<td>' + employe.adresse_employee.substring(0, 20) + '</td>');
+        row.append('<td>' + employe.email_employee + '</td>');
+        row.append('<td>' + employe.telephone_employee + '</td>');
+        row.append('<td>' + moment(employe.date_embauche).format("LL") + '</td>');
+        row.append(
+            '<td class="d-flex">' +
+            '<button onclick="editEmploye(' + employe.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
+            '<i class="ri-edit-line"></i></button>' +
+            '<div class="mx-1"><button onclick="deleteEmploye(' + employe.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div>' +
+            '</td>'
+        );
 
-      },
+        tbody.append(row);
+    }
+},
       error: function(data) {
         swal(data.responseJSON.message, "", "warning");
       }
@@ -227,7 +231,6 @@
         
 
   function storeEmploye() {
- console.log('9awd');
    var  nom =  $("#employenom").val() ;
    var  code =  $("#employecode").val() ;
    var  role =  $("#employerole").val() ;
@@ -240,7 +243,7 @@
   
 
   $.ajax({
-    url: "https://iker.wiicode.tech/api/employee",
+    url:  backendUrl +"/employee",
     type: "POST",
     data: {
         nom_employee :nom ,
@@ -279,7 +282,7 @@ function editEmploye(id) {
   $("#myLargeModalLabel").text("Modifier un employé");
 
   $.ajax({
-    url: "https://iker.wiicode.tech/api/employee/" + id,
+    url:  backendUrl +"/employee/" + id,
     type: "GET",
     dataType: "json",
     success: function(data) {
@@ -315,7 +318,7 @@ function updateEmploye() {
        var RoleId = $("#employerole").val();
 
     $.ajax({
-        url: "https://iker.wiicode.tech/api/employee/" + id,
+        url:  backendUrl +"/employee/" + id,
         type: "PUT",
         dataType: "json",
         data: {
@@ -359,7 +362,7 @@ function deleteEmploye(id){
             if (willDelete) {
                            
             $.ajax({
-                url: "https://iker.wiicode.tech/api/employee/"+ id,  
+                url:  backendUrl +"/employee/"+ id,  
                 type: "delete",
                 dataType: "json",
                 success: function(response) {

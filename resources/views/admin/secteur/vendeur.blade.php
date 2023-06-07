@@ -138,6 +138,7 @@
 
 
 <script>
+    const backendUrl = "{{ app('backendUrl') }}";
 
 
 
@@ -164,7 +165,7 @@
  
        function displaydatavendeur() {
   $.ajax({
-    url: "https://iker.wiicode.tech/api/vendeur",
+    url: backendUrl + "/vendeur",
     type: 'GET',
     dataType: 'json',
     success: function(response) {
@@ -216,7 +217,7 @@ function storevendeur() {
   };
 
   $.ajax({
-    url: 'https://iker.wiicode.tech/api/vendeur',
+    url: backendUrl + '/vendeur',
     type: 'POST',
     data: formData,
     dataType: 'json',
@@ -242,7 +243,7 @@ function editdatavendeur(id) {
   $("#myLargeModalLabel").text('Edite info Vendeur');
 
   $.ajax({
-    url: "https://iker.wiicode.tech/api/vendeur/" + id,
+    url: backendUrl + "/vendeur/" + id,
     type: 'GET',
     dataType: 'json',
     success: function(response) {
@@ -273,7 +274,7 @@ function updatevendeur() {
   var adresse = $('#vendeuradress').val();
 
   $.ajax({
-    url: "https://iker.wiicode.tech/api/vendeur/" + id,
+    url: backendUrl + "/vendeur/" + id,
     type: 'PUT',
     dataType: 'json',
     data: {
@@ -314,7 +315,7 @@ function updatevendeur() {
             if (willDelete) {
                               
             $.ajax({
-            url: 'https://iker.wiicode.tech/api/vendeur/' + id,
+            url: backendUrl + '/vendeur/' + id,
             type: "delete",
                 dataType: "json",
                 success: function(response) {

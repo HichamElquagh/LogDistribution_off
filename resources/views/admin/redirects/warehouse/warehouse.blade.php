@@ -126,6 +126,8 @@ wireHouse| Log Dist Du Nord
 @section('script')
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
+            const backendUrl = "{{ app('backendUrl') }}";
+
         // import swal from 'sweetalert';
 
         function showModel(nom,id){
@@ -140,7 +142,7 @@ wireHouse| Log Dist Du Nord
     
     function displaydatawarehouse() {
     $.ajax({
-        url: "https://iker.wiicode.tech/public/api/warehouse",
+        url: backendUrl + "/warehouse",
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -211,7 +213,7 @@ wireHouse| Log Dist Du Nord
 
     // Make the AJAX request to store the warehouse data
     $.ajax({
-        url: "https://iker.wiicode.tech/public/api/warehouse",
+        url: backendUrl + "/warehouse",
         type: 'POST',
         data : {
         nom_Warehouse: nomWarehouse,
@@ -246,7 +248,7 @@ function editwarehouse(warehouseId) {
     $("#myLargeModalLabel").text('Editer le Warehouse');
       // Make the AJAX request to fetch the warehouse data for editing
     $.ajax({
-        url: "https://iker.wiicode.tech/public/api/warehouse/" + warehouseId,
+        url: backendUrl + "/warehouse/" + warehouseId,
         type: 'GET',
         dataType: 'json',
         success: function(response) {
@@ -278,7 +280,7 @@ function editwarehouse(warehouseId) {
 
     // Make the AJAX request to update the warehouse data
     $.ajax({
-        url: "https://iker.wiicode.tech/public/api/warehouse/" + warehouseId,
+        url: backendUrl + "/warehouse/" + warehouseId,
         type: 'PUT',
         data : {
             nom_Warehouse: nomWarehouse,
@@ -316,7 +318,7 @@ function editwarehouse(warehouseId) {
             if (willDelete) {
                            
             $.ajax({
-                url: "https://iker.wiicode.tech/public/api/warehouse/" + warehouseId,
+                url: backendUrl + "/warehouse/" + warehouseId,
             type: "delete",
                 dataType: "json",
                 success: function(response) {

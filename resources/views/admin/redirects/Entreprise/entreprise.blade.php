@@ -183,6 +183,8 @@ Entreprise| Log Dist Du Nord
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
+        const backendUrl = "{{ app('backendUrl') }}";
+
 
 $(document).ready(function(){
     displaydataEntreprise()
@@ -202,7 +204,7 @@ $(document).ready(function(){
        }
        function displaydataEntreprise() {
     $.ajax({
-        url: "https://iker.wiicode.tech/api/societe",
+        url: backendUrl + "/societe",
         type: "GET",
         dataType: "json",
         success: function(data) {
@@ -251,7 +253,7 @@ function storeDataEntreprise() {
 
   // Make the AJAX request
   $.ajax({
-    url: 'https://iker.wiicode.tech/api/societe',
+    url: backendUrl + '/societe',
     type: 'POST',
     dataType: 'json',
     data: {
@@ -297,7 +299,7 @@ function editdataEntreprise(id) {
     $("#myLargeModalLabel").text('Editer les Info');
 
   $.ajax({
-    url: "https://iker.wiicode.tech/api/societe/" + id,
+    url: backendUrl + "/societe/" + id,
     type: 'GET',
     dataType: 'json',
     success: function(response) {
@@ -344,7 +346,7 @@ function updatedataEntreprise() {
   };
 
   $.ajax({
-    url: "https://iker.wiicode.tech/api/societe/" + id,
+    url: backendUrl + "/societe/" + id,
     type: 'PUT',
     dataType: 'json',
     data: data,
@@ -376,7 +378,7 @@ function updatedataEntreprise() {
 //             if (willDelete) {
                            
 //             $.ajax({
-//                 url: "https://iker.wiicode.tech/api/emprole/"+ id,  
+//                 url: backendUrl + "/emprole/"+ id,  
 //                 type: "delete",
 //                 dataType: "json",
 //                 success: function(response) {
