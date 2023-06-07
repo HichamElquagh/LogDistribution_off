@@ -227,7 +227,6 @@ $(document).ready(function(){
                     '<button onclick="editdataEntreprise(' + company.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
                     '<i class="ri-edit-line"></i></button>' +
                     '</td>');
-                    tbody.append(row);
                 tbody.append(row);
             }
         },
@@ -269,15 +268,15 @@ function storeDataEntreprise() {
     success: function(result) {
       // Handle the response
       swal(result.message, "", "success");
-            $('input[type="text"]').each(function() {
-              $(this).val('');
-            });
-            $('input[type="number"]').each(function() {
-              $(this).val('');
-            });
-            $('input[type="phone"]').each(function() {
-              $(this).val('');
-            });
+            // $('input[type="text"]').each(function() {
+            //   $(this).val('');
+            // });
+            // $('input[type="number"]').each(function() {
+            //   $(this).val('');
+            // });
+            // $('input[type="phone"]').each(function() {
+            //   $(this).val('');
+            // });
             displaydataEntreprise();
     },
     error: function(response) {
