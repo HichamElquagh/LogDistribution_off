@@ -210,27 +210,27 @@ Depenses | Log Dist Du Nord
     });
 }
 
-    function editdepense(id){
-        console.log(id);
-        $('.depenseModal').modal('show');
+        function editdepense(id){
+            console.log(id);
+            $('.depenseModal').modal('show');
 
-        $.ajax({
-       
-            url : "https://iker.wiicode.tech/api/depense/" + id,
-           type : 'GET',
-           dataType : 'json',
-            success: function(response){
-            $('input[name="editDepenseId"]').val(response.depense.id);
-            $('input[name="editDepense"]').val(response.depense.depense);
-            $('input[name="editDepense_Tax"]').val(response.depense.depense_Tax);
-            }, 
-            error:function(response){
-           console.log(response);
-            }
+            $.ajax({
+        
+                url : "https://iker.wiicode.tech/api/depense/" + id,
+            type : 'GET',
+            dataType : 'json',
+                success: function(response){
+                $('input[name="editDepenseId"]').val(response.depense.id);
+                $('input[name="editDepense"]').val(response.depense.depense);
+                $('input[name="editDepense_Tax"]').val(response.depense.depense_Tax);
+                }, 
+                error:function(response){
+            console.log(response);
+                }
 
-        });
+            });
 
-    }
+        }
         function updatedepense(){
             var upDepenseId = $('#editDepenseId').val();
             var upDepensename = $('#editDepense').val();

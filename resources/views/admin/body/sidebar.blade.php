@@ -236,6 +236,12 @@
                         <span>Entrepôt</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('adminentreprise') }}" class="waves-effect">
+                        <i class="fas fa-building"></i>
+                        <span>Entreprise</span>
+                    </a>
+                </li>
             
             </ul>
         </div>

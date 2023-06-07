@@ -19,6 +19,7 @@ use App\Http\Controllers\admin\Personnel\EmployesController;
 use App\Http\Controllers\admin\Secteur\BonSecteurController;
 use App\Http\Controllers\admin\Vente\FactureVenteController;
 use App\Http\Controllers\Admin\Personnel\MagaziniersController;
+use App\Http\Controllers\EntrepriseController;
 
 Route::controller(DashboardController::class)->group(function() {
     Route::get('/', 'Index')->name('adminDashboard');
@@ -178,4 +179,7 @@ Route::controller(DepenseController::class)->group(function() {
      Route::get('/depense/{id}', 'EditDepense')->name('editBanque');
      Route::put('/depense/{id?}', 'updateDepense')->name('updatedepense');
     Route::delete('/depense/{id}', 'Deletedepense')->name('deletedepense');
+});
+Route::controller(EntrepriseController::class)->group(function() {
+    Route::get('/Entreprise', 'Index')->name('adminentreprise');
 });
