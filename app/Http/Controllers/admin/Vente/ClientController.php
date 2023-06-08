@@ -10,9 +10,6 @@ class ClientController extends Controller
 {
     public function ListeClient(){
 
-        $Clients = Http::get('https://iker.wiicode.tech/api/client');
-        $dataClient = $Clients->json();
-
-        return view('admin.vente.client',compact('dataClient'));
+        return view('admin.vente.client');
     }
 }
