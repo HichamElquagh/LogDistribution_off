@@ -10,14 +10,14 @@ class EmployesController extends Controller
 {
     public function ListeEmploye(){
         
-        $employes = Http::get('https://iker.wiicode.tech/api/employee');
+        $employes = Http::get(app('backendUrl').'/employee');
         $dataEmploye = collect($employes->json()['data']);
 
         $SoloEmploye = $dataEmploye->filter(function ($employe) {
             return $employe['role_name'] != 'Magazinier';
         });
 
-        $roles = Http::get('https://iker.wiicode.tech/api/emprole');
+        $roles = Http::get(app('backendUrl').'/emprole');
         $dataRole = collect($roles->json());
 
         $SoloRole = $dataRole->filter(function ($role) {

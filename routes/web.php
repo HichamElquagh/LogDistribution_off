@@ -19,6 +19,7 @@ use App\Http\Controllers\admin\Personnel\EmployesController;
 use App\Http\Controllers\admin\Secteur\BonSecteurController;
 use App\Http\Controllers\admin\Vente\FactureVenteController;
 use App\Http\Controllers\Admin\Personnel\MagaziniersController;
+use App\Http\Controllers\admin\Personnel\RoleController;
 use App\Http\Controllers\admin\Secteur\CamionController;
 use App\Http\Controllers\EntrepriseController;
 

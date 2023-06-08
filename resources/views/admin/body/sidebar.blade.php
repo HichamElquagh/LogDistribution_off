@@ -69,6 +69,12 @@
                                 <span>Employés</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('adminRole') }}" class="waves-effect">
+                                <i class="ri-user-fill"></i>
+                                <span>Role</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -177,7 +183,6 @@
                         <li>
                             <a href="{{ route('secteurCamion') }}" class="waves-effect">
                                  <i class="ri-truck-line"></i>  
-
                                 <span>Camion</span>
                             </a>
                         </li>
