@@ -136,7 +136,7 @@
                                         <th data-bs-toggle="tooltip"
                                         data-bs-placement="top"
                                         data-bs-title="Référence">ref</th>  
-                                        <th>Categorie</th>
+                                        <th>Fournisseur</th>
                                         <th data-bs-toggle="tooltip"
                                         data-bs-placement="top"
                                         data-bs-title="Prix Unitaire">P.U</th>  
@@ -206,6 +206,8 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
+        console.log(data
+        );
         var articleData = data.data ;
         var tbody = $(".table tbody");
         tbody.empty(); // Clear the existing table body
@@ -217,7 +219,7 @@
           row.append('<td class="text-warning fw-bold">#' + article.id + "</td>");
           row.append("<td>" + article.article_libelle + "</td>");
           row.append("<td>" + article.reference + "</td>");
-          row.append("<td>" + article.category + "</td>");
+          row.append("<td>" + article.fournissuer + "</td>");
           row.append("<td>" + numeral(article.prix_unitaire).format("0,0.00") + "</td>");
           row.append("<td>" + numeral(article.prix_public).format("0,0.00") + "</td>");
           row.append("<td>" + numeral(article.demi_grossiste).format("0,0.00") + "</td>");
