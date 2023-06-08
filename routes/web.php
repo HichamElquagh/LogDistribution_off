@@ -21,6 +21,7 @@ use App\Http\Controllers\admin\Vente\FactureVenteController;
 use App\Http\Controllers\Admin\Personnel\MagaziniersController;
 use App\Http\Controllers\admin\Personnel\RoleController;
 use App\Http\Controllers\admin\Secteur\CamionController;
+use App\Http\Controllers\admin\Secteur\SecteurController;
 use App\Http\Controllers\EntrepriseController;
 
 Route::controller(DashboardController::class)->group(function() {
@@ -176,6 +177,9 @@ Route::controller(WareHouseController::class)->group(function() {
 
 Route::controller(RoleController::class)->group(function() {
     Route::get('/AdminRole', 'Index')->name('adminRole');
+});
+Route::controller(SecteurController::class)->group(function() {
+    Route::get('/secteur', 'Index')->name('secteur');
 });
 
 Route::controller(DepenseController::class)->group(function() {

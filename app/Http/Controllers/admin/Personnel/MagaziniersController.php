@@ -14,7 +14,7 @@ class MagaziniersController extends Controller
         $dataMagazinier = collect($magaziniers->json()['data']);
 
         $SoloMagaziniers = $dataMagazinier->filter(function ($magazinier) {
-            return $magazinier['role_name'] === 'Magazinier';
+            return $magazinier['role_name'] === 'magazinier';
         });
         return view('admin.personnel.magazinier',compact('SoloMagaziniers'));
     }

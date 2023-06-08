@@ -209,7 +209,7 @@ function displaydataClient() {
       }
     },
     error: function(data) {
-      swal("Error", "Failed to fetch data from the API.", "error");
+        swal("Error", "Failed to fetch data from the API.", "error");
     }
   });
 }

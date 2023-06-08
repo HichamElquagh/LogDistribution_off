@@ -186,6 +186,12 @@
                                 <span>Camion</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('secteur') }}" class="waves-effect">
+                                <i class="fas fa-industry"></i>
+                                <span>Secteur</span>
+                            </a>
+                        </li>
 
                         <li>
                             <a href="{{ route('listeSortieSecteur') }}" class="waves-effect">
