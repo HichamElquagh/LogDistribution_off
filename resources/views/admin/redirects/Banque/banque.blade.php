@@ -200,7 +200,7 @@ Banque | Log Dist Du Nord
 @section('script')
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
-            const backendUrl = "{{ app('backendUrl') }}";
+            // const backendUrl = "{{ app('backendUrl') }}" ;
 
         // import swal from 'sweetalert';
 
