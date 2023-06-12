@@ -138,7 +138,7 @@
                         </div>
                         <button id="genererBonSecteur" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer BonSecteur</button>
                         @if( $dataBonSortie['vente_secteur_id'] != null )
-                            <a href="{{ route('showBonSecteur', $dataBonSortie["vente_secteur_id"] )}}" id="goVenteSecteur" class="btn btn-light fw-bold text-secondary mb-2 col-12">Bon Secteur</a>
+                            <a href="{{ route('showBonSecteur', $dataBonSortie["vente_secteur_id"] )}}" id="goVenteSecteur" class="btn btn-warning fw-bold text-white mb-2 col-12">Bon Secteur</a>
                         @endif
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
                     </div>
@@ -158,7 +158,7 @@
 <script>
 
 $(document).ready(function() {
-    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonCommande, #genererBonSecteur').hide();
+    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #genererBonSecteur').hide();
 
     let confirme = {{ $dataBonSortie['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
@@ -166,13 +166,13 @@ $(document).ready(function() {
     const backendUrl = "{{ app('backendUrl') }}";
     
     if (confirme == 1) {
-        $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton , #retourBonCommande').show();
+        $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton ').show();
         $('#confirmationButton').hide();
         $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
         $statutBadge.removeClass('bg-danger').addClass('bg-success');
         console.log($statutBadge)
     } else {
-        $('#accordionImprimer, #accordionTelecharger, #retourBonCommande').hide();
+        $('#accordionImprimer, #accordionTelecharger').hide();
         $('#confirmationButton').show();
         $statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
         $statutBadge.removeClass('bg-success').addClass('bg-danger');
