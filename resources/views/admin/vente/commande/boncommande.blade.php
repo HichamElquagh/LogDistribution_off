@@ -55,7 +55,7 @@
                                         <tr>
                                             <td class="text-warning fw-bold">#{{$boncommande['id']}}</td>
                                             <td>{{$boncommande['Numero_bonCommandeVente']}}</td>
-                                            <td>{{$boncommande['client']}}</td>
+                                            <td>{{$boncommande['nom_Client']}}</td>
                                             <td>{{$boncommande['Etat']}}</td>
                                             <td>{{$boncommande['Total_HT']}}</td>
                                             <td>{{$boncommande['Total_TVA']}}</td>
