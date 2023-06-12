@@ -74,7 +74,7 @@ Route::controller(App\Http\Controllers\Admin\Achat\BonRetourController::class)->
     Route::prefix('/bon-retour-achat')->group(function() {
         Route::get('/', 'ListeBonRetour')->name('listeRetour');
         Route::get('/nouveau', 'CreateBonRetour')->name('createRetour');
-        // Route::get('/detail/{id}', 'ShowBonRetour')->name('showRetour');
+        Route::get('/detail/{id}', 'ShowBonRetour')->name('showRetour');
     });
 });
 

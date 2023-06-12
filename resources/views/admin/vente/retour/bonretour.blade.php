@@ -26,7 +26,7 @@
         </div>
 
         <div class="d-flex mb-3 justify-content-end">
-            <a href="" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de retour</a>
+            <a href="{{route('createRetourVente')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de retour</a>
         </div>
 
         <div class="row">
