@@ -320,9 +320,9 @@ function sendRetour() {
                     className: "btn btn-success" 
                 },
                 closeOnClickOutside: false
-            });//.then(function() {
-                // window.location.href = "{{ env('APP_URL') }}/facture-vente/detail/" + response.id;
-           // })
+            }).then(function() {
+                window.location.href = "{{ env('APP_URL') }}/bon-retour-achat/detail/" + response.id;
+            });
         },
         error: function(response) {
             swal({

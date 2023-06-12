@@ -57,7 +57,7 @@
                                         $fournisseurs = Http::get(app('backendUrl').'/fournisseurs/'.$dataBonRetour['fournisseur_id']);
                                         $dataFournisseur = $fournisseurs->json()['Fournisseur Requested'];
                                     @endphp
-                                    <h6 class="mb-3">Envoyé par:</h6>
+                                    <h6 class="mb-3">Envoyé à:</h6>
                                     <p class="mb-2">{{ $dataFournisseur['fournisseur'] }}</p>
                                     <p class="mb-2">{{ $dataFournisseur['Adresse'] }}</p>
                                     <p class="mb-2">{{ $dataFournisseur['Telephone'] }}</p>

@@ -40,7 +40,7 @@
                                     <th>id</th>
                                     <th>N° Bon Livraison</th> 
                                     <th>Bon Commande</th>  
-                                    <th>Fournisseur</th>  
+                                    <th>Client</th>  
                                     <th>Etat</th>
                                     <th>Total HT</th>
                                     <th>Total TVA</th>

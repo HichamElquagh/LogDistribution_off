@@ -126,7 +126,7 @@ Route::controller(App\Http\Controllers\Admin\Vente\BonRetourController::class)->
     Route::prefix('/bon-retour-vente')->group(function() {
         Route::get('/', 'ListeBonRetour')->name('listeRetourVente');
         Route::get('/nouveau', 'CreateBonRetour')->name('createRetourVente');
-        // Route::get('/detail/{id}', 'ShowBonRetour')->name('showRetourVente');
+        Route::get('/detail/{id}', 'ShowBonRetour')->name('showRetourVente');
     });
 });
 
