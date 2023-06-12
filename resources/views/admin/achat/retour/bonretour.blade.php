@@ -72,7 +72,7 @@
                                             {{\Carbon\Carbon::parse($bonretour['date_BRetour'])->isoFormat("LL") }}
                                         </td>
                                         <td>
-                                            <a  href=""
+                                            <a  href="{{route('showRetour', $bonretour['id'])}}"
                                                 class="btn btn-outline-primary btn-sm mb-2"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"

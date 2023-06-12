@@ -20,5 +20,15 @@ class BonRetourController extends Controller
         $dataBl = $bonLivraison->json();
 
         return view('admin.achat.retour.createbonretour',compact('dataBl'));
-    }   
+    }  
+
+    public function ShowBonRetour($id){
+        $bonretour = Http::get(app('backendUrl').'/bonretourachat/'.$id);
+        $dataBonRetour = $bonretour->json();
+
+        $societe = Http::get(app('backendUrl').'/societe');
+        $dataSociete = $societe->json();
+
+        return view('admin.achat.retour.showbonretour',compact('dataBonRetour','dataSociete'));
+    } 
 }
