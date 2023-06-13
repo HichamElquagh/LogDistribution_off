@@ -256,6 +256,13 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('admintransfert') }}" class="waves-effect">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Transfert</span>
+                    </a>
+                </li>
+                              
+                <li>
                     <a href="{{ route('adminentreprise') }}" class="waves-effect">
                         <i class="fas fa-building"></i>
                         <span>Entreprise</span>

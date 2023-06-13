@@ -142,7 +142,7 @@ Banque | Log Dist Du Nord
                             <button type="button"  class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
                             <button onclick="storebank()" class="btn btn-warning fw-bold text-white" id="add-btn">Ajouter</button>
                             <button onclick="updatebank()" class="btn btn-warning fw-bold text-white" id="update-btn">Update</button>
-                            <button onclick="addsoldetobank()" class="btn btn-warning fw-bold text-white" id="add-solde-btn">Ajouter un solde</button>
+                            <button onclick="addsoldetobank()" class="btn btn-warning fw-bold text-white" id="add-solde-btn">Operations </button>
                         </div>
                     </div>
                 </div>

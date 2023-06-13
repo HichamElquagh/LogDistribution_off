@@ -219,7 +219,7 @@
           row.append('<td class="text-warning fw-bold">#' + article.id + "</td>");
           row.append("<td>" + article.article_libelle + "</td>");
           row.append("<td>" + article.reference + "</td>");
-          row.append("<td>" + article.fournissuer + "</td>");
+          row.append("<td>" + article.fournisseu&r + "</td>");
           row.append("<td>" + numeral(article.prix_unitaire).format("0,0.00") + "</td>");
           row.append("<td>" + numeral(article.prix_public).format("0,0.00") + "</td>");
           row.append("<td>" + numeral(article.demi_grossiste).format("0,0.00") + "</td>");

@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\Personnel\MagaziniersController;
 use App\Http\Controllers\admin\Personnel\RoleController;
 use App\Http\Controllers\admin\Secteur\CamionController;
 use App\Http\Controllers\admin\Secteur\SecteurController;
+use App\Http\Controllers\admin\TransfertController;
 use App\Http\Controllers\EntrepriseController;
 
 Route::controller(DashboardController::class)->group(function() {
@@ -191,4 +192,7 @@ Route::controller(DepenseController::class)->group(function() {
 });
 Route::controller(EntrepriseController::class)->group(function() {
     Route::get('/Entreprise', 'Index')->name('adminentreprise');
+});
+Route::controller(TransfertController::class)->group(function() {
+    Route::get('/Transfert', 'Index')->name('admintransfert');
 });
