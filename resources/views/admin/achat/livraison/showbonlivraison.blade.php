@@ -149,6 +149,27 @@
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
                     </div>
                 </div>
+                
+                <div class="card" id="imageCard">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        Image
+                    </div>
+                    <div class="card-body">
+                        <img class="img-fluid image-pointer" id="livraisonImage" src="" alt=""data-bs-toggle="modal" data-bs-target="#imageModal">
+                    </div>
+
+                    <!-- Modal pour afficher l'image agrandie -->
+                    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <img id="modalImage" class="img-fluid" src="" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>   
@@ -165,7 +186,7 @@
 <script>
 
 $(document).ready(function() {
-    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonCommande, #genererFacture, #genererBonRetour').hide();
+    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonCommande, #genererFacture, #genererBonRetour, #imageCard').hide();
 
     let confirme = {{ $dataBonLivraison['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
@@ -173,7 +194,7 @@ $(document).ready(function() {
     const backendUrl = "{{ app('backendUrl') }}";
     
     if (confirme == 1) {
-        $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton , #retourBonCommande').show();
+        $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton , #retourBonCommande, #imageCard').show();
         $('#confirmationButton').hide();
         $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
         $statutBadge.removeClass('bg-danger').addClass('bg-success');
@@ -185,6 +206,10 @@ $(document).ready(function() {
         $statutBadge.removeClass('bg-success').addClass('bg-danger');
         console.log($statutBadge)
     }
+
+    const livraisonImage = document.getElementById('livraisonImage');
+    const imageUrl = backendUrl +'/getimage/bonLivraisonAchat/' + '{{ $dataBonLivraison["attachement"] }}';
+    livraisonImage.src = imageUrl;
 
     $.ajax({
         url: backendUrl +'/getblf',
@@ -283,6 +308,21 @@ $(document).ready(function() {
         
         window.open(url, '_blank');
     });
+
+    $('#livraisonImage').on('click', function() {
+        // Récupérer l'URL de l'image à partir de la source de l'image cliquée
+        let imageUrl = $(this).attr('src');
+        
+        // Mettre à jour l'URL de l'image dans le modal
+        $('#modalImage').attr('src', imageUrl);
+        
+        // Afficher le modal agrandi
+        $('#imageModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    });
+
 });
 
 
