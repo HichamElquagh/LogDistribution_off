@@ -210,5 +210,7 @@ Route::controller(EntrepriseController::class)->group(function() {
     Route::get('/Entreprise', 'Index')->name('adminentreprise');
 });
 Route::controller(TransfertController::class)->group(function() {
-    Route::get('/Transfert', 'Index')->name('admintransfert');
+    Route::get('/Transferts', 'Index')->name('admintransfert');
+    Route::get('/ShowTransfert/{id}', 'ShowTransfert')->name('showTransfert');
+    Route::get('/Transfert', 'CreateTransfert')->name('createTransfert');
 });

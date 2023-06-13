@@ -8,10 +8,29 @@ use Illuminate\Support\Facades\Http;
 
 class TransfertController extends Controller
 {
-    function Index() {
+   public function Index() {
 
-        $responseArticles = Http::get(app('backendUrl').'/');
-        $allArticles = $responseArticles->json();
-         return view("admin.redirects.Transfert.transfert");
+        $responseTransfet = Http::get(app('backendUrl').'/transfert');
+        $allTransfert = $responseTransfet->json();
+         return view("admin.redirects.Transfert.transfert" , compact('allTransfert'));
     } 
+
+   public function ShowTransfert($id) {
+    
+      $Transfert = Http::get(app('backendUrl').'/transfert/'.$id);
+      $allTransfert = $Transfert->json();
+
+      // return $allTransfert;
+      $societe = Http::get(app('backendUrl').'/societe');
+      $dataSociete = $societe->json();  
+         return view("admin.redirects.Transfert.showtransfert" , compact('allTransfert','dataSociete'));
+    } 
+
+   public function CreateTransfert() {
+  
+         return view("admin.redirects.Transfert.CreateTransfert");
+    } 
+
+
+   
 }
