@@ -76,7 +76,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <a  href="{{route("showLivraison",$bonsecteur['id'])}}"
+                                            <a  href="{{ route('showBonSecteur', $bonsecteur['id'])}}"
                                                 class="btn btn-outline-primary btn-sm mb-2"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"

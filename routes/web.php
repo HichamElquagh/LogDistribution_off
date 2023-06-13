@@ -71,6 +71,14 @@ Route::controller(App\Http\Controllers\Admin\Achat\BonLivraisonController::class
     });
 });
 
+Route::controller(App\Http\Controllers\Admin\Achat\BonRetourController::class)->group(function() {
+    Route::prefix('/bon-retour-achat')->group(function() {
+        Route::get('/', 'ListeBonRetour')->name('listeRetour');
+        Route::get('/nouveau', 'CreateBonRetour')->name('createRetour');
+        Route::get('/detail/{id}', 'ShowBonRetour')->name('showRetour');
+    });
+});
+
 Route::controller(FactureAchatController::class)->group(function() {
     Route::prefix('/facture-achat')->group(function() {
         Route::get('/', 'ListeFactureAchat')->name('achatFacture');
@@ -112,6 +120,14 @@ Route::controller(App\Http\Controllers\Admin\Vente\BonLivraisonController::class
         Route::get('/', 'ListeBonLivraison')->name('listeLivraisonVente');
         Route::get('/nouveau', 'CreateBonLivraison')->name('createLivraisonVente');
         Route::get('/detail/{id}', 'ShowBonLivraison')->name('showLivraisonVente');
+    });
+});
+
+Route::controller(App\Http\Controllers\Admin\Vente\BonRetourController::class)->group(function() {
+    Route::prefix('/bon-retour-vente')->group(function() {
+        Route::get('/', 'ListeBonRetour')->name('listeRetourVente');
+        Route::get('/nouveau', 'CreateBonRetour')->name('createRetourVente');
+        Route::get('/detail/{id}', 'ShowBonRetour')->name('showRetourVente');
     });
 });
 

@@ -21,4 +21,15 @@ class BonSecteurController extends Controller
 
         return view('admin.secteur.vente.createbonsecteur',compact('dataBs'));
     }
+
+    public function ShowBonSecteur($id){
+        $bonSecteur = Http::get(app('backendUrl').'/ventesecteur/'.$id);
+        $bsc = $bonSecteur->json()['data'];
+
+        $societe = Http::get(app('backendUrl').'/societe');
+        $dataSociete = $societe->json();
+
+        return view('admin.secteur.vente.showbonsecteur',compact('bsc','dataSociete'));
+    }
 }
+

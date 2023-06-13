@@ -138,6 +138,10 @@
                         </div>
                         <button id="genererBonReceptionButton" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Récéption</button>
                         <button id="genererFacture" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Facture</button>
+                        <button id="genererBonRetour" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Retour</button>
+                        @if( $dataBonLivraison['bonretour_id'] != null )
+                            <a href="{{ route('showRetour', $dataBonLivraison["bonretour_id"] )}}" id="goRetour" class="btn btn-light fw-bold text-secondary mb-2 col-12">Bon Retour</a>
+                        @endif
                         @if( $dataBonLivraison['facture_id'] != null )
                             <a href="{{ route('showFacture', $dataBonLivraison["facture_id"] )}}" id="goFacture" class="btn btn-light fw-bold text-secondary mb-2 col-12">Facture</a>
                         @endif
@@ -161,7 +165,7 @@
 <script>
 
 $(document).ready(function() {
-    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonCommande, #genererFacture').hide();
+    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonCommande, #genererFacture, #genererBonRetour').hide();
 
     let confirme = {{ $dataBonLivraison['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
@@ -199,6 +203,23 @@ $(document).ready(function() {
         }
     }); 
 
+    $.ajax({
+        url: backendUrl +'/getblr',
+        method: 'GET',
+        success: function(response) { 
+           response.forEach(e => {
+            
+            console.log(e.id)
+                if (e.id == existe) {
+                    $('#genererBonRetour').show();
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    }); 
+
     $('#confirmationButton').on('click', function() {
         let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
         
@@ -213,7 +234,7 @@ $(document).ready(function() {
                     buttons: false,
                     timer: 1500,
                 }).then(function() {
-                    $('#accordionImprimer, #accordionTelecharger, #genererFacture, #retourBonCommande').show();
+                    $('#accordionImprimer, #accordionTelecharger, #genererFacture, #retourBonCommande, #genererBonRetour').show();
                     $('#confirmationButton').hide();
                     $statutBadge.removeClass('bg-danger').addClass('bg-success');
                     $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
@@ -235,6 +256,11 @@ $(document).ready(function() {
 
     $('#genererFacture').on('click', function() {
         let url = '{{ route("createFacture") }}';
+        window.location.href = url;
+    });
+
+    $('#genererBonRetour').on('click', function() {
+        let url = '{{ route("createRetour") }}';
         window.location.href = url;
     });
 

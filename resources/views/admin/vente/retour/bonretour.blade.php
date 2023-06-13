@@ -1,7 +1,7 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Bon de Livraison | Log Dist Du Nord
+    Bon de Retour | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Bon de Livraison</h4>
+                    <h4 class="mb-sm-0">Bon de Retour</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Bon de Livraison</li>
+                            <li class="breadcrumb-item active">Bon de Retour</li>
                         </ol>
                     </div>
 
@@ -26,7 +26,7 @@
         </div>
 
         <div class="d-flex mb-3 justify-content-end">
-            <a href="{{route('createLivraisonVente')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de livraison</a>
+            <a href="{{route('createRetourVente')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de retour</a>
         </div>
 
         <div class="row">
@@ -38,8 +38,8 @@
                             <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>N° Bon Livraison</th> 
-                                    <th>Bon Commande</th>  
+                                    <th>N° Bon Retour</th> 
+                                    <th>Bon Livraison</th>  
                                     <th>Client</th>  
                                     <th>Etat</th>
                                     <th>Total HT</th>
@@ -52,27 +52,27 @@
                             </thead>
                             
                             <tbody class="text-center">
-                                @foreach($dataBl as $bonlivraison)
+                                @foreach($dataBr as $bonretour)
                                     <tr>
-                                        <td class="text-warning fw-bold">#{{$bonlivraison['id']}}</td>
-                                        <td>{{$bonlivraison['Numero_bonLivraisonVente']}}</td>
-                                        <td>{{$bonlivraison['Numero_bonCommandeVente']}}</td>
-                                        <td>{{$bonlivraison['nom_Client']}}</td>
-                                        <td>{{$bonlivraison['Etat']}}</td>
-                                        <td>{{$bonlivraison['Total_HT']}}</td>
-                                        <td>{{$bonlivraison['Total_TVA']}}</td>
-                                        <td>{{$bonlivraison['Total_TTC']}}</td>
+                                        <td class="text-warning fw-bold">#{{$bonretour['id']}}</td>
+                                        <td>{{$bonretour['Numero_bonRetour']}}</td>
+                                        <td>{{$bonretour['Numero_bonLivraisonVente']}}</td>
+                                        <td>{{$bonretour['nom_Client']}}</td>
+                                        <td>{{$bonretour['Etat']}}</td>
+                                        <td>{{$bonretour['Total_HT']}}</td>
+                                        <td>{{$bonretour['Total_TVA']}}</td>
+                                        <td>{{$bonretour['Total_TTC']}}</td>
                                         <td>
-                                            <span class="statut-dispo badge bg-{{ $bonlivraison['Confirme'] == 1 ? 'success' : 'danger' }} text-white">
-                                                <i class="{{ $bonlivraison['Confirme'] == 1 ? 'ri-checkbox-circle-line' : 'ri-close-circle-line' }} align-middle font-size-14 text-white"></i> 
-                                                {{ $bonlivraison['Confirme'] == 1 ? 'Confirmé' : 'Non Confirmé' }}
+                                            <span class="statut-dispo badge bg-{{ $bonretour['Confirme'] == 1 ? 'success' : 'danger' }} text-white">
+                                                <i class="{{ $bonretour['Confirme'] == 1 ? 'ri-checkbox-circle-line' : 'ri-close-circle-line' }} align-middle font-size-14 text-white"></i> 
+                                                {{ $bonretour['Confirme'] == 1 ? 'Confirmé' : 'Non Confirmé' }}
                                             </span>
                                         </td>
                                         <td>
-                                            {{\Carbon\Carbon::parse($bonlivraison['date_BlivraisonVente'])->isoFormat("LL") }}
+                                            {{\Carbon\Carbon::parse($bonretour['date_BRetour'])->isoFormat("LL") }}
                                         </td>
                                         <td>
-                                            <a  href="{{route("showLivraisonVente",$bonlivraison['id'])}}"
+                                            <a  href="{{route('showRetourVente', $bonretour['id'])}}"
                                                 class="btn btn-outline-primary btn-sm mb-2"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
