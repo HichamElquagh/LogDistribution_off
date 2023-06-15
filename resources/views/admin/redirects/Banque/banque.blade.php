@@ -104,7 +104,7 @@ Banque | Log Dist Du Nord
                             <div class="mb-3 col-lg-6" id="journallabel">
                                 <label class="form-label" for="journal" >Jornal </label>
                                 <select class="form-select" name="journal" id="journal">
-                                    <option  > selectionnez un jornal  </option>
+                                    <option value=" " selected > selectionnez un jornal  </option>
                               @foreach ( $allJournals as $journal )
                               <option value="{{ $journal['id'] }}" > {{ $journal['Code_journal']}} </option>
                               @endforeach

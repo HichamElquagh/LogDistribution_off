@@ -16,7 +16,7 @@ class TransfertController extends Controller
     } 
 
    public function ShowTransfert($id) {
-    
+   //   return $id ;
       $Transfert = Http::get(app('backendUrl').'/transfert/'.$id);
       $allTransfert = $Transfert->json();
 
@@ -27,8 +27,15 @@ class TransfertController extends Controller
     } 
 
    public function CreateTransfert() {
-  
-         return view("admin.redirects.Transfert.CreateTransfert");
+              $num_Transfert =  Http::get(app('backendUrl').'/getnt');
+              $nmTransfert  = $num_Transfert->json();
+
+              $warehouse = Http::get(app('backendUrl').'/warehouse');
+              $allwarhouse  = $warehouse->json();
+            //   return $allwarhouse ;
+              
+
+         return view("admin.redirects.Transfert.addtransfert" , compact('nmTransfert' ,'allwarhouse'));
     } 
 
 

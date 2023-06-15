@@ -60,7 +60,7 @@
                             <div class="mb-3 col-lg-4">
                                 <label class="form-label" for="employerole">Rôle</label>
                                 <select class="form-select" name="employerole" id="employerole">
-                                    @foreach($SoloRole as $role)
+                                    @foreach($dataRole as $role)
                                         <option value="{{$role['id']}}">{{$role['role_name']}}</option>
                                     @endforeach
                                 </select>

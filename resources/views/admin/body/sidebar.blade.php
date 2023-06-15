@@ -6,10 +6,10 @@
         <!-- User details -->
             <div class="user-profile text-center mt-3">
                 <div class="">
-                    <img src="{{ asset('backend/assets/images/users/profile/avatar-6.jpg') }}" alt="" class="avatar-md rounded-circle">
+                    {{-- <img src="{{ asset('backend/assets/images/users/profile/avatar-6.jpg') }}" alt="" class="avatar-md rounded-circle"> --}}
                 </div>
                 <div class="mt-3">
-                    <h4 class="font-size-16 mb-1">Mehdi</h4>
+                    <h4 class="font-size-16 mb-1">Administrateur</h4>
                     <span class="text-muted"><i class="ri-record-circle-line align-middle font-size-14 text-success"></i> En Ligne</span>
                 </div>
                 <span class="badge badge-soft-warning fw-bold px-3 py-2 mt-1 mb-2">Admin</span>
@@ -56,12 +56,12 @@
                         <span>Personnels</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li>
+                        {{-- <li>
                             <a href="{{ route('adminMagazinier') }}" class="waves-effect">
                                 <i class="ri-user-2-line"></i>
                                 <span>Magasiniers</span>
                             </a>
-                        </li>
+                        </li> --}}
 
                         <li>
                             <a href="{{ route('adminEmploye') }}" class="waves-effect">
@@ -118,13 +118,13 @@
                                 <span>Facture</span>
                             </a>
                         </li>
-
+{{-- 
                         <li>
                             <a href="{{ route('achatPaiement') }}" class="waves-effect">
                                 <i class="  ri-money-euro-box-line"></i>
                                 <span>Paiements</span>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
 
@@ -170,12 +170,12 @@
                             </a>
                         </li>
 
-                        <li>
+                        {{-- <li>
                             <a href="{{ route('ventePaiement') }}" class="waves-effect">
                                 <i class="  ri-money-euro-box-line"></i>
                                 <span>Paiements</span>
                             </a>
-                        </li>
+                        </li> --}}
 
                     </ul>
                 </li>

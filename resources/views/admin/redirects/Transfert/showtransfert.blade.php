@@ -57,10 +57,10 @@
                                         $client = Http::get(app('backendUrl').'/client/'.$allTransfert['client_id']);
                                         $dataClient = $client->json()['client'];
                                     @endphp --}}
-                                    <h6 class="mb-2">Livrer par: {{ $allTransfert['nom_employee'] }}</h6>
-                                   <h6 class="mb-2">Camion: <span>{{ $allTransfert['marque'] }}</span></h6>
-                                   <h6 class="mb-2">Matricule: <span>{{ $allTransfert['matricule'] }}</span></h6>
-                                   <h6 class="mb-0">Modele: <span>{{ $allTransfert['modele'] }}</span></h6>
+                                    <h6 class="mb-2">Livrer par : {{ $allTransfert['nom_employee'] }}</h6>
+                                   <h6 class="mb-2">Camion : <span>{{ $allTransfert['marque'] }}</span></h6>
+                                   <h6 class="mb-2">Matricule : <span>{{ $allTransfert['matricule'] }}</span></h6>
+                                   <h6 class="mb-0">Modele : <span>{{ $allTransfert['modele'] }}</span></h6>
                                 </div>
                             </div>
                         </div>
@@ -123,55 +123,21 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         Actions
-                        {{-- <a href="{{ route('listeCommandeVente') }}" class="btn btn-outline-secondary btn-sm" type="submit"> --}}
+                        <a href="{{ route('admintransfert') }}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>
                     <div class="card-body">
                         <div id="accordionImprimer" class="custom-accordion">
                             <div class="card mb-1 shadow-none">
-                                <a href="#collapseOne" class="text-dark collapsed" data-bs-toggle="collapse"
-                                                aria-expanded="false"
-                                                aria-controls="collapseOne">
-                                    <div class="card-header bg-warning mb-2" id="headingOne">
-                                        <h6 class="m-0 text-white">
-                                            Imprimer
-                                            <i class="mdi mdi-minus float-end accor-plus-icon"></i>
-                                        </h6>
-                                    </div>
-                                </a>
-                                <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
-                                        data-bs-parent="#accordion">
-                                    <div class="card-body py-0">
-                                        <button class="btn btn-outline-primary fw-bold col-12 mb-2 imp"  id="imprimerAcButton">Avec Calculs</button>
-                                        <button class="btn btn-outline-primary fw-bold col-12 mb-2 imp" id="imprimerScButton">Sans Calculs</button>                                        
-                                    </div>
-                                </div>
+                              <div class="card-header bg-warning mb-2 text-center" id="headingOne">
+                                <button type="submit" class="m-0 text-white border-0 bg-warning text-dark " id="print_transfert">
+                                  Imprimer
+                                </button>
+                              </div>
                             </div>
-                        </div>
-                        <div id="accordionTelecharger" class="custom-accordion">
-                            <div class="card mb-1 shadow-none">
-                                <a href="#collapseTwo" class="text-dark collapsed" data-bs-toggle="collapse"
-                                                aria-expanded="false"
-                                                aria-controls="collapseTwo">
-                                    <div class="card-header mb-2" id="headingTwo">
-                                        <h6 class="m-0 text-secondary">
-                                            Télécharger
-                                            <i class="mdi mdi-minus float-end accor-plus-icon"></i>
-                                        </h6>
-                                    </div>
-                                </a>
-                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                        data-bs-parent="#accordion">
-                                    <div class="card-body py-0">
-                                        <button class="btn btn-outline-secondary fw-bold col-12 mb-2" id="telechargerAcButton">Avec Calculs</button>
-                                        <button class="btn btn-outline-secondary fw-bold col-12 mb-2" id="telechargerScButton">Sans Calculs</button>                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                          </div>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
-                        <button id="genererBonLivraisonButton" class="btn btn-light fw-bold text-secondary col-12">Générer Bon Livraison</button>
                         {{-- @if( $allTransfert['bonLivraisonVente_id'] != null )
                             <a href="{{ route('showLivraisonVente', $dataBonCommande["bonLivraisonVente_id"] )}}" id="goLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
                         @endif --}}
@@ -185,3 +151,67 @@
 @endsection
 
 @section('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+    const backendUrl = "{{ app('backendUrl') }}";
+    let TransfertId = {{ $allTransfert["id"] }};
+    let $statutBadge = $('.statut-dispo');
+    let confirme = {{ $allTransfert['Confirme'] }};
+
+    $(document).ready(function() {
+        if (confirme == 1) {
+            $('#accordionImprimer, #accordionTelecharger').show();
+            $('#confirmationButton').hide();
+            $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
+            $statutBadge.removeClass('bg-danger').addClass('bg-success');
+        } else {
+            $('#accordionImprimer, #accordionTelecharger').hide();
+            $('#confirmationButton').show();
+            $statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
+            $statutBadge.removeClass('bg-success').addClass('bg-danger');
+        }
+
+        $('#print_transfert').on('click', function() {
+            let url = backendUrl + '/printt/' + TransfertId + '/isDownloaded';
+            let newWindow = window.open(url, '_blank');
+
+            if (newWindow) {
+                // Popup blocked, fallback to opening in the same window
+                newWindow.focus();
+            } else {
+                // Opening in a new window was blocked, display an error message
+                console.log('Popup blocked. Enable popups in your browser settings to proceed.');
+            }
+        });
+
+        $('#confirmationButton').on('click', function() {
+            swal({
+                title: "Confirmation",
+                text: "Êtes-vous sûr de vouloir confirmer le transfert ?",
+                icon: "warning",
+                buttons: ["Annuler", "Confirmer"],
+                dangerMode: true,
+            }).then((confirmed) => {
+                if (confirmed) {
+                    let url = backendUrl + '/transfert/confirme/' + TransfertId;
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        success: function(response) {
+                            swal("Succès", "Le transfert a été confirmé avec succès.", "success").then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            swal("Erreur", "Une erreur s'est produite lors de la confirmation du transfert.", "error");
+                            console.log(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+@endsection

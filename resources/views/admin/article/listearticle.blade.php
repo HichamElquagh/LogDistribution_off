@@ -56,13 +56,13 @@
                             </div>
                             <div class="mb-3 col-lg-4">
                                 <label class="form-label" for="articlereference">Référence</label>
-                                <input type="number" class="form-control" name="articleReference" id="articleReference" value="{{ old('articleReference')}}"/>
+                                <input type="text" class="form-control" name="articleReference" id="articleReference" value="{{ old('articleReference')}}"/>
                             </div>
 
                             <div class="mb-3 col-lg-4">
                                 <label class="form-label" for="articlecategory">Catégorie</label>
                                 <select class="form-select" name="articlecategory" id="articlecategory">
-                                    <option > selectionnez une category</option>
+                                    <option value="" selected> selectionnez une category</option>
                                     @foreach($dataCategory as $category)
                                         <option value="{{$category['id']}}">{{$category['category']}}</option>
                                     @endforeach
@@ -137,6 +137,7 @@
                                         data-bs-placement="top"
                                         data-bs-title="Référence">ref</th>  
                                         <th>Fournisseur</th>
+                                        <th>Category</th>
                                         <th data-bs-toggle="tooltip"
                                         data-bs-placement="top"
                                         data-bs-title="Prix Unitaire">P.U</th>  
@@ -219,7 +220,8 @@
           row.append('<td class="text-warning fw-bold">#' + article.id + "</td>");
           row.append("<td>" + article.article_libelle + "</td>");
           row.append("<td>" + article.reference + "</td>");
-          row.append("<td>" + article.fournisseu&r + "</td>");
+          row.append("<td>" + article.fournisseur + "</td>");
+          row.append("<td>" + article.category + "</td>");
           row.append("<td>" + numeral(article.prix_unitaire).format("0,0.00") + "</td>");
           row.append("<td>" + numeral(article.prix_public).format("0,0.00") + "</td>");
           row.append("<td>" + numeral(article.demi_grossiste).format("0,0.00") + "</td>");
