@@ -12,7 +12,7 @@ class BonRetourController extends Controller
         $bonRetour = Http::get(app('backendUrl').'/bonretourvente');
         $dataBr = $bonRetour->json();
 
-        return view('admin.vente.retour.bonRetour',compact('dataBr'));
+        return view('admin.vente.retour.bonretour',compact('dataBr'));
     }
 
     public function CreateBonRetour(){
