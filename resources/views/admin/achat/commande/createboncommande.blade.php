@@ -345,7 +345,7 @@ function sendCommande() {
             Prix_unitaire: prixUnitaire,
             Quantity: quantite,
             Total_HT: totalHt,
-        };
+        };  
         articles.push(article);
     }
 
