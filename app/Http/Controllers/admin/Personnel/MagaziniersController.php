@@ -10,11 +10,11 @@ class MagaziniersController extends Controller
 {
     public function ListeMagazinier(){
 
-        $magaziniers = Http::get('https://iker.wiicode.tech/api/employee'); 
+        $magaziniers = Http::get(app('backendUrl').'/employee'); 
         $dataMagazinier = collect($magaziniers->json()['data']);
 
         $SoloMagaziniers = $dataMagazinier->filter(function ($magazinier) {
-            return $magazinier['role_name'] === 'Magazinier';
+            return $magazinier['role_name'] === 'magazinier';
         });
         return view('admin.personnel.magazinier',compact('SoloMagaziniers'));
     }

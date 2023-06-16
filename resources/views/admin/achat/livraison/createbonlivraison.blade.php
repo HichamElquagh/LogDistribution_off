@@ -84,6 +84,10 @@
                                     <label class="form-label" for="bltva">TVA</label>
                                     <input type="number" class="form-control" name="bltva" id="bltva" value="{{ old('bltva')}}"/>
                                 </div>
+                                <div class="mb-4 col-lg-6">
+                                    <label class="form-label" for="blimage">Image bon livraison</label>
+                                    <input type="file" class="form-control" name="blimage" id="blimage" value="{{ old('blimage')}}"/>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="mb-3 col-lg-6">
@@ -150,6 +154,7 @@ const dateInput = document.getElementById('bldate');
 const noteTextarea = document.getElementById('blnote');
 const tableBody = document.getElementById('bltable').getElementsByTagName('tbody')[0];
 const warehouseSelect = document.getElementById('warehouseSelect');
+const imageInput = document.getElementById('blimage');
 const backendUrl = "{{ app('backendUrl') }}";
 
 warehouseSelect.disabled = true;
@@ -306,73 +311,144 @@ function updateGlobalTotals() {
     totalTtcGlobalCell.textContent = totalTtcGlobal.toFixed(2) + " dhs";
 }
 
+// function sendLivraison() {
+
+//     const numeroBonLivraison = numeroInput.value;
+//     const totalHtGlobal = totalHtGlobalCell.textContent.replace("dhs", "").trim();
+//     const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
+//     const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
+//     const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
+//     const bonCommandeId = bonCommandeSelect.value;
+//     const dateBonLivraison = dateInput.value;
+//     const noteBonLivraison = noteTextarea.value;
+//     const tvaBonLivraison = document.getElementById('bltva').value;
+//     const fournisseurId = document.getElementById('fournisseurId').value;
+//     const warehouseId = document.getElementById('warehouseSelect').value;
+//     const selectedImage = imageInput.files[0];
+
+//     let articles = [];
+//     let rows = tableBody.rows;
+//     for (let i = 0; i < rows.length; i++) {
+//         let cells = rows[i].cells;
+//         let articleId = cells[0].textContent;
+//         let reference = cells[1].textContent;
+//         let articleName = cells[2].textContent;
+//         let prixUnitaire = cells[3].querySelector("input[name='prixUnitaire']").value;
+//         let quantite = cells[4].querySelector("input[name='quantite']").value;
+//         let totalHt = cells[5].textContent.replace("dhs", "").trim();
+
+//         let article = {
+//             article_id: articleId,
+//             reference: reference,
+//             Prix_unitaire: prixUnitaire,
+//             Quantity: quantite,
+//             Total_HT: totalHt,
+//         };
+//         articles.push(article);
+//     }
+//     let confirmation = document.getElementById('blconfirm').checked ? 1 : 0;
+
+//     // let livraison = {
+//     //     Numero_bonLivraison: numeroBonLivraison,
+//     //     Total_HT: totalHtGlobal,
+//     //     Total_TVA: totalTvaGlobal,
+//     //     Confirme: confirmation,
+//     //     remise: totalRemiseGlobal,
+//     //     date_Blivraison: dateBonLivraison,
+//     //     Total_TTC: totalTtcGlobal,
+//     //     fournisseur_id: fournisseurId,
+//     //     Commentaire: noteBonLivraison,
+//     //     TVA : tvaBonLivraison,
+//     //     bonCommande_id: bonCommandeId,
+//     //     warehouse_id : warehouseId,
+//     //     attachement: selectedImage ? selectedImage : null,
+//     //     Articles: articles,
+//     // };
+
+   
+   
+//     console.log(formData);
+
+//     $.ajax({
+//         url: backendUrl + '/bonlivraison',
+//         type: 'POST',
+//         data: formData,
+//         contentType: false,
+//         processData: false,
+//         success: function(response) {
+//             swal({
+//                 title: response.message,
+//                 icon: "success",
+//                 button: {
+//                     text: "OK",
+//                     className: "btn btn-success" 
+//                 },
+//                 closeOnClickOutside: false
+//             }).then(function() {
+//                 window.location.href = "{{ env('APP_URL') }}/bon-livraison-achat/detail/" + response.id;
+//             });
+//         },
+//         error: function(response) {
+//             swal({
+//                 title: response.responseJSON.message,
+//                 icon: "warning",
+
+//                 button: "OK",
+//                 dangerMode: true,
+//                 closeOnClickOutside: false
+//             });
+//         }        
+//     });
+// }
+
 function sendLivraison() {
+    const formData = new FormData();
 
-    const numeroBonLivraison = numeroInput.value;
-    const totalHtGlobal = totalHtGlobalCell.textContent.replace("dhs", "").trim();
-    const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
-    const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
-    const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
-    const bonCommandeId = bonCommandeSelect.value;
-    const dateBonLivraison = dateInput.value;
-    const noteBonLivraison = noteTextarea.value;
-    const tvaBonLivraison = document.getElementById('bltva').value;
-    const fournisseurId = document.getElementById('fournisseurId').value;
-    const warehouseId = document.getElementById('warehouseSelect').value;
+    formData.append('Numero_bonLivraison', numeroInput.value);
+    formData.append('Total_HT', totalHtGlobalCell.textContent.replace("dhs", "").trim());
+    formData.append('Total_TVA', totalTvaGlobalCell.textContent.replace("dhs", "").trim());
+    formData.append('Confirme', document.getElementById('blconfirm').checked ? 1 : 0);
+    formData.append('remise', totalRemiseCell.textContent.replace("dhs", "").trim());
+    formData.append('date_Blivraison', dateInput.value);
+    formData.append('Total_TTC', totalTtcGlobalCell.textContent.replace("dhs", "").trim());
+    formData.append('fournisseur_id', document.getElementById('fournisseurId').value);
+    formData.append('TVA', document.getElementById('bltva').value);
+    formData.append('bonCommande_id', bonCommandeSelect.value);
+    formData.append('warehouse_id', document.getElementById('warehouseSelect').value);
 
-    let articles = [];
+    const selectedImage = imageInput.files[0];
+    formData.append('attachement', selectedImage);
+
     let rows = tableBody.rows;
     for (let i = 0; i < rows.length; i++) {
         let cells = rows[i].cells;
         let articleId = cells[0].textContent;
         let reference = cells[1].textContent;
-        let articleName = cells[2].textContent;
         let prixUnitaire = cells[3].querySelector("input[name='prixUnitaire']").value;
         let quantite = cells[4].querySelector("input[name='quantite']").value;
         let totalHt = cells[5].textContent.replace("dhs", "").trim();
 
-        let article = {
-            article_id: articleId,
-            reference: reference,
-            Prix_unitaire: prixUnitaire,
-            Quantity: quantite,
-            Total_HT: totalHt,
-        };
-        articles.push(article);
+        formData.append(`Articles[${i}][article_id]`, articleId);
+        formData.append(`Articles[${i}][reference]`, reference);
+        formData.append(`Articles[${i}][Prix_unitaire]`, prixUnitaire);
+        formData.append(`Articles[${i}][Quantity]`, quantite);
+        formData.append(`Articles[${i}][Total_HT]`, totalHt);
     }
-    let confirmation;
-    if(document.getElementById('blconfirm').checked) confirmation = 1;
-    else confirmation = 0;
-
-    let livraison = {
-        Numero_bonLivraison: numeroBonLivraison,
-        Total_HT: totalHtGlobal,
-        Total_TVA: totalTvaGlobal,
-        Confirme: confirmation,
-        remise: totalRemiseGlobal,
-        date_Blivraison: dateBonLivraison,
-        Total_TTC: totalTtcGlobal,
-        fournisseur_id: fournisseurId,
-        Commentaire: noteBonLivraison,
-        TVA : tvaBonLivraison,
-        bonCommande_id: bonCommandeId,
-        warehouse_id : warehouseId,
-        Articles: articles,
-    };
-   
-    console.log(livraison);
-
+    console.log(formData)
+    
     $.ajax({
         url: backendUrl + '/bonlivraison',
         type: 'POST',
-        data: livraison,
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function(response) {
             swal({
                 title: response.message,
                 icon: "success",
                 button: {
                     text: "OK",
-                    className: "btn btn-success" 
+                    className: "btn btn-success"
                 },
                 closeOnClickOutside: false
             }).then(function() {
@@ -383,12 +459,11 @@ function sendLivraison() {
             swal({
                 title: response.responseJSON.message,
                 icon: "warning",
-
                 button: "OK",
                 dangerMode: true,
                 closeOnClickOutside: false
             });
-        }        
+        }
     });
 }
 

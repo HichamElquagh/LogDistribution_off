@@ -56,43 +56,37 @@
                                     <input type="text" class="form-control" name="ventesecteurdate" id="ventesecteurdate" value="{{ old('ventesecteurdate')}}" disabled/>
                                 </div>
                             </div>
-                            <table id="facturetable" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Reference</th>
-                                        <th>Article</th>
-                                        <th>Prix Unitaire</th>
-                                        <th>Quantité</th>
-                                        <th>Total HT</th>
-                                        <th>Supprimer</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-responsive mb-4">
+                                <table id="bonsecteurtable" class="table table-centered mb-0 align-middle table-hover table-nowrap text-center" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Référence</th>
+                                            <th>Article</th>
+                                            <th>Prix Unitaire</th>
+                                            <th>Quantité Sortie</th>
+                                            <th>Quantité Retour</th>
+                                            <th>Quantité Périmé</th>
+                                            <th>Quantité Gratuite</th>
+                                            <th>Quantité Echange</th>
+                                            <th>Quantité Crédit</th>
+                                            <th>Quantité Vendu</th>
+                                            <th>Total HT</th>
+                                            <th>Supprimer</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
-                            <div class="row">
-                                <div class="mb-4 col-lg-4">
-                                    <label class="form-label" for="factureremise">Remise</label>
-                                    <input type="number" class="form-control" name="factureremise" id="factureremise" value=""/>
-                                </div>
-                                <div class="mb-4 col-lg-2">
-                                    <label class="form-label" for="facturetva">TVA</label>
-                                    <input type="number" class="form-control" name="facturetva" id="facturetva" value=""/>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="row">
-                                <div class="mb-3 col-lg-6">
-                                    <div class="mb-4">
-                                        <label class="form-label" for="facturenote">Notes</label>
-                                        <textarea class="form-control" name="facturenote" id="facturenote" rows="4"></textarea>
-                                    </div>
-                                    <div>
-                                        <input class="form-check-input" type="checkbox" id="factureconfirm">
-                                        <label class="form-check-label ms-2" for="formCheck1">
-                                            Confirmer la facture
-                                        </label>
-                                    </div>
+                                <div class="mb-4 col-lg-3">
+                                    <label class="form-label" for="bonsecteurkilometrage">Kilométrage d'entrée</label>
+                                    <input type="number" class="form-control" name="bonsecteurkilometrage" id="bonsecteurkilometrage" value=""/>
+                                </div>
+                                <div class="mb-4 col-lg-3">
+                                    <label class="form-label" for="bonsecteurtva">TVA</label>
+                                    <input type="number" class="form-control" name="bonsecteurtva" id="bonsecteurtva" value=""/>
                                 </div>
                                 <div class="mb-3 col-lg-6">
                                     <table id="summary" class="table stacked mb-0">
@@ -100,10 +94,6 @@
                                             <tr>
                                                 <th width="50" class="fw-normal">Total HT Global</th>
                                                 <td width="50" class="text-end" data-summary-field="totalht">0.00 dhs</td>
-                                            </tr>
-                                            <tr>
-                                                <th width="50" class="fw-normal">Remise</th>
-                                                <td width="50" class="text-end" data-summary-field="remise" class="fw-normal">0.00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-normal">Total TVA Global</th>
@@ -118,9 +108,11 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" class="form-control" name="clientId" id="clientId"/>
+                        <input type="hidden" class="form-control" name="vendeurId" id="vendeurId"/>
+                        <input type="hidden" class="form-control" name="aideVendeurIdOne" id="aideVendeurIdOne"/>
+                        <input type="hidden" class="form-control" name="aideVendeurIdTwo" id="aideVendeurIdTwo"/>
                         <div class="card-footer text-center">
-                            <button onclick="sendFacture()" class="btn btn-warning fw-bold text-white">Ajouter la facture</button>
+                            <button onclick="sendBonSecteur()" class="btn btn-warning fw-bold text-white">Ajouter le bon secteur</button>
                         </div>
                     </span>
                 </div>
@@ -140,253 +132,274 @@
 
 <script>
     
-//     const bonLivraisonSelect = document.getElementById('ventesecteursortie');
-//     const numeroInput = document.getElementById('ventesecteurnum');
-//     const dateInput = document.getElementById('ventesecteurdate');
-//     const noteTextarea = document.getElementById('facturenote');
-//     const tableBody = document.getElementById('facturetable').getElementsByTagName('tbody')[0];
-//     const backendUrl = "{{ app('backendUrl') }}";
+    const bonSortieSelect = document.getElementById('ventesecteursortie');
+    const numeroInput = document.getElementById('ventesecteurnum');
+    const dateInput = document.getElementById('ventesecteurdate');
+    const noteTextarea = document.getElementById('bonsecteurnote');
+    const tableBody = document.getElementById('bonsecteurtable').getElementsByTagName('tbody')[0];
+    const backendUrl = "{{ app('backendUrl') }}";
+    
+    bonSortieSelect.addEventListener('change', function() {
+        const bonSortieId = this.value;
 
-//     bonLivraisonSelect.addEventListener('change', function() {
-//         const bonLivraisonId = this.value;
+        fetch(backendUrl +`/bonsortie/${bonSortieId}`)
+        .then(response => response.json())
+        .then(data => {
+            tableBody.innerHTML = '';
 
-//         fetch(backendUrl +`/bonlivraisonvente/${bonLivraisonId}`)
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log(data.Articles);
-//             tableBody.innerHTML = '';
+            let numeroBonSortie = data.reference;
+        
+            numeroInput.value = numeroBonSortie;
 
-//             const clientId = data.client_id;
-//             let clientIdInput = document.getElementById("clientId");
-//             clientIdInput.value = clientId
+            let vendeurId = data.vendeur_id;
+            let vendeurIdInput = document.getElementById("vendeurId");
+            vendeurIdInput.value = vendeurId
 
-//             data.Articles.forEach(article => {
-//                 let row = tableBody.insertRow();
+            let aideVendeurIdOne = data.aideVendeur_id;
+            let aideVendeurIdOneInput = document.getElementById("aideVendeurIdOne");
+            aideVendeurIdOneInput.value = (aideVendeurIdOne) ? aideVendeurIdOne : null;
 
-//                 let idCell = row.insertCell();
-//                 idCell.innerHTML = article.article_id;
-//                 idCell.style.display = 'none'
+            let aideVendeurIdTwo = data.aideVendeur2_id;
+            let aideVendeurIdTwoInput = document.getElementById("aideVendeurIdTwo");
+            aideVendeurIdTwoInput.value = (aideVendeurIdTwo) ? aideVendeurIdTwo : null;
 
-//                 let referenceCell = row.insertCell();
-//                 referenceCell.textContent = article.reference;
+            data.Articles.forEach(article => {
+                let row = tableBody.insertRow();
+
+                let idCell = row.insertCell();
+                idCell.innerHTML = article.article_id;
+                idCell.style.display = 'none'
+
+                let referenceCell = row.insertCell();
+                referenceCell.textContent = article.reference;
                 
-//                 let articleCell = row.insertCell();
-//                 articleCell.textContent = article.article_libelle;
+                let articleCell = row.insertCell();
+                articleCell.textContent = article.article_libelle;
                 
-//                 let prixUnitaireCell = row.insertCell();
-//                 let prixUnitaireInput = document.createElement('input');
-//                 prixUnitaireInput.type = 'number';
-//                 prixUnitaireInput.name = 'prixUnitaire';
-//                 prixUnitaireInput.classList.add('form-control');
-//                 prixUnitaireInput.value = article.Prix_unitaire;
-//                 prixUnitaireCell.appendChild(prixUnitaireInput);
+                let prixUnitaireCell = row.insertCell();
+                let prixUnitaireInput = document.createElement('input');
+                prixUnitaireInput.type = 'number';
+                prixUnitaireInput.name = 'prixUnitaire';
+                prixUnitaireInput.classList.add('form-control');
+                prixUnitaireCell.appendChild(prixUnitaireInput);
 
-//                 let quantiteCell = row.insertCell();
-//                 let quantiteInput = document.createElement('input');
-//                 quantiteInput.type = 'number';
-//                 quantiteInput.name = 'quantite';
-//                 quantiteInput.classList.add('form-control');
-//                 quantiteInput.value = article.Quantity;
-//                 quantiteCell.appendChild(quantiteInput);
-                
-//                 let totalHTCell = row.insertCell();
-//                 totalHTCell.textContent = '0.00 dhs';
-                
-//                 let deleteCell = row.insertCell();
-//                 let deleteButton = document.createElement("button");
-//                 deleteButton.classList.add("btn", "btn-sm", "btn-outline-danger");
-                
-//                 let deleteIcon = document.createElement("i");
-//                 deleteIcon.classList.add("fas", "fa-trash-alt");
-//                 deleteButton.appendChild(deleteIcon);
-                
-//                 deleteButton.addEventListener('click', function() {
-//                     tableBody.removeChild(row);
-//                     updateGlobalTotals()
-//                 });
-//                 deleteCell.appendChild(deleteButton);
+                let quantiteSortieCell = row.insertCell();
+                let quantiteSortieInput = document.createElement('input');
+                quantiteSortieInput.type = 'number';
+                quantiteSortieInput.name = 'quantiteSortie';
+                quantiteSortieInput.classList.add('form-control');
+                quantiteSortieInput.value = article.QuantitySortie;
+                quantiteSortieCell.appendChild(quantiteSortieInput);
 
-//                 prixUnitaireInput.addEventListener("input", calculTotalHt);
-//                 quantiteInput.addEventListener("input", calculTotalHt);  
+                let quantiteRetourCell = row.insertCell();
+                let quantiteRetourInput = document.createElement('input');
+                quantiteRetourInput.type = 'number';
+                quantiteRetourInput.name = 'quantiteRetour';
+                quantiteRetourInput.classList.add('form-control');
+                quantiteRetourCell.appendChild(quantiteRetourInput);
 
-//                 function calculTotalHt() {
-//                     let prixUnitaire = parseFloat(prixUnitaireInput.value);
-//                     let quantite = parseInt(quantiteInput.value);
+                let quantitePerimeCell = row.insertCell();
+                let quantitePerimeInput = document.createElement('input');
+                quantitePerimeInput.type = 'number';
+                quantitePerimeInput.name = 'quantitePerime';
+                quantitePerimeInput.classList.add('form-control');
+                quantitePerimeCell.appendChild(quantitePerimeInput);
+
+                let quantiteGratuitCell = row.insertCell();
+                let quantiteGratuitInput = document.createElement('input');
+                quantiteGratuitInput.type = 'number';
+                quantiteGratuitInput.name = 'quantiteGratuit';
+                quantiteGratuitInput.classList.add('form-control');
+                quantiteGratuitCell.appendChild(quantiteGratuitInput);
+
+                let quantiteEchangeCell = row.insertCell();
+                let quantiteEchangeInput = document.createElement('input');
+                quantiteEchangeInput.type = 'number';
+                quantiteEchangeInput.name = 'quantiteEchange';
+                quantiteEchangeInput.classList.add('form-control');
+                quantiteEchangeCell.appendChild(quantiteEchangeInput);
+
+                let quantiteCreditCell = row.insertCell();
+                let quantiteCreditInput = document.createElement('input');
+                quantiteCreditInput.type = 'number';
+                quantiteCreditInput.name = 'quantiteCredit';
+                quantiteCreditInput.classList.add('form-control');
+                quantiteCreditCell.appendChild(quantiteCreditInput);
+
+                let quantiteVenduCell = row.insertCell();
+                let quantiteVenduInput = document.createElement('input');
+                quantiteVenduInput.type = 'number';
+                quantiteVenduInput.name = 'quantiteVendu';
+                quantiteVenduInput.classList.add('form-control');
+                quantiteVenduCell.appendChild(quantiteVenduInput);
+                
+                let totalHTCell = row.insertCell();
+                totalHTCell.textContent = '0.00 dhs';
+                
+                let deleteCell = row.insertCell();
+                let deleteButton = document.createElement("button");
+                deleteButton.classList.add("btn", "btn-sm", "btn-outline-danger");
+                
+                let deleteIcon = document.createElement("i");
+                deleteIcon.classList.add("fas", "fa-trash-alt");
+                deleteButton.appendChild(deleteIcon);
+                
+                deleteButton.addEventListener('click', function() {
+                    tableBody.removeChild(row);
+                    updateGlobalTotals()
+                });
+                deleteCell.appendChild(deleteButton);
+
+                prixUnitaireInput.addEventListener("input", calculTotalHt);
+                quantiteVenduInput.addEventListener("input", calculTotalHt);  
+
+                function calculTotalHt() {
+                    let prixUnitaire = parseFloat(prixUnitaireInput.value);
+                    let quantite = parseInt(quantiteVenduInput.value);
                     
-//                     let totalHt = prixUnitaire * quantite;
-//                     if(prixUnitaireInput.value > 0 && quantiteInput.value > 0)
-//                         totalHTCell.textContent = totalHt.toFixed(2) + " dhs";
-//                     if(prixUnitaireInput.value == 0 || quantiteInput.value== 0)
-//                         totalHTCell.textContent = '0.00 dhs';
-//                     updateGlobalTotals();
-//                 }
-//                 calculTotalHt();
-//             });
-//             let remiseInput = document.getElementById('factureremise');
-//             remiseInput.value = data.remise;
+                    let totalHt = prixUnitaire * quantite;
+                    if(prixUnitaireInput.value > 0 && quantiteVenduInput.value > 0)
+                        totalHTCell.textContent = totalHt.toFixed(2) + " dhs";
+                    if(prixUnitaireInput.value == 0 || quantiteVenduInput.value== 0)
+                        totalHTCell.textContent = '0.00 dhs';
+                    updateGlobalTotals();
+                }
+                calculTotalHt();
+            });
 
-//             let tvaInput = document.getElementById('facturetva');
-//             tvaInput.value = data.TVA;
+            let tvaInput = document.getElementById('bonsecteurtva');
+            tvaInput.value = data.TVA;
 
-//             updateGlobalTotals();
-//         })
-//     });
+            updateGlobalTotals();
+        })
+    });
 
-// let totalHtGlobalCell = document.querySelector('[data-summary-field="totalht"]');
-// let totalRemiseCell = document.querySelector('[data-summary-field="remise"]');
-// let totalTvaGlobalCell = document.querySelector('[data-summary-field="totaltva"]');
-// let totalTtcGlobalCell = document.querySelector('[data-summary-field="totalttc"]');
+let totalHtGlobalCell = document.querySelector('[data-summary-field="totalht"]');
+let totalTvaGlobalCell = document.querySelector('[data-summary-field="totaltva"]');
+let totalTtcGlobalCell = document.querySelector('[data-summary-field="totalttc"]');
 
-// function updateGlobalTotals() {
+function updateGlobalTotals() {
 
-//     let remiseInput = document.querySelector('[name="factureremise"]')
-//     let tvaInput = document.querySelector('[name="facturetva"]');
-//     remiseInput.addEventListener("input", updateGlobalTotals);
-//     tvaInput.addEventListener("input", updateGlobalTotals);
-//     let totalHtGlobal = 0;
-//     let totalTvaGlobal = 0;
-//     let totalTtcGlobal = 0;
+    let tvaInput = document.querySelector('[name="bonsecteurtva"]');
+    tvaInput.addEventListener("input", updateGlobalTotals);
+    let totalHtGlobal = 0;
+    let totalTvaGlobal = 0;
+    let totalTtcGlobal = 0;
 
-//     let rows = tableBody.rows;
+    let rows = tableBody.rows;
     
-//     for (let i = 0; i < rows.length; i++) {
-//         let cells = rows[i].cells;
-//         let totalHt = parseFloat(cells[5].textContent.replace("dhs", "").trim());
+    for (let i = 0; i < rows.length; i++) {
+        let cells = rows[i].cells;
+        let totalHt = parseFloat(cells[11].textContent.replace("dhs", "").trim());
 
-//         totalHtGlobal += totalHt;
-//         totalTvaGlobal += totalHt * (tvaInput.value / 100);
+        totalHtGlobal += totalHt;
+        totalTvaGlobal += totalHt * (tvaInput.value / 100);
+        totalTtcGlobal += totalHtGlobal + totalTvaGlobal;
+    }
 
-//         let remise = parseFloat(remiseInput.value);
+    totalHtGlobalCell.textContent = totalHtGlobal.toFixed(2) + " dhs";
+    totalTvaGlobalCell.textContent = totalTvaGlobal.toFixed(2) + " dhs";
+    totalTtcGlobalCell.textContent = totalTtcGlobal.toFixed(2) + " dhs";
+}
 
-//         if (remise && remise <= totalHtGlobal) {
-//             totalTvaGlobal = totalHtGlobal * (tvaInput.value / 100);
-//             totalTtcGlobal = totalHtGlobal - remise + totalTvaGlobal;
-//         } else if (remise && remise > totalHtGlobal) {
-//             remise = totalHtGlobal;
-//             totalTvaGlobal = totalHtGlobal * (tvaInput.value / 100);
-//             totalTtcGlobal = totalHtGlobal - remise + totalTvaGlobal;
-//         } else {
-//             totalTtcGlobal = totalHtGlobal + totalTvaGlobal;
-//         }
-//     }
+function sendBonSecteur() {
 
-//     totalHtGlobalCell.textContent = totalHtGlobal.toFixed(2) + " dhs";
+    const numeroBonSecteur = numeroInput.value;
+    const totalHtGlobal = totalHtGlobalCell.textContent.replace("dhs", "").trim();
+    const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
+    const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
+    const bonSecteurId = bonSortieSelect.value;
+    const dateBonSecteur = dateInput.value;
+    const tvaBonSecteur = document.getElementById('bonsecteurtva').value;
+    const vendeurId = document.getElementById('vendeurId').value;
+    const kilometrageEntree = document.getElementById('bonsecteurkilometrage').value;
 
-//     if (remiseInput.value && parseFloat(remiseInput.value) > totalHtGlobal) {
-//         totalRemiseCell.textContent = totalHtGlobal.toFixed(2) + " dhs";
-//     } else if (remiseInput.value) {
-//         totalRemiseCell.textContent = parseFloat(remiseInput.value).toFixed(2) + " dhs";
-//     } else {
-//         totalRemiseCell.textContent = "0.00 dhs";
-//     }
-    
-//     totalTvaGlobalCell.textContent = totalTvaGlobal.toFixed(2) + " dhs";
-//     totalTtcGlobalCell.textContent = totalTtcGlobal.toFixed(2) + " dhs";
-// }
+    let articles = [];
+    let rows = tableBody.rows;
+    for (let i = 0; i < rows.length; i++) {
+        let cells = rows[i].cells;
+        let articleId = cells[0].textContent;
+        let prixUnitaire = cells[3].querySelector("input[name='prixUnitaire']").value;
+        let quantiteSortie = cells[4].querySelector("input[name='quantiteSortie']").value;
+        let quantiteRetour = cells[5].querySelector("input[name='quantiteRetour']").value;
+        let quantitePerime = cells[6].querySelector("input[name='quantitePerime']").value;
+        let quantiteGratuit = cells[7].querySelector("input[name='quantiteGratuit']").value;
+        let quantiteEchange = cells[8].querySelector("input[name='quantiteEchange']").value;
+        let quantiteCredit = cells[9].querySelector("input[name='quantiteCredit']").value;
+        let quantiteVendu = cells[10].querySelector("input[name='quantiteVendu']").value;
+        let totalHt = cells[11].textContent.replace("dhs", "").trim();
 
-// function sendFacture() {
+        let article = {
+            article_id: articleId,
+            Prix_unitaire: prixUnitaire,
+            qte_sortie: quantiteSortie,
+            qte_retourV: (quantiteRetour) ? quantiteRetour : "0",
+            qte_perime: (quantitePerime) ? quantitePerime : "0",
+            qte_gratuit: (quantiteGratuit) ? quantiteGratuit : "0",
+            qte_echange: (quantiteEchange) ? quantiteEchange : "0",
+            qte_credit: (quantiteCredit) ? quantiteCredit : "0",
+            qte_vendu: (quantiteVendu) ? quantiteVendu : "0",
+            Total_Vendu: totalHt,
+        };
+        articles.push(article);
+    }
 
-//     const numeroFacture = numeroInput.value;
-//     const totalHtGlobal = totalHtGlobalCell.textContent.replace("dhs", "").trim();
-//     const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
-//     const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
-//     const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
-//     const bonLivraisonId = bonLivraisonSelect.value;
-//     const dateFacture = dateInput.value;
-//     const noteFacture = noteTextarea.value;
-//     const tvaFacture = document.getElementById('facturetva').value;
-//     const clientId = document.getElementById('clientId').value;
-
-//     let articles = [];
-//     let rows = tableBody.rows;
-//     for (let i = 0; i < rows.length; i++) {
-//         let cells = rows[i].cells;
-//         let articleId = cells[0].textContent;
-//         let reference = cells[1].textContent;
-//         let articleName = cells[2].textContent;
-//         let prixUnitaire = cells[3].querySelector("input[name='prixUnitaire']").value;
-//         let quantite = cells[4].querySelector("input[name='quantite']").value;
-//         let totalHt = cells[5].textContent.replace("dhs", "").trim();
-
-//         let article = {
-//             article_id: articleId,
-//             reference: reference,
-//             article_libelle: articleName,
-//             Prix_unitaire: prixUnitaire,
-//             Quantity: quantite,
-//             Total_HT: totalHt,
-//         };
-//         articles.push(article);
-//     }
-//     let confirmation;
-//     if(document.getElementById('factureconfirm').checked) confirmation = 1;
-//     else confirmation = 0;
-
-//     let facture = {
-//         numero_FactureVente: numeroFacture,
-//         Total_HT: totalHtGlobal,
-//         Total_TVA: totalTvaGlobal,
-//         Confirme: confirmation,
-//         remise: totalRemiseGlobal,
-//         date_FactureVente: dateFacture,
-//         Total_TTC: totalTtcGlobal,
-//         Total_Rester: totalTtcGlobal,
-//         client_id: clientId,
-//         Commentaire: noteFacture,
-//         TVA : tvaFacture,
-//         bonLivraisonVente_id: bonLivraisonId,
-//         Articles: articles,
-//     };
+    let bonsecteur = {
+        Total_HT: totalHtGlobal,
+        Total_TVA: totalTvaGlobal,
+        Confirme: 0,
+        dateEntree: dateBonSecteur,
+        Total_TTC: totalTtcGlobal,
+        TVA : tvaBonSecteur,
+        bonSortie_id: bonSecteurId,
+        kilometrageFait: kilometrageEntree,
+        Articles: articles,
+    };
    
-//     console.log(facture);
+    console.log(bonsecteur);
 
-//     $.ajax({
-//         url: backendUrl +'/facturevente',
-//         type: 'POST',
-//         data: facture,
-//         success: function(response) {
-//             swal({
-//                 title: response.message,
-//                 icon: "success",
-//                 button: {
-//                     text: "OK",
-//                     className: "btn btn-success" 
-//                 },
-//                 closeOnClickOutside: false
-//             }).then(function() {
-//                 window.location.href = "{{ env('APP_URL') }}/facture-vente/detail/" + response.id;
-//             });
-//         },
-//         error: function(response) {
-//             swal({
-//                 title: response.responseJSON.message,
-//                 icon: "warning",
+    $.ajax({
+        url: backendUrl +'/ventesecteur',
+        type: 'POST',
+        data: bonsecteur,
+        success: function(response) {
+            swal({
+                title: response.message,
+                icon: "success",
+                button: {
+                    text: "OK",
+                    className: "btn btn-success" 
+                },
+                closeOnClickOutside: false
+            }).then(function() {
+                window.location.href = "{{ env('APP_URL') }}/bon-vente-secteur/detail/" + response.id;
+            });
+        },
+        error: function(response) {
+            swal({
+                title: response.responseJSON.message,
+                icon: "warning",
 
-//                 button: "OK",
-//                 dangerMode: true,
-//                 closeOnClickOutside: false
-//             });
-//         }        
-//     });
-// }
+                button: "OK",
+                dangerMode: true,
+                closeOnClickOutside: false
+            });
+        }        
+    });
+}
 
 $(document).ready(function() {
 
-    $.ajax({
-        url: backendUrl +'/getnf',
-        type: 'GET',
-        success: function(response) {
-            console.log(response);
-            document.getElementById("ventesecteurnum").value = response.num_fv;
-            let today = new Date();
-            let dd = String(today.getDate()).padStart(2, '0');
-            let mm = String(today.getMonth() + 1).padStart(2, '0');
-            let yyyy = today.getFullYear();
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0');
+    let yyyy = today.getFullYear();
+    let h = String(today.getHours()).padStart(2, '0');
+    let m = String(today.getMinutes()).padStart(2, '0');
+    let s = String(today.getSeconds()).padStart(2, '0');
 
-            today = yyyy + '-' + mm + '-' + dd;
-            document.getElementById("ventesecteurdate").value = today;
-        },
-    });
+    today = yyyy + '-' + mm + '-' + dd + ' ' + h + ':' + m + ':' + s;
+    document.getElementById("ventesecteurdate").value = today;
 
 });
 

@@ -11,9 +11,9 @@ class ArticlesController extends Controller
 {
     public function ListeArticle(){
 
-        $categories = Http::get('https://iker.wiicode.tech/api/categories');
+        $categories = Http::get(app('backendUrl').'/categories');
         $dataCategory = $categories->json();
-        $fournisseurs = Http::get('https://iker.wiicode.tech/api/fournisseurs');
+        $fournisseurs = Http::get(app('backendUrl').'/fournisseurs');
         $dataFournisseurs = $fournisseurs->json();
 
         return view('admin.article.listearticle',compact('dataCategory','dataFournisseurs'));

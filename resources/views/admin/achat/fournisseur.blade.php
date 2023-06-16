@@ -153,6 +153,7 @@
 
 
 <script>
+     const backendUrl = "{{ app('backendUrl') }}";
 
 
 
@@ -174,7 +175,7 @@
 
         function dislaydatafornisseur() {
             $.ajax({
-                    url: 'https://iker.wiicode.tech/api/fournisseurs',
+                    url: backendUrl + '/fournisseurs',
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
@@ -226,7 +227,7 @@
     // console.log(FournisseurNom);
 
     $.ajax({
-        url: 'https://iker.wiicode.tech/api/fournisseurs',
+        url: backendUrl + '/fournisseurs',
         type: "POST",
         data: {
             code_fournisseur: FournisseurCode,
@@ -260,7 +261,7 @@
             $("#myLargeModalLabel").text('Edit Fournisseur');
 
             $.ajax({
-              url: 'https://iker.wiicode.tech/api/fournisseurs/' + id,
+              url: backendUrl + '/fournisseurs/' + id,
               type: 'GET',
               dataType: 'json',
 
@@ -303,7 +304,7 @@
     // console.log(FournisseurId);
 
     $.ajax({
-        url: 'https://iker.wiicode.tech/api/fournisseurs/' + FournisseurId,
+        url: backendUrl + '/fournisseurs/' + FournisseurId,
         type: "PUT",
         data: {
             code_fournisseur: FournisseurCode,
@@ -344,7 +345,7 @@
             if (willDelete) {
                               
             $.ajax({
-            url: 'https://iker.wiicode.tech/api/fournisseurs/' + id,
+            url: backendUrl + '/fournisseurs/' + id,
             type: "delete",
                 dataType: "json",
                 success: function(response) {

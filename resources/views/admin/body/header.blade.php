@@ -9,7 +9,7 @@
                         <img src="{{ asset('backend/assets/images/logos/logo-sm.png') }}" alt="logo-sm-light" height="40">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('backend/assets/images/logos/logo-light.png') }}" alt="logo-light" width="100">
+                        <img class="mt-2" src="{{ asset('backend/assets/images/logos/logo-light.png') }}" alt="logo-light" width="100">
                     </span>
                 </a>
             </div>
@@ -119,9 +119,9 @@
             <div class="dropdown d-inline-block user-dropdown">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="{{ asset('backend/assets/images/users/profile/avatar-6.jpg') }}"
-                        alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1 text-dark fw-bold">MEhdi</span>
+                    {{-- <img class="rounded-circle header-profile-user" src="{{ asset('backend/assets/images/users/profile/avatar-6.jpg') }}"
+                        alt="Header Avatar"> --}}
+                    <span class="d-none d-xl-inline-block ms-1 text-dark fw-bold">Administrateur</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block text-dark fw-bold"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">

@@ -1,7 +1,8 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Bon de Commande | Log Dist Du Nord
+    Transfert
+     | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +13,15 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Bon de Commande</h4>
+                    <h4 class="mb-sm-0">Transfert 
+            
+
+                    </h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Bon de Commande</li>
+                            <li class="breadcrumb-item active">Transfert </li>
                         </ol>
                     </div>
 
@@ -26,7 +30,9 @@
         </div>
 
         <div class="d-flex mb-3 justify-content-end">
-            <a href="{{route('createCommandeVente')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de commande</a>
+            <a href="{{route('createTransfert')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un Transfert 
+
+            </a>
         </div>
 
         <div class="row">
@@ -38,39 +44,39 @@
                             <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>N° Bon Commande</th> 
-                                    <th>Client</th>  
-                                    <th>Etat</th>
-                                    <th>Total HT</th>
-                                    <th>Total TVA</th>
-                                    <th>Total TTC</th>
-                                    <th>Confirmé</th>
-                                    <th>Date</th>
+                                    <th>N° reference</th> 
+                                    <th>De L'entrepôt </th>  
+                                    <th>À L'entrepôt</th>
+                                    <th>Nom Employee </th>
+                                    <th>Camion </th>
+                                    <th>Matricule</th>
+                                    <th>Confirmation</th>
+                                    <th>Date Transfert</th>
                                     <th>Détail</th>
                                 </tr>
                             </thead>
                             
                             <tbody class="text-center">
-                                @foreach($dataBc as $boncommande)
+                                @foreach($allTransfert as $transfert)
                                         <tr>
-                                            <td class="text-warning fw-bold">#{{$boncommande['id']}}</td>
-                                            <td>{{$boncommande['Numero_bonCommandeVente']}}</td>
-                                            <td>{{$boncommande['nom_Client']}}</td>
-                                            <td>{{$boncommande['Etat']}}</td>
-                                            <td>{{$boncommande['Total_HT']}}</td>
-                                            <td>{{$boncommande['Total_TVA']}}</td>
-                                            <td>{{$boncommande['Total_TTC']}}</td>
+                                            <td class="text-warning fw-bold">#{{$transfert['id']}}</td>
+                                            <td>{{$transfert['reference']}}</td>
+                                            <td>{{$transfert['warehousesFrom']}}</td>
+                                            <td>{{$transfert['warehouseTo']}}</td>
+                                            <td>{{$transfert['nom_employee']}}</td>
+                                            <td>{{$transfert['marque']}}</td>
+                                            <td>{{$transfert['matricule']}}</td>
                                             <td>
-                                                <span class="statut-dispo badge bg-{{ $boncommande['Confirme'] == 1 ? 'success' : 'danger' }} text-white">
-                                                    <i class="{{ $boncommande['Confirme'] == 1 ? 'ri-checkbox-circle-line' : 'ri-close-circle-line' }} align-middle font-size-14 text-white"></i> 
-                                                    {{ $boncommande['Confirme'] == 1 ? 'Confirmé' : 'Non Confirmé' }}
+                                                <span class="statut-dispo badge bg-{{ $transfert['Confirme'] == 1 ? 'success' : 'danger' }} text-white">
+                                                    <i class="{{ $transfert['Confirme'] == 1 ? 'ri-checkbox-circle-line' : 'ri-close-circle-line' }} align-middle font-size-14 text-white"></i> 
+                                                    {{ $transfert['Confirme'] == 1 ? 'Confirmé' : 'Non Confirmé' }}
                                                 </span>
                                             </td>
                                             <td>
-                                                {{\Carbon\Carbon::parse($boncommande['date_BCommandeVente'])->isoFormat("LL") }}
+                                                {{\Carbon\Carbon::parse($transfert['dateTransfert'])->isoFormat("LL") }}
                                             </td>
                                             <td>
-                                                <a  href="{{route("showCommandeVente",$boncommande['id'])}}"
+                                                <a  href="{{route("showTransfert", $transfert['id'])}}"
                                                     class="btn btn-outline-primary btn-sm mb-2"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"

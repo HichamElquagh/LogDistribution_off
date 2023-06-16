@@ -239,7 +239,7 @@ Depenses | Log Dist Du Nord
             var upDepenseTax = $('#editDepenseTax').val();
               
              $.ajax({
-                url :  backendUrl + "/depense/" + upDepenseId,
+            url :  backendUrl + "/depense/" + upDepenseId,
            type : 'put',
            data : {
             depense : upDepensename,

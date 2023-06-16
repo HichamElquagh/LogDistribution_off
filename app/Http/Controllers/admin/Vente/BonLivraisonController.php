@@ -29,6 +29,6 @@ class BonLivraisonController extends Controller
         $societe = Http::get(app('backendUrl').'/societe');
         $dataSociete = $societe->json();
 
-        return view('admin.vente.Livraison.showbonlivraison',compact('dataBonLivraison','dataSociete'));
+        return view('admin.vente.livraison.showbonlivraison',compact('dataBonLivraison','dataSociete'));
     }
 }

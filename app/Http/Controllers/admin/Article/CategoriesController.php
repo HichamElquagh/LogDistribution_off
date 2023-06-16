@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class CategoriesController extends Controller
 {
     public function ListeCategorie(){
-        $categories = Http::get('https://iker.wiicode.tech/api/categories');
+        $categories = Http::get(app('backendUrl').'/categories');
         $dataCategory = $categories->json();
 
         return view('admin.article.listecategory',compact('dataCategory'));

@@ -26,7 +26,7 @@ wireHouse| Log Dist Du Nord
         </div>
 
         <div class="d-flex mb-3 justify-content-end">
-            <button type="button" class="btn btn-warning fw-bold text-white"  data-bs-toggle="modal" onclick="changeBtn()" data-bs-target=".roleModal"> Ajouter un stock </button>
+            <button type="button" class="btn btn-warning fw-bold text-white"  data-bs-toggle="modal" onclick="changeBtn()" data-bs-target=".roleModal"> Ajouter un Role </button>
         </div>
 
 

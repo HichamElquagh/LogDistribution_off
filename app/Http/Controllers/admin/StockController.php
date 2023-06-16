@@ -15,8 +15,8 @@ class StockController extends Controller
     public function index()
     {
         //
-        $responseArticles = Http::get('https://iker.wiicode.tech/api/articles');
-        $responseWarehouse = Http::get('https://iker.wiicode.tech/api/warehouse');
+        $responseArticles = Http::get(app('backendUrl').'/articles');
+        $responseWarehouse = Http::get(app('backendUrl').'/warehouse');
         $allArticles = $responseArticles->json();
         $allWarehouses = $responseWarehouse->json();
         

@@ -104,7 +104,7 @@ Banque | Log Dist Du Nord
                             <div class="mb-3 col-lg-6" id="journallabel">
                                 <label class="form-label" for="journal" >Jornal </label>
                                 <select class="form-select" name="journal" id="journal">
-                                    <option  > selectionnez un jornal  </option>
+                                    <option value=" " selected > selectionnez un jornal  </option>
                               @foreach ( $allJournals as $journal )
                               <option value="{{ $journal['id'] }}" > {{ $journal['Code_journal']}} </option>
                               @endforeach
@@ -142,7 +142,7 @@ Banque | Log Dist Du Nord
                             <button type="button"  class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
                             <button onclick="storebank()" class="btn btn-warning fw-bold text-white" id="add-btn">Ajouter</button>
                             <button onclick="updatebank()" class="btn btn-warning fw-bold text-white" id="update-btn">Update</button>
-                            <button onclick="addsoldetobank()" class="btn btn-warning fw-bold text-white" id="add-solde-btn">Ajouter un solde</button>
+                            <button onclick="addsoldetobank()" class="btn btn-warning fw-bold text-white" id="add-solde-btn">Operations </button>
                         </div>
                     </div>
                 </div>
@@ -200,7 +200,7 @@ Banque | Log Dist Du Nord
 @section('script')
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
-            const backendUrl = "{{ app('backendUrl') }}";
+            // const backendUrl = "{{ app('backendUrl') }}" ;
 
         // import swal from 'sweetalert';
 

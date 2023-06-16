@@ -1,7 +1,7 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Bon de Livraison | Log Dist Du Nord
+    Bon de Retour | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Bon de Livraison</h4>
+                    <h4 class="mb-sm-0">Bon de Retour</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Bon de Livraison</li>
+                            <li class="breadcrumb-item active">Bon de Retour</li>
                         </ol>
                     </div>
 
@@ -42,11 +42,11 @@
                                 @endforeach
                             </div>
                             <div>
-                                <h4 class="fw-semibold mb-2">BON LIVRAISON {{$dataBonLivraison['Numero_bonLivraisonVente']}}</h4>
+                                <h4 class="fw-semibold mb-2">BON RETOUR {{$dataBonRetour['Numero_bonRetour']}}</h4>
                                 <div class="mb-4 pt-1 d-flex">
                                     <span class="pe-2">Date: </span>
                                     <span class="fw-semibold pe-3">
-                                        {{\Carbon\Carbon::parse($dataBonLivraison['date_BlivraisonVente'])->isoFormat("LL") }}
+                                        {{\Carbon\Carbon::parse($dataBonRetour['date_BRetour'])->isoFormat("LL") }}
                                     </span>
                                     <span class="statut-dispo d-flex align-items-center badge text-white">
 
@@ -54,10 +54,10 @@
                                 </div>
                                 <div class="">
                                     @php
-                                        $client = Http::get(app('backendUrl').'/client/'.$dataBonLivraison['client_id']);
+                                        $client = Http::get(app('backendUrl').'/client/'.$dataBonRetour['client_id']);
                                         $dataClient = $client->json()['client'];
                                     @endphp
-                                    <h6 class="mb-3">Envoyé à:</h6>
+                                    <h6 class="mb-3">Envoyé par:</h6>
                                     <p class="mb-2">{{ $dataClient['nom_Client'] }}</p>
                                     <p class="mb-2">{{ $dataClient['adresse_Client'] }}</p>
                                     <p class="mb-2">{{ $dataClient['telephone_Client'] }}</p>
@@ -78,7 +78,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($dataBonLivraison['Articles'] as $article)
+                                @foreach($dataBonRetour['Articles'] as $article)
                                     <tr>
                                         <td class="text-nowrap" width="300">{{$article['reference']}}</td>
                                         <td class="text-nowrap" width="600">{{$article['article_libelle']}}</td>
@@ -96,15 +96,13 @@
                                     </td>
                                     <td class="text-start pe-3 py-4" width="250">
                                         <p class="mb-2 pt-3 fw-bold">Total HT</p>
-                                        <p class="mb-2 fw-bold">Remise</p>
                                         <p class="mb-2 fw-bold">Total TVA</p>
                                         <p class="mb-0 pb-3 fw-bold">Total TTC</p>
                                     </td>
                                     <td class="ps-2 pe-5 py-4 text-end" width="800">
-                                        <p class="fw-semibold mb-2 pt-3">{{number_format($dataBonLivraison['Total_HT'], 2, ',', ' ')}} Dhs</p>
-                                        <p class="fw-semibold mb-2">{{number_format($dataBonLivraison['remise'], 2, ',', ' ')}} Dhs</p>
-                                        <p class="fw-semibold mb-2">{{number_format($dataBonLivraison['Total_TVA'], 2, ',', ' ')}} Dhs</p>
-                                        <p class="fw-semibold mb-0 pb-3">{{number_format($dataBonLivraison['Total_TTC'], 2, ',', ' ')}} Dhs</p>
+                                        <p class="fw-semibold mb-2 pt-3">{{number_format($dataBonRetour['Total_HT'], 2, ',', ' ')}} Dhs</p>
+                                        <p class="fw-semibold mb-2">{{number_format($dataBonRetour['Total_TVA'], 2, ',', ' ')}} Dhs</p>
+                                        <p class="fw-semibold mb-0 pb-3">{{number_format($dataBonRetour['Total_TTC'], 2, ',', ' ')}} Dhs</p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -115,7 +113,7 @@
                         <div class="row">
                             <div class="col-12 text-center">
                                 <span class="fw-bold">Note : </span>
-                                <span>{{$dataBonLivraison['Commentaire']}}</span>
+                                <span>{{$dataBonRetour['Commentaire']}}</span>
                             </div>
                         </div>
                     </div>
@@ -125,7 +123,7 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         Actions
-                        <a href="{{ route('listeLivraisonVente') }}" class="btn btn-outline-secondary btn-sm" type="submit">
+                        <a href="{{ route('listeRetourVente') }}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>
@@ -136,13 +134,11 @@
                         <div id="accordionTelecharger">
                             <button class="btn btn-light text-secondary fw-bold col-12 mb-2" id="telechargerAcButton">Télécharger</button>
                         </div>
-                        <button id="genererBonReceptionButton" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Récéption</button>
-                        <button id="genererFacture" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Facture</button>
-                        <button id="genererBonRetour" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Retour</button>
-                        @if( $dataBonLivraison['factureVente_id'] != null )
-                            <a href="{{ route('showFactureVente', $dataBonLivraison["factureVente_id"] )}}" id="goFacture" class="btn btn-light fw-bold text-secondary mb-2 col-12">Facture</a>
-                        @endif
-                        <a href="{{ route('showCommandeVente', $dataBonLivraison["bonCommandeVente_id"] )}}" id="retourBonCommande" class="btn btn-warning fw-bold text-white col-12">Bon Commande</a>
+                        {{-- <button id="genererFacture" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Facture Avoir</button> --}}
+                        {{-- @if( $dataBonRetour['facture_id'] != null )
+                            <a href="{{ route('showFacture', $dataBonRetour["facture_id"] )}}" id="goFacture" class="btn btn-light fw-bold text-secondary mb-2 col-12">Facture Avoir</a>
+                        @endif --}}
+                        <a href="{{ route('showLivraisonVente', $dataBonRetour["bonLivraison_id"] )}}" id="retourBonLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
                     </div>
                 </div>
@@ -162,65 +158,49 @@
 <script>
 
 $(document).ready(function() {
-    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonCommande, #genererFacture, #genererBonRetour').hide();
+    $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').hide();
 
-    let confirme = {{ $dataBonLivraison['Confirme'] }};
+    let confirme = {{ $dataBonRetour['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
-    let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
+    let existe = {{ $dataBonRetour['id'] }};
     const backendUrl = "{{ app('backendUrl') }}";
     
     if (confirme == 1) {
-        $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton , #retourBonCommande').show();
+        $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').show();
         $('#confirmationButton').hide();
         $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
         $statutBadge.removeClass('bg-danger').addClass('bg-success');
         console.log($statutBadge)
     } else {
-        $('#accordionImprimer, #accordionTelecharger, #retourBonCommande').hide();
+        $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').hide();
         $('#confirmationButton').show();
         $statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
         $statutBadge.removeClass('bg-success').addClass('bg-danger');
         console.log($statutBadge)
     }
 
-    $.ajax({
-        url: backendUrl +'/getblv',
-        method: 'GET',
-        success: function(response) { 
-           response.forEach(e => {
+    // $.ajax({
+    //     url: backendUrl +'/getblf',
+    //     method: 'GET',
+    //     success: function(response) { 
+    //        response.forEach(e => {
             
-            console.log(e.id)
-                if (e.id == bonLivraisonId) {
-                    $('#genererFacture').show();
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-        }
-    }); 
-
-    $.ajax({
-        url: backendUrl +'/getblrv',
-        method: 'GET',
-        success: function(response) { 
-           response.forEach(e => {
-            
-            console.log(e.id)
-                if (e.id == bonLivraisonId) {
-                    $('#genererBonRetour').show();
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-        }
-    }); 
+    //         console.log(e.id)
+    //             if (e.id == existe) {
+    //                 $('#genererFacture').show();
+    //             }
+    //         });
+    //     },
+    //     error: function(xhr, status, error) {
+    //         console.error(error);
+    //     }
+    // }); 
 
     $('#confirmationButton').on('click', function() {
+        let bonRetourId = '{{ $dataBonRetour["id"] }}';
         
         $.ajax({
-            url: backendUrl +'/bonlivraisonvente/confirme/' + bonLivraisonId,
+            url: backendUrl +'/bonretourvente/confirme/' + bonRetourId,
             method: 'PUT',
             success: function(response) {
                 swal({
@@ -230,16 +210,15 @@ $(document).ready(function() {
                     buttons: false,
                     timer: 1500,
                 }).then(function() {
-                    $('#accordionImprimer, #accordionTelecharger, #genererFacture, #retourBonCommande, #genererBonRetour').show();
+                    $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').show();
                     $('#confirmationButton').hide();
                     $statutBadge.removeClass('bg-danger').addClass('bg-success');
                     $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
-                    $('#genererBonReceptionButton').show();
                 });
             },
-            error: function(response) {
+            error: function(xhr, status, error) {
                 swal({
-                    title: response.responseJSON.message,
+                    title: 'Erreur',
                     text: 'Une erreur s\'est produite lors de la confirmation du bon de livraison.',
                     icon: 'error',
                     buttons: false,
@@ -250,29 +229,15 @@ $(document).ready(function() {
         });
     });
 
-    $('#genererFacture').on('click', function() {
-        let url = '{{ route("createFactureVente") }}';
-        window.location.href = url;
-    });
-
-    $('#genererBonRetour').on('click', function() {
-        let url = '{{ route("createRetourVente") }}';
-        window.location.href = url;
-    });
-
-    $('#telechargerAcButton').on('click', function() {
-        let url = backendUrl +'/printblv/' + bonLivraisonId + '/true';
+    // $('#telechargerAcButton').on('click', function() {
+    //     let bonRetourId = '{{ $dataBonRetour["id"] }}';
+    //     let url = backendUrl +'/printbretour/' + bonRetourId + '/true';
         
-        window.location.href = url;
-    });
-    $('#imprimerAcButton').on('click', function() {
-        let url = backendUrl +'/printblv/' + bonLivraisonId + '/false';
-        
-        window.open(url, '_blank');
-    });
-
-    // $('#genererBonReceptionButton').on('click', function() {
-    //     let url = backendUrl +'/printbr/' + bonLivraisonId + '/false';
+    //     window.location.href = url;
+    // });
+    // $('#imprimerAcButton').on('click', function() {
+    //     let bonRetourId = '{{ $dataBonRetour["id"] }}';
+    //     let url = backendUrl +'/printbretour/' + bonRetourId + '/false';
         
     //     window.open(url, '_blank');
     // });

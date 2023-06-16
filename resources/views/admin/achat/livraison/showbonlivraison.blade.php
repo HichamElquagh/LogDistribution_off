@@ -138,12 +138,37 @@
                         </div>
                         <button id="genererBonReceptionButton" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Récéption</button>
                         <button id="genererFacture" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Facture</button>
+                        <button id="genererBonRetour" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Retour</button>
+                        @if( $dataBonLivraison['bonretour_id'] != null )
+                            <a href="{{ route('showRetour', $dataBonLivraison["bonretour_id"] )}}" id="goRetour" class="btn btn-light fw-bold text-secondary mb-2 col-12">Bon Retour</a>
+                        @endif
                         @if( $dataBonLivraison['facture_id'] != null )
                             <a href="{{ route('showFacture', $dataBonLivraison["facture_id"] )}}" id="goFacture" class="btn btn-light fw-bold text-secondary mb-2 col-12">Facture</a>
                         @endif
                         <a href="{{ route('showCommande', $dataBonLivraison["bonCommande_id"] )}}" id="retourBonCommande" class="btn btn-warning fw-bold text-white col-12">Bon Commande</a>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
                     </div>
+                </div>
+                
+                <div class="card" id="imageCard">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        Image
+                    </div>
+                    <div class="card-body">
+                        <img class="img-fluid image-pointer" id="livraisonImage" src="" alt=""data-bs-toggle="modal" data-bs-target="#imageModal">
+                    </div>
+
+                    <!-- Modal pour afficher l'image agrandie -->
+                    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <img id="modalImage" class="img-fluid" src="" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -161,7 +186,7 @@
 <script>
 
 $(document).ready(function() {
-    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonCommande, #genererFacture').hide();
+    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonCommande, #genererFacture, #genererBonRetour, #imageCard').hide();
 
     let confirme = {{ $dataBonLivraison['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
@@ -169,7 +194,7 @@ $(document).ready(function() {
     const backendUrl = "{{ app('backendUrl') }}";
     
     if (confirme == 1) {
-        $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton , #retourBonCommande').show();
+        $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton , #retourBonCommande, #imageCard').show();
         $('#confirmationButton').hide();
         $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
         $statutBadge.removeClass('bg-danger').addClass('bg-success');
@@ -182,6 +207,10 @@ $(document).ready(function() {
         console.log($statutBadge)
     }
 
+    const livraisonImage = document.getElementById('livraisonImage');
+    const imageUrl = backendUrl +'/getimage/bonLivraisonAchat/' + '{{ $dataBonLivraison["attachement"] }}';
+    livraisonImage.src = imageUrl;
+
     $.ajax({
         url: backendUrl +'/getblf',
         method: 'GET',
@@ -191,6 +220,23 @@ $(document).ready(function() {
             console.log(e.id)
                 if (e.id == existe) {
                     $('#genererFacture').show();
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    }); 
+
+    $.ajax({
+        url: backendUrl +'/getblr',
+        method: 'GET',
+        success: function(response) { 
+           response.forEach(e => {
+            
+            console.log(e.id)
+                if (e.id == existe) {
+                    $('#genererBonRetour').show();
                 }
             });
         },
@@ -213,7 +259,7 @@ $(document).ready(function() {
                     buttons: false,
                     timer: 1500,
                 }).then(function() {
-                    $('#accordionImprimer, #accordionTelecharger, #genererFacture, #retourBonCommande').show();
+                    $('#accordionImprimer, #accordionTelecharger, #genererFacture, #retourBonCommande, #genererBonRetour').show();
                     $('#confirmationButton').hide();
                     $statutBadge.removeClass('bg-danger').addClass('bg-success');
                     $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
@@ -238,6 +284,11 @@ $(document).ready(function() {
         window.location.href = url;
     });
 
+    $('#genererBonRetour').on('click', function() {
+        let url = '{{ route("createRetour") }}';
+        window.location.href = url;
+    });
+
     $('#telechargerAcButton').on('click', function() {
         let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
         let url = backendUrl +'/printbl/' + bonLivraisonId + '/true';
@@ -257,6 +308,21 @@ $(document).ready(function() {
         
         window.open(url, '_blank');
     });
+
+    $('#livraisonImage').on('click', function() {
+        // Récupérer l'URL de l'image à partir de la source de l'image cliquée
+        let imageUrl = $(this).attr('src');
+        
+        // Mettre à jour l'URL de l'image dans le modal
+        $('#modalImage').attr('src', imageUrl);
+        
+        // Afficher le modal agrandi
+        $('#imageModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    });
+
 });
 
 
