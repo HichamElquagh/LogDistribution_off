@@ -138,9 +138,9 @@
                             </div>
                           </div>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
-                        {{-- @if( $allTransfert['bonLivraisonVente_id'] != null )
+                         {{-- @if( $allTransfert['bonLivraisonVente_id'] != null )
                             <a href="{{ route('showLivraisonVente', $dataBonCommande["bonLivraisonVente_id"] )}}" id="goLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
-                        @endif --}}
+                        @endif  --}}
                     </div>
                 </div>
             </div>
@@ -157,22 +157,24 @@
 <script>
     const backendUrl = "{{ app('backendUrl') }}";
     let TransfertId = {{ $allTransfert["id"] }};
-    let $statutBadge = $('.statut-dispo');
+    let statutBadge = $('.statut-dispo');
     let confirme = {{ $allTransfert['Confirme'] }};
 
+
+
     $(document).ready(function() {
+        // console.log(TransfertId);
         if (confirme == 1) {
             $('#accordionImprimer, #accordionTelecharger').show();
             $('#confirmationButton').hide();
-            $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
-            $statutBadge.removeClass('bg-danger').addClass('bg-success');
+            statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
+            statutBadge.removeClass('bg-danger').addClass('bg-success');
         } else {
             $('#accordionImprimer, #accordionTelecharger').hide();
             $('#confirmationButton').show();
-            $statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
-            $statutBadge.removeClass('bg-success').addClass('bg-danger');
+            statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
+            statutBadge.removeClass('bg-success').addClass('bg-danger');
         }
-
         $('#print_transfert').on('click', function() {
             let url = backendUrl + '/printt/' + TransfertId + '/isDownloaded';
             let newWindow = window.open(url, '_blank');
@@ -198,7 +200,7 @@
                     let url = backendUrl + '/transfert/confirme/' + TransfertId;
                     $.ajax({
                         url: url,
-                        type: 'POST',
+                        type: 'put',
                         success: function(response) {
                             swal("Succès", "Le transfert a été confirmé avec succès.", "success").then(() => {
                                 location.reload();

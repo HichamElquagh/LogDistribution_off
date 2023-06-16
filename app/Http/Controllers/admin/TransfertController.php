@@ -12,6 +12,7 @@ class TransfertController extends Controller
 
         $responseTransfet = Http::get(app('backendUrl').'/transfert');
         $allTransfert = $responseTransfet->json();
+      //   return $allTransfert ;
          return view("admin.redirects.Transfert.transfert" , compact('allTransfert'));
     } 
 
@@ -27,6 +28,13 @@ class TransfertController extends Controller
     } 
 
    public function CreateTransfert() {
+            $responseCamion = Http::get(app('backendUrl').'/camion');
+            $allCamion = $responseCamion->json();
+
+            $responseTransporteur = Http::get(app('backendUrl').'/employee');
+            $allTransporteur = $responseTransporteur->json();
+            // return $allTransporteur;
+
               $num_Transfert =  Http::get(app('backendUrl').'/getnt');
               $nmTransfert  = $num_Transfert->json();
 
@@ -35,7 +43,7 @@ class TransfertController extends Controller
             //   return $allwarhouse ;
               
 
-         return view("admin.redirects.Transfert.addtransfert" , compact('nmTransfert' ,'allwarhouse'));
+         return view("admin.redirects.Transfert.addtransfert" , compact('nmTransfert' ,'allwarhouse' , 'allCamion', 'allTransporteur'));
     } 
 
 

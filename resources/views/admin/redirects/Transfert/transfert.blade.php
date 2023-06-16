@@ -76,7 +76,7 @@
                                                 {{\Carbon\Carbon::parse($transfert['dateTransfert'])->isoFormat("LL") }}
                                             </td>
                                             <td>
-                                                <a  href="{{route("showTransfert",$transfert['id'])}}"
+                                                <a  href="{{route("showTransfert", $transfert['id'])}}"
                                                     class="btn btn-outline-primary btn-sm mb-2"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"

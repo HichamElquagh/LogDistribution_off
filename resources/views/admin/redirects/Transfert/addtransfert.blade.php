@@ -39,12 +39,31 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="mb-3 col-lg-6">
-                                    <label class="form-label" for="bcnumero">Numéro du Transfert</label>
-                                    <input type="text" class="form-control" name="bcnumero" id="bcnumero" disabled value="{{$nmTransfert['num_Transfert']}}" />
+                                    <label class="form-label" for="transfert_num">Numéro du Transfert</label>
+                                    <input type="text" class="form-control" name="transfert_num" id="transfert_num" disabled value="{{$nmTransfert['num_Transfert']}}" />
                                 </div>
                                 <div class="mb-3 col-lg-6">
                                     <label class="form-label" for="bcdate">Date</label>
-                                    <input type="date" class="form-control" name="bcdate" id="bcdate" value="{{ old('bcdate')}}"/>
+                                    <input type="date" class="form-control" name="transfertdate" id="transfertdate" value="{{ old('bcdate')}}"/>
+                                </div>
+                                <div class="mb-3 col-lg-6">
+                                    <label class="form-label" for="bcclient">Transporteur</label>
+                                    <select class="form-select" name="transporteur" id="transporteur">
+                                        <option value="">Selectionner un Transporteur</option>
+                                        @foreach($allTransporteur as $transporteur)
+                                            <option value="{{ $transporteur[0]['id'] }}">{{ $transporteur[0]['Nom'] }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3 col-lg-6">
+                                    <label class="form-label" for="bcclient">Camion</label>
+                                    <select class="form-select" name="trcamion" id="trcamion">
+                                        <option value="">Selectionner un Camion</option>
+                                        @foreach($allCamion as $camion)
+                                            <option value="{{$camion['id']}}">{{$camion['marque']}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="mb-3 col-lg-6">
                                     <label class="form-label" for="bcclient">Envoyé de l'entrepôt :</label>
@@ -92,7 +111,7 @@
 
                         </div>
                         <div class="card-footer text-center">
-                            <button onclick="" class="btn btn-warning fw-bold text-white">Transfert</button>
+                            <button onclick="storeTransfert()"class="btn btn-warning fw-bold text-white">Transfert</button>
                         </div>
                     </span>
                 </div>
@@ -125,7 +144,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script> --}}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
     
@@ -141,7 +161,7 @@
                 url: 'https://iker.wiicode.tech/api/getartbyware/' + warehouseId,
                 type: 'GET',
                 success: function(response) {
-                    console.log(response);
+                    // console.log(response);
                     if (response && response.length > 0) {
                         // Clear the existing options in the article select dropdown
                         // Append the new options based on the response
@@ -169,26 +189,29 @@
     });
     var selectedArticles = []; // Array to store the selected articles
 
-// Function to remove a row from the table
-function removeRow(row) {
+    function removeRow(row) {
     var articleId = row.attr('data-articleid');
     // Remove the row from the table
     row.remove();
     // Remove the corresponding article from the selectedArticles array
-    var removedArticleIndex = -1;
-    selectedArticles.forEach(function(article, index) {
-        if (article.id === articleId) {
-            removedArticleIndex = index;
-        }
+    selectedArticles = selectedArticles.filter(function(article) {
+        return article.id !== articleId;
     });
-    if (removedArticleIndex !== -1) {
-        var removedArticle = selectedArticles.splice(removedArticleIndex, 1)[0];
-        // Add the removed article back to the select dropdown
-        var selectDropdown = $('#bcarticle');
-        var optionHtml = '<option value="' + removedArticle.id + '">' + removedArticle.article_libelle + '</option>';
-        selectDropdown.append(optionHtml);
+    // Add the removed article back to the select dropdown
+    var selectDropdown = $('#bcarticle');
+    var article = selectedArticles.find(function(a) {
+        return a.id == articleId;
+    });
+    if (article) {
+        var optionHtml = '<option value="' + article.id + '">' + article.article_libelle + '</option>';
+        // Check if the option already exists in the select dropdown
+        var existingOption = selectDropdown.find('option[value="' + article.id + '"]');
+        if (existingOption.length === 0) {
+            selectDropdown.append(optionHtml);
+        }
     }
 }
+
 
 $('#bcarticle').change(function() {
     var articleId = $(this).val();
@@ -200,7 +223,7 @@ $('#bcarticle').change(function() {
             url: 'https://iker.wiicode.tech/api/articles/' + articleId,
             type: 'GET',
             success: function(articleData) {
-                console.log(articleData);
+                // console.log(articleData);
                 // Get the existing table body
                 var tableBody = $('#bctable tbody');
 
@@ -263,8 +286,84 @@ function populateTable() {
 // Call the populateTable function initially to display any previously selected articles
 populateTable();
 
-
 });
+
+function storeTransfert() {
+    // Get the values from the form inputs
+    var reference = $('#transfert_num').val();
+    var fromWarehouseId = $('#from_warehouse_id').val();
+    var toWarehouseId = $('#to_warehouse').val();
+    var camionId = $('#trcamion').val(); 
+    var transporteurId = $('#transporteur').val();;  
+    var dateTransfert = $('#transfertdate').val();
+    var confirme = 0;
+
+    // Prepare the Articles array
+    var articles = [];
+
+    // Get the table body and loop through each row
+    var tableBody = $('#bctable tbody');
+    tableBody.find('tr').each(function() {
+        var row = $(this);
+        var articleId = row.attr('data-articleid');
+        var quantity = row.find('input[name="quantity[]"]').val();
+
+        // Create an article object and add it to the articles array
+        var article = {
+            article_id: parseInt(articleId),
+            Quantity: parseInt(quantity)
+        };
+        articles.push(article);
+    });
+
+    // Prepare the data object
+    var data = {
+        reference: reference,
+        from: fromWarehouseId,
+        to: toWarehouseId,
+        camion_id: camionId,
+        transporteur_id: transporteurId,
+        dateTransfert: dateTransfert,
+        Confirme: confirme,
+        Articles: articles
+    };
+
+    // Send the POST request
+    $.ajax({
+        url: 'https://iker.wiicode.tech/api/transfert',
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(response) {
+            console.log(response);
+            swal({
+                title: response.message,
+                icon: "success",
+                button: {
+                    text: "OK",
+                    className: "btn btn-success" 
+                },
+                closeOnClickOutside: false
+            }).then(function() {
+                window.location.href = "{{ env('APP_URL') }}/ShowTransfert/" + response.id;
+            });
+
+
+            // Handle the success case
+        },
+        error: function(response) {
+           swal({
+                title: response.responseJSON.message,
+                icon: "warning",
+                button: "OK",
+                dangerMode: true,
+                closeOnClickOutside: false
+            });
+            // Handle the error case
+        }
+    });
+}
+
 
 </script>
 @endsection
