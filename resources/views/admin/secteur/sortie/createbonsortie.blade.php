@@ -106,12 +106,6 @@
                                         <label class="form-label" for="bsnote">Notes</label>
                                         <textarea class="form-control" name="bsnote" id="bsnote" rows="2"></textarea>
                                     </div>
-                                    <div>
-                                        <input class="form-check-input" type="checkbox" id="bsconfirm">
-                                        <label class="form-check-label ms-2" for="formCheck1">
-                                            Confirmer le bon sortie
-                                        </label>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -417,13 +411,10 @@ function sendSortie() {
         };
         articles.push(article);
     }
-    let confirmation;
-    if(document.getElementById('bsconfirm').checked) confirmation = 1;
-    else confirmation = 0;
 
     let sortie = {
         reference: numeroBonsortie,
-        Confirme: confirmation,
+        Confirme: 0,
         dateSortie: dateBonsortie,
         secteur_id: secteurId,
         vendeur_id: vendeurId,

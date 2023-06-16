@@ -95,12 +95,6 @@
                                         <label class="form-label" for="blnote">Notes</label>
                                         <textarea class="form-control" name="blnote" id="blnote" rows="4"></textarea>
                                     </div>
-                                    <div>
-                                        <input class="form-check-input" type="checkbox" id="blconfirm">
-                                        <label class="form-check-label ms-2" for="formCheck1">
-                                            Confirmer le bon livraison
-                                        </label>
-                                    </div>
                                 </div>
                                 <div class="mb-3 col-lg-6">
                                     <table id="summary" class="table stacked mb-0">
@@ -407,7 +401,7 @@ function sendLivraison() {
     formData.append('Numero_bonLivraison', numeroInput.value);
     formData.append('Total_HT', totalHtGlobalCell.textContent.replace("dhs", "").trim());
     formData.append('Total_TVA', totalTvaGlobalCell.textContent.replace("dhs", "").trim());
-    formData.append('Confirme', document.getElementById('blconfirm').checked ? 1 : 0);
+    formData.append('Confirme', 0);
     formData.append('remise', totalRemiseCell.textContent.replace("dhs", "").trim());
     formData.append('date_Blivraison', dateInput.value);
     formData.append('Total_TTC', totalTtcGlobalCell.textContent.replace("dhs", "").trim());

@@ -90,12 +90,6 @@
                                         <label class="form-label" for="bcnote">Notes</label>
                                         <textarea class="form-control" name="bcnote" id="bcnote" rows="4"></textarea>
                                     </div>
-                                    <div>
-                                        <input class="form-check-input" type="checkbox" id="bcconfirm">
-                                        <label class="form-check-label ms-2" for="formCheck1">
-                                            Confirmer le bon commande
-                                        </label>
-                                    </div>
                                 </div>
                                 <div class="mb-3 col-lg-6">
                                     <table id="summary" class="table stacked mb-0">
@@ -354,15 +348,12 @@ function sendCommande() {
         };
         articles.push(article);
     }
-    let confirmation;
-    if(document.getElementById('bcconfirm').checked) confirmation = 1;
-    else confirmation = 0;
 
     let commande = {
         Numero_bonCommande: numeroBonCommande,
         Total_HT: totalHtGlobal,
         Total_TVA: totalTvaGlobal,
-        Confirme: confirmation,
+        Confirme: 0,
         remise: totalRemiseGlobal,
         date_BCommande: dateBonCommande,
         Total_TTC: totalTtcGlobal,

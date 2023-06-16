@@ -91,12 +91,6 @@
                                         <label class="form-label" for="blnote">Notes</label>
                                         <textarea class="form-control" name="blnote" id="blnote" rows="4"></textarea>
                                     </div>
-                                    <div>
-                                        <input class="form-check-input" type="checkbox" id="blconfirm">
-                                        <label class="form-check-label ms-2" for="formCheck1">
-                                            Confirmer le bon livraison
-                                        </label>
-                                    </div>
                                 </div>
                                 <div class="mb-3 col-lg-6">
                                     <table id="summary" class="table stacked mb-0">
@@ -340,15 +334,12 @@ function sendLivraison() {
         };
         articles.push(article);
     }
-    let confirmation;
-    if(document.getElementById('blconfirm').checked) confirmation = 1;
-    else confirmation = 0;
 
     let livraison = {
         Numero_bonLivraisonVente: numeroBonLivraison,
         Total_HT: totalHtGlobal,
         Total_TVA: totalTvaGlobal,
-        Confirme: confirmation,
+        Confirme: 0,
         remise: totalRemiseGlobal,
         date_BlivraisonVente: dateBonLivraison,
         Total_TTC: totalTtcGlobal,

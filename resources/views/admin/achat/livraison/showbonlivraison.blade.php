@@ -130,23 +130,18 @@
                         </a>
                     </div>
                     <div class="card-body">
-                        <div id="accordionImprimer">
-                            <button class="btn btn-warning text-white fw-bold col-12 mb-2 imp"  id="imprimerAcButton">Imprimer</button>
-                        </div>
-                        <div id="accordionTelecharger">
-                            <button class="btn btn-light text-secondary fw-bold col-12 mb-2" id="telechargerAcButton">Télécharger</button>
-                        </div>
-                        <button id="genererBonReceptionButton" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Récéption</button>
+                        <button id="genererBonReceptionButton" class="btn btn-warning fw-bold text-white col-12 mb-2">Generer Bon Récéption</button>
                         <button id="genererFacture" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Facture</button>
                         <button id="genererBonRetour" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Retour</button>
-                        @if( $dataBonLivraison['bonretour_id'] != null )
-                            <a href="{{ route('showRetour', $dataBonLivraison["bonretour_id"] )}}" id="goRetour" class="btn btn-light fw-bold text-secondary mb-2 col-12">Bon Retour</a>
+                        @if( $dataBonLivraison['bonretourAchat_id'] != null )
+                            <a href="{{ route('showRetour', $dataBonLivraison["bonretourAchat_id"] )}}" id="goRetour" class="btn btn-light fw-bold text-secondary mb-2 col-12">Bon Retour</a>
                         @endif
                         @if( $dataBonLivraison['facture_id'] != null )
                             <a href="{{ route('showFacture', $dataBonLivraison["facture_id"] )}}" id="goFacture" class="btn btn-light fw-bold text-secondary mb-2 col-12">Facture</a>
                         @endif
                         <a href="{{ route('showCommande', $dataBonLivraison["bonCommande_id"] )}}" id="retourBonCommande" class="btn btn-warning fw-bold text-white col-12">Bon Commande</a>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
+                        <button class="btn btn-danger fw-bold text-white col-12 mb-2" id="annulationButton">Annuler</button>
                     </div>
                 </div>
                 
@@ -155,20 +150,11 @@
                         Image
                     </div>
                     <div class="card-body">
-                        <img class="img-fluid image-pointer" id="livraisonImage" src="" alt=""data-bs-toggle="modal" data-bs-target="#imageModal">
-                    </div>
-
-                    <!-- Modal pour afficher l'image agrandie -->
-                    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <img id="modalImage" class="img-fluid" src="" alt="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                        <img class="img-fluid image-pointer" id="livraisonImage" src="" alt="">
+                        @if( $dataBonLivraison['attachement'] == null )
+                            <button class="btn btn-warning fw-bold text-white col-12 mb-2" id="imageButton" disabled>Ajouter l'image</button>
+                        @endif
+                    </div>           
                 </div>
             </div>
         </div>
@@ -191,24 +177,25 @@ $(document).ready(function() {
     let confirme = {{ $dataBonLivraison['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
     let existe = {{ $dataBonLivraison['id'] }};
+    let imageName = '{{ $dataBonLivraison['attachement'] }}';
     const backendUrl = "{{ app('backendUrl') }}";
     
     if (confirme == 1) {
         $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton , #retourBonCommande, #imageCard').show();
-        $('#confirmationButton').hide();
+        $('#confirmationButton, #annulationButton').hide();
         $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
         $statutBadge.removeClass('bg-danger').addClass('bg-success');
         console.log($statutBadge)
     } else {
-        $('#accordionImprimer, #accordionTelecharger, #retourBonCommande').hide();
-        $('#confirmationButton').show();
+        $('#accordionImprimer, #accordionTelecharger, #retourBonCommande, #imageCard').hide();
+        $('#confirmationButton, #annulationButton').show();
         $statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
         $statutBadge.removeClass('bg-success').addClass('bg-danger');
         console.log($statutBadge)
     }
 
     const livraisonImage = document.getElementById('livraisonImage');
-    const imageUrl = backendUrl +'/getimage/bonLivraisonAchat/' + '{{ $dataBonLivraison["attachement"] }}';
+    const imageUrl = backendUrl +'/getimage/bonLivraisonAchat/' + imageName;
     livraisonImage.src = imageUrl;
 
     $.ajax({
@@ -259,8 +246,8 @@ $(document).ready(function() {
                     buttons: false,
                     timer: 1500,
                 }).then(function() {
-                    $('#accordionImprimer, #accordionTelecharger, #genererFacture, #retourBonCommande, #genererBonRetour').show();
-                    $('#confirmationButton').hide();
+                    $('#accordionImprimer, #accordionTelecharger, #genererFacture, #retourBonCommande, #genererBonRetour, #imageCard').show();
+                    $('#confirmationButton, #annulationButton').hide();
                     $statutBadge.removeClass('bg-danger').addClass('bg-success');
                     $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
                     $('#genererBonReceptionButton').show();
@@ -270,6 +257,36 @@ $(document).ready(function() {
                 swal({
                     title: 'Erreur',
                     text: 'Une erreur s\'est produite lors de la confirmation du bon de livraison.',
+                    icon: 'error',
+                    buttons: false,
+                    timer: 2000,
+                });
+                console.error(error);
+            }
+        });
+    });
+
+    $('#annulationButton').on('click', function() {
+        let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
+        
+        $.ajax({
+            url: backendUrl +'/bonlivraison/' + bonLivraisonId,
+            method: 'DELETE',
+            success: function(response) {
+                swal({
+                    title: 'Annulation réussie',    
+                    text: 'Le bon de livraison a été annulé.',
+                    icon: 'success',
+                    buttons: false,
+                    timer: 1500,
+                }).then(function() {
+                    window.location.href = "{{ env('APP_URL') }}/bon-livraison-achat"; 
+                });
+            },
+            error: function(xhr, status, error) {
+                swal({
+                    title: 'Erreur',
+                    text: 'Une erreur s\'est produite lors de l\'annulation du bon de livraison.',
                     icon: 'error',
                     buttons: false,
                     timer: 2000,
@@ -289,19 +306,6 @@ $(document).ready(function() {
         window.location.href = url;
     });
 
-    $('#telechargerAcButton').on('click', function() {
-        let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
-        let url = backendUrl +'/printbl/' + bonLivraisonId + '/true';
-        
-        window.location.href = url;
-    });
-    $('#imprimerAcButton').on('click', function() {
-        let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
-        let url = backendUrl +'/printbl/' + bonLivraisonId + '/false';
-        
-        window.open(url, '_blank');
-    });
-
     $('#genererBonReceptionButton').on('click', function() {
         let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
         let url = backendUrl +'/printbr/' + bonLivraisonId + '/false';
@@ -310,18 +314,10 @@ $(document).ready(function() {
     });
 
     $('#livraisonImage').on('click', function() {
-        // Récupérer l'URL de l'image à partir de la source de l'image cliquée
         let imageUrl = $(this).attr('src');
-        
-        // Mettre à jour l'URL de l'image dans le modal
-        $('#modalImage').attr('src', imageUrl);
-        
-        // Afficher le modal agrandi
-        $('#imageModal').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
+        window.open(imageUrl, '_blank');
     });
+
 
 });
 
