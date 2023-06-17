@@ -300,9 +300,21 @@
                                 </div>
                             </div>
                         </div>
-
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
+                        <button class="btn btn-danger fw-bold text-white col-12 mb-2" id="annulationButton">Annuler</button>
                     </div>
+                </div>
+
+                <div class="card" id="imageCard">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        Image
+                    </div>
+                    <div class="card-body">
+                        <img class="img-fluid image-pointer" id="factureimage" src="" alt="">
+                        @if( $dataFacturee['attachement'] == null )
+                            <button class="btn btn-warning fw-bold text-white col-12 mb-2" id="imageButton" disabled>Ajouter l'image</button>
+                        @endif
+                    </div>           
                 </div>
               
                 <div class="cardTr overflow-scroll" style="height: 600px">
@@ -324,7 +336,7 @@
 <script>
 
 $(document).ready(function() {
-    $('#accordionImprimer, #accordionTelecharger, #accordionPaiement, #retourBonLivraison').hide();
+    $('#accordionImprimer, #accordionTelecharger, #accordionPaiement, #retourBonLivraison, #imageCard').hide();
 
     let confirme = {{ $dataFacturee['Confirme'] }};
     let etatPaiement = '{{ $dataFacturee['EtatPaiement']}}'; 
@@ -332,22 +344,23 @@ $(document).ready(function() {
     let $statutBadge = $('.statut-dispo');
     let $badgeFacture = $('.statut-paye');
     let factureId = {{ $dataFacturee["id"] }};
+    let imageName = '{{ $dataFacturee['attachement'] }}';
     const backendUrl = "{{ app('backendUrl') }}";
     
     if (confirme == 1) {
-        $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').show();
+        $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison, #imageCard').show();
         if(etatPaiement === "Paye"){
             $('#accordionPaiement').hide();
         }else {
             $('#accordionPaiement').show();
         }
-        $('#confirmationButton').hide();
+        $('#confirmationButton, #annulationButton').hide();
         $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
         $statutBadge.removeClass('bg-danger').addClass('bg-success');       
         
     } else {
-        $('#accordionImprimer, #accordionTelecharger, #accordionPaiement').hide();
-        $('#confirmationButton').show();
+        $('#accordionImprimer, #accordionTelecharger, #accordionPaiement, #imageCard').hide();
+        $('#confirmationButton, #annulationButton').show();
         $statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
         $statutBadge.removeClass('bg-success').addClass('bg-danger');
     }
@@ -365,34 +378,118 @@ $(document).ready(function() {
         }
     }
 
+    const factureImage = document.getElementById('factureimage');
+    const imageUrl = backendUrl +'/getimage/FactureAchat/' + imageName;
+    factureImage.src = imageUrl;
+
     $('#confirmationButton').on('click', function() {
-        
-        $.ajax({
-            url: backendUrl +'/facture/confirme/' + factureId,
-            method: 'PUT',
-            success: function(response) {
-                swal({
-                    title: 'Confirmation réussie',
-                    text: 'La facture a été confirmé',
-                    icon: 'success',
-                    buttons: false,
-                    timer: 1500,
-                }).then(function() {
-                    $('#accordionImprimer, #accordionTelecharger, #accordionPaiement, #retourBonLivraison').show();
-                    $('#confirmationButton').hide();
-                    $statutBadge.removeClass('bg-danger').addClass('bg-success');
-                    $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');                   
-                });
+
+        swal({
+            title: 'Confirmation',
+            text: 'Voulez-vous vraiment confirmer la facture ?',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Non',
+                    value: false,
+                    visible: true,
+                    className: '',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Oui',
+                    value: true,
+                    visible: true,
+                    className: 'bg-success',
+                    closeModal: true
+                }
             },
-            error: function(xhr, status, error) {
-                swal({
-                    title: 'Erreur',
-                    text: 'Une erreur s\'est produite lors de la confirmation du bon du facture.',
-                    icon: 'error',
-                    buttons: false,
-                    timer: 2000,
+            dangerMode: true,
+        }).then(function(confirm) {
+            if (confirm) {
+                $.ajax({
+                    url: backendUrl + '/facture/confirme/' + factureId,
+                    method: 'PUT',
+                    success: function(response) {
+                        swal({
+                            title: 'Confirmation réussie',
+                            text: 'La facture a été confirmé.',
+                            icon: 'success',
+                            buttons: false,
+                            timer: 1500,
+                        }).then(function() {
+                            $('#accordionImprimer, #accordionTelecharger, #accordionPaiement, #retourBonLivraison, #imageCard').show();
+                            $('#confirmationButton, #annulationButton').hide();
+                            $statutBadge.removeClass('bg-danger').addClass('bg-success');
+                            $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');     
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        swal({
+                            title: 'Erreur',
+                            text: 'Une erreur s\'est produite lors de la confirmation du facture.',
+                            icon: 'error',
+                            buttons: false,
+                            timer: 2000,
+                        });
+                        console.error(error);
+                    }
                 });
-            }
+            } 
+        });
+    });
+
+    $('#annulationButton').on('click', function() {
+
+        swal({
+            title: 'Annulation',
+            text: 'Voulez-vous vraiment annuler la facture ?',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Non',
+                    value: false,
+                    visible: true,
+                    className: '',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Oui',
+                    value: true,
+                    visible: true,
+                    className: 'bg-success',
+                    closeModal: true
+                }
+            },
+            dangerMode: true,
+        }).then(function(confirm) {
+            if (confirm) {
+                $.ajax({
+                    url: backendUrl + '/facture/' + factureId,
+                    method: 'DELETE',
+                    success: function(response) {
+                        swal({
+                            title: 'Annulation réussie',
+                            text: 'La facture a été annulé.',
+                            icon: 'success',
+                            buttons: false,
+                            timer: 1500,
+                        }).then(function() {
+                            window.location.href = "{{ env('APP_URL') }}/facture-achat";
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        swal({
+                            title: 'Erreur',
+                            text: 'Une erreur s\'est produite lors de l\'annulation du facture.',
+                            icon: 'error',
+                            buttons: false,
+                            timer: 2000,
+                        });
+                        console.error(error);
+                    }
+                });
+            } 
         });
     });
 
@@ -797,6 +894,11 @@ $(document).ready(function() {
     $('#telechargerAcButton').on('click', function() {
         let url = backendUrl +'/printf/' + factureId + '/true';    
         window.location.href = url;
+    });
+
+    $('#factureimage').on('click', function() {
+        let imageUrl = $(this).attr('src');
+        window.open(imageUrl, '_blank');
     });
 });
 
