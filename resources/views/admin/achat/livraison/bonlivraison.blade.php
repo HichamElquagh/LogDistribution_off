@@ -26,7 +26,8 @@
         </div>
 
         <div class="d-flex mb-3 justify-content-end">
-            <a href="{{route('createLivraison')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de livraison</a>
+            <a href="{{route('createLivraison')}}" class="btn btn-warning fw-bold text-white me-2" id="createBtn">Créer un bon de livraison</a>
+            <a href="{{route('createchange')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de change</a>
         </div>
 
         <div class="row">
@@ -40,10 +41,9 @@
                                     <th>id</th>
                                     <th>N° Bon Livraison</th> 
                                     <th>Bon Commande</th>  
+                                    <th>Bon Retour</th>  
                                     <th>Fournisseur</th>  
-                                    <th>Etat</th>
-                                    <th>Total HT</th>
-                                    <th>Total TVA</th>
+                                    <th>Type</th>
                                     <th>Total TTC</th>
                                     <th>Confirmé</th>
                                     <th>Date</th>
@@ -56,11 +56,14 @@
                                     <tr>
                                         <td class="text-warning fw-bold">#{{$bonlivraison['id']}}</td>
                                         <td>{{$bonlivraison['Numero_bonLivraison']}}</td>
-                                        <td>{{$bonlivraison['Numero_bonCommande']}}</td>
+                                        <td>{{$bonlivraison['Numero_bonCommande'] ? $bonlivraison['Numero_bonCommande'] : '-'}}</td>
+                                        <td>{{$bonlivraison['Numero_bonRetour'] ? $bonlivraison['Numero_bonRetour'] : '-'}}</td>
                                         <td>{{$bonlivraison['fournisseur']}}</td>
-                                        <td>{{$bonlivraison['Etat']}}</td>
-                                        <td>{{$bonlivraison['Total_HT']}}</td>
-                                        <td>{{$bonlivraison['Total_TVA']}}</td>
+                                        <td>
+                                            <span class="statut-dispo badge bg-{{ $bonlivraison['isChange'] == 1 ? 'info' : 'dark' }} text-white">
+                                                {{ $bonlivraison['isChange'] == 1 ? 'Change' : 'Livraison' }}
+                                            </span>
+                                        </td>
                                         <td>{{$bonlivraison['Total_TTC']}}</td>
                                         <td>
                                             <span class="statut-dispo badge bg-{{ $bonlivraison['Confirme'] == 1 ? 'success' : 'danger' }} text-white">
