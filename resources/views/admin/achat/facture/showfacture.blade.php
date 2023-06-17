@@ -1,4 +1,4 @@
-@extends('admin.layouts.template')
+    @extends('admin.layouts.template')
 
 @section('page-title')
     Facture Achat | Log Dist Du Nord
@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="mb-2">
                                     <span class="fw-bold">Cond. Paiement : </span>
-                                    <span >60 JOURS FIN DE MOIS</span>
+                                    <span >{{$dataFacturee['conditionPaiement']}} JOURS FIN DE MOIS</span>
                                 </div>
                                 <div class="mb-2">
                                     <span class="fw-bold">Date Echéance : </span>

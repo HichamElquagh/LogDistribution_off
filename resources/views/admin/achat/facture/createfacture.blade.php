@@ -72,13 +72,21 @@
                                 </tbody>
                             </table>
                             <div class="row">
-                                <div class="mb-4 col-lg-4">
+                                <div class="mb-4 col-lg-2">
+                                    <label class="form-label" for="facturecondit">Condition Paiement</label>
+                                    <input type="number" class="form-control" name="facturecondit" id="facturecondit" value=""/>
+                                </div>
+                                <div class="mb-4 col-lg-2">
                                     <label class="form-label" for="factureremise">Remise</label>
                                     <input type="number" class="form-control" name="factureremise" id="factureremise" value=""/>
                                 </div>
                                 <div class="mb-4 col-lg-2">
                                     <label class="form-label" for="facturetva">TVA</label>
                                     <input type="number" class="form-control" name="facturetva" id="facturetva" value=""/>
+                                </div>
+                                <div class="mb-4 col-lg-6">
+                                    <label class="form-label" for="factureimage">Image facture</label>
+                                    <input type="file" class="form-control" name="factureimage" id="factureimage" value="{{ old('factureimage')}}"/>
                                 </div>
                             </div>
                             <div class="row">
@@ -139,6 +147,8 @@
     const dateInput = document.getElementById('facturedate');
     const noteTextarea = document.getElementById('facturenote');
     const tableBody = document.getElementById('facturetable').getElementsByTagName('tbody')[0];
+    const imageInput = document.getElementById('factureimage');
+    const conditionInput = document.getElementById('facturecondit');
     const backendUrl = "{{ app('backendUrl') }}";
 
     bonLivraisonSelect.addEventListener('change', function() {
@@ -278,20 +288,111 @@ function updateGlobalTotals() {
     totalTtcGlobalCell.textContent = totalTtcGlobal.toFixed(2) + " dhs";
 }
 
+// function sendFacture() {
+
+//     const numeroFacture = numeroInput.value;
+//     const totalHtGlobal = totalHtGlobalCell.textContent.replace("dhs", "").trim();
+//     const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
+//     const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
+//     const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
+//     const bonLivraisonId = bonLivraisonSelect.value;
+//     const dateFacture = dateInput.value;
+//     const noteFacture = noteTextarea.value;
+//     const tvaFacture = document.getElementById('facturetva').value;
+//     const fournisseurId = document.getElementById('fournisseurId').value;
+
+//     let articles = [];
+//     let rows = tableBody.rows;
+//     for (let i = 0; i < rows.length; i++) {
+//         let cells = rows[i].cells;
+//         let articleId = cells[0].textContent;
+//         let reference = cells[1].textContent;
+//         let articleName = cells[2].textContent;
+//         let prixUnitaire = cells[3].querySelector("input[name='prixUnitaire']").value;
+//         let quantite = cells[4].querySelector("input[name='quantite']").value;
+//         let totalHt = cells[5].textContent.replace("dhs", "").trim();
+
+//         let article = {
+//             article_id: articleId,
+//             reference: reference,
+//             article_libelle: articleName,
+//             Prix_unitaire: prixUnitaire,
+//             Quantity: quantite,
+//             Total_HT: totalHt,
+//         };
+//         articles.push(article);
+//     }
+
+//     let facture = {
+//         numero_Facture: numeroFacture,
+//         Total_HT: totalHtGlobal,
+//         Total_TVA: totalTvaGlobal,
+//         Confirme: 0,
+//         remise: totalRemiseGlobal,
+//         date_Facture: dateFacture,
+//         Total_TTC: totalTtcGlobal,
+//         Total_Rester: totalTtcGlobal,
+//         fournisseur_id: fournisseurId,
+//         Commentaire: noteFacture,
+//         TVA : tvaFacture,
+//         bonLivraison_id: bonLivraisonId,
+//         Code_journal: 'Achat',
+//         Articles: articles,
+//     };
+   
+//     console.log(facture);
+
+//     $.ajax({
+//         url: backendUrl +'/facture',
+//         type: 'POST',
+//         data: facture,
+//         success: function(response) {
+//             swal({
+//                 title: response.message,
+//                 icon: "success",
+//                 button: {
+//                     text: "OK",
+//                     className: "btn btn-success" 
+//                 },
+//                 closeOnClickOutside: false
+//             }).then(function() {
+//                 window.location.href = "{{ env('APP_URL') }}/facture-achat/detail/" + response.id;
+//             });
+//         },
+//         error: function(response) {
+//             swal({
+//                 title: response.responseJSON.message,
+//                 icon: "warning",
+
+//                 button: "OK",
+//                 dangerMode: true,
+//                 closeOnClickOutside: false
+//             });
+//         }        
+//     });
+// }
+
 function sendFacture() {
+    const formData = new FormData();
 
-    const numeroFacture = numeroInput.value;
-    const totalHtGlobal = totalHtGlobalCell.textContent.replace("dhs", "").trim();
-    const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
-    const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
-    const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
-    const bonLivraisonId = bonLivraisonSelect.value;
-    const dateFacture = dateInput.value;
-    const noteFacture = noteTextarea.value;
-    const tvaFacture = document.getElementById('facturetva').value;
-    const fournisseurId = document.getElementById('fournisseurId').value;
+    formData.append('numero_Facture', numeroInput.value);
+    formData.append('Total_HT', totalHtGlobalCell.textContent.replace("dhs", "").trim());
+    formData.append('Total_TVA', totalTvaGlobalCell.textContent.replace("dhs", "").trim());
+    formData.append('Confirme', 0);
+    formData.append('remise', totalRemiseCell.textContent.replace("dhs", "").trim());
+    formData.append('date_Facture', dateInput.value);
+    formData.append('Total_TTC', totalTtcGlobalCell.textContent.replace("dhs", "").trim());
+    formData.append('fournisseur_id', document.getElementById('fournisseurId').value);
+    formData.append('Commentaire', noteTextarea.value);
+    formData.append('conditionPaiement', conditionInput.value);
+    formData.append('TVA', document.getElementById('facturetva').value);
+    formData.append('bonLivraison_id', bonLivraisonSelect.value);
+    // formData.append('bonretourAchat_id', null);
+    formData.append('Code_journal', 'Achat');
+    console.log(conditionInput.value)
+    const selectedImage = imageInput.files[0];
+    formData.append('attachement', selectedImage);
 
-    let articles = [];
     let rows = tableBody.rows;
     for (let i = 0; i < rows.length; i++) {
         let cells = rows[i].cells;
@@ -302,65 +403,47 @@ function sendFacture() {
         let quantite = cells[4].querySelector("input[name='quantite']").value;
         let totalHt = cells[5].textContent.replace("dhs", "").trim();
 
-        let article = {
-            article_id: articleId,
-            reference: reference,
-            article_libelle: articleName,
-            Prix_unitaire: prixUnitaire,
-            Quantity: quantite,
-            Total_HT: totalHt,
-        };
-        articles.push(article);
+        formData.append(`Articles[${i}][article_id]`, articleId);
+        formData.append(`Articles[${i}][reference]`, reference);
+        formData.append(`Articles[${i}][article_libelle]`, articleName);
+        formData.append(`Articles[${i}][Prix_unitaire]`, prixUnitaire);
+        formData.append(`Articles[${i}][Quantity]`, quantite);
+        formData.append(`Articles[${i}][Total_HT]`, totalHt);
     }
 
-    let facture = {
-        numero_Facture: numeroFacture,
-        Total_HT: totalHtGlobal,
-        Total_TVA: totalTvaGlobal,
-        Confirme: 0,
-        remise: totalRemiseGlobal,
-        date_Facture: dateFacture,
-        Total_TTC: totalTtcGlobal,
-        Total_Rester: totalTtcGlobal,
-        fournisseur_id: fournisseurId,
-        Commentaire: noteFacture,
-        TVA : tvaFacture,
-        bonLivraison_id: bonLivraisonId,
-        Code_journal: 'Achat',
-        Articles: articles,
-    };
-   
-    console.log(facture);
+    console.log(formData);
 
     $.ajax({
-        url: backendUrl +'/facture',
+        url: backendUrl + '/facture',
         type: 'POST',
-        data: facture,
-        success: function(response) {
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
             swal({
                 title: response.message,
                 icon: "success",
                 button: {
                     text: "OK",
-                    className: "btn btn-success" 
+                    className: "btn btn-success"
                 },
                 closeOnClickOutside: false
-            }).then(function() {
+            }).then(function () {
                 window.location.href = "{{ env('APP_URL') }}/facture-achat/detail/" + response.id;
             });
         },
-        error: function(response) {
+        error: function (response) {
             swal({
                 title: response.responseJSON.message,
                 icon: "warning",
-
                 button: "OK",
                 dangerMode: true,
                 closeOnClickOutside: false
             });
-        }        
+        }
     });
 }
+
 
 </script>
 
