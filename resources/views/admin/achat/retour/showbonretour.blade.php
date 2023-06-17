@@ -140,6 +140,7 @@
                         @endif --}}
                         <a href="{{ route('showLivraison', $dataBonRetour["bonLivraison_id"] )}}" id="retourBonLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
+                        <button class="btn btn-danger fw-bold text-white col-12 mb-2" id="annulationButton">Annuler</button>
                     </div>
                 </div>
             </div>
@@ -167,13 +168,13 @@ $(document).ready(function() {
     
     if (confirme == 1) {
         $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').show();
-        $('#confirmationButton').hide();
+        $('#confirmationButton, #annulationButton').hide();
         $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
         $statutBadge.removeClass('bg-danger').addClass('bg-success');
         console.log($statutBadge)
     } else {
         $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').hide();
-        $('#confirmationButton').show();
+        $('#confirmationButton, #annulationButton').show();
         $statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
         $statutBadge.removeClass('bg-success').addClass('bg-danger');
         console.log($statutBadge)
@@ -199,33 +200,113 @@ $(document).ready(function() {
     $('#confirmationButton').on('click', function() {
         let bonRetourId = '{{ $dataBonRetour["id"] }}';
         
-        $.ajax({
-            url: backendUrl +'/bonretourachat/confirme/' + bonRetourId,
-            method: 'PUT',
-            success: function(response) {
-                swal({
-                    title: 'Confirmation réussie',
-                    text: 'Le bon de livraison a été confirmé.',
-                    icon: 'success',
-                    buttons: false,
-                    timer: 1500,
-                }).then(function() {
-                    $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').show();
-                    $('#confirmationButton').hide();
-                    $statutBadge.removeClass('bg-danger').addClass('bg-success');
-                    $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
-                });
+        swal({
+            title: 'Confirmation',
+            text: 'Voulez-vous vraiment confirmer le bon de retour ?',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Non',
+                    value: false,
+                    visible: true,
+                    className: '',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Oui',
+                    value: true,
+                    visible: true,
+                    className: 'bg-success',
+                    closeModal: true
+                }
             },
-            error: function(xhr, status, error) {
-                swal({
-                    title: 'Erreur',
-                    text: 'Une erreur s\'est produite lors de la confirmation du bon de livraison.',
-                    icon: 'error',
-                    buttons: false,
-                    timer: 2000,
+            dangerMode: true,
+        }).then(function(confirm) {
+            if (confirm) {
+                $.ajax({
+                    url: backendUrl + '/bonretourachat/confirme/' + bonRetourId,
+                    method: 'PUT',
+                    success: function(response) {
+                        swal({
+                            title: 'Confirmation réussie',
+                            text: 'Le bon de retour a été confirmé.',
+                            icon: 'success',
+                            buttons: false,
+                            timer: 1500,
+                        }).then(function() {
+                            $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').show();
+                            $('#confirmationButton, #annulationButton').hide();
+                            $statutBadge.removeClass('bg-danger').addClass('bg-success');
+                            $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        swal({
+                            title: 'Erreur',
+                            text: 'Une erreur s\'est produite lors de la confirmation du bon de retour.',
+                            icon: 'error',
+                            buttons: false,
+                            timer: 2000,
+                        });
+                        console.error(error);
+                    }
                 });
-                console.error(error);
-            }
+            } 
+        });
+    });
+
+    $('#annulationButton').on('click', function() {
+        let bonRetourId = '{{ $dataBonRetour["id"] }}';
+
+        swal({
+            title: 'Annulation',
+            text: 'Voulez-vous vraiment annuler le bon de retour ?',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Non',
+                    value: false,
+                    visible: true,
+                    className: '',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Oui',
+                    value: true,
+                    visible: true,
+                    className: 'bg-success',
+                    closeModal: true
+                }
+            },
+            dangerMode: true,
+        }).then(function(confirm) {
+            if (confirm) {
+                $.ajax({
+                    url: backendUrl + '/bonretourachat/' + bonRetourId,
+                    method: 'DELETE',
+                    success: function(response) {
+                        swal({
+                            title: 'Annulation réussie',
+                            text: 'Le bon de retour a été annulé.',
+                            icon: 'success',
+                            buttons: false,
+                            timer: 1500,
+                        }).then(function() {
+                            window.location.href = "{{ env('APP_URL') }}/bon-retour-achat";
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        swal({
+                            title: 'Erreur',
+                            text: 'Une erreur s\'est produite lors de l\'annulation du bon de retour.',
+                            icon: 'error',
+                            buttons: false,
+                            timer: 2000,
+                        });
+                        console.error(error);
+                    }
+                });
+            } 
         });
     });
 

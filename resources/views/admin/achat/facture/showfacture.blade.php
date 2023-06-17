@@ -317,7 +317,7 @@
                     </div>           
                 </div>
               
-                <div class="cardTr overflow-scroll" style="height: 600px">
+                <div class="cardTr overflow-scroll" style="height: 275px">
                 </div>
 
             </div>
