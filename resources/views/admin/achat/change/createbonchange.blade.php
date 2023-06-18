@@ -1,7 +1,7 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Bon de Livraison | Log Dist Du Nord
+    Bon de Change | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Bon de Livraison</h4>
+                    <h4 class="mb-sm-0">Bon de Change</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Bon de Livraison</li>
+                            <li class="breadcrumb-item active">Bon de Change</li>
                         </ol>
                     </div>
 
@@ -29,7 +29,7 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        Créer un bon de livraison
+                        Créer un bon de change
                         <a href="{{ route('listeLivraison') }}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
@@ -39,21 +39,21 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="blnumero">Numéro du bon de livraison</label>
-                                    <input type="text" class="form-control" name="blnumero" id="blnumero" value="{{ old('blnumero')}}"/>
+                                    <label class="form-label" for="bcnumero">Numéro du bon de change</label>
+                                    <input type="text" class="form-control" name="bcnumero" id="bcnumero" value="{{ old('bcnumero')}}"/>
                                 </div>
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="blboncommande">Bon Commande</label>
-                                    <select class="form-select" name="blboncommande" id="blboncommande">
-                                        <option>Selectionner un bon commande</option>
-                                        @foreach($dataBc as $bc)
-                                            <option value="{{$bc['id']}}">{{$bc['Numero_bonCommande']}}</option>
+                                    <label class="form-label" for="bcbonretour">Bon Retour</label>
+                                    <select class="form-select" name="bcbonretour" id="bcbonretour">
+                                        <option>Selectionner un bon retour</option>
+                                        @foreach($dataBr as $Br)
+                                            <option value="{{$Br['id']}}">{{$Br['Numero_bonRetour']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="bldate">Date</label>
-                                    <input type="date" class="form-control" name="bldate" id="bldate" value="{{ old('bldate')}}"/>
+                                    <label class="form-label" for="bcdate">Date</label>
+                                    <input type="date" class="form-control" name="bcdate" id="bcdate" value="{{ old('bcdate')}}"/>
                                 </div>
                             </div>
                             <table id="bltable" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -73,27 +73,27 @@
                             </table>
                             <div class="row">
                                 <div class="mb-4 col-lg-3">
-                                    <label class="form-label" for="blentrepot">Entrepôt</label>
-                                    <select class="form-select" name="warehouseSelect" id="warehouseSelect"></select>
+                                    <label class="form-label" for="warehouseSelect">Entrepôt</label>
+                                    <input type="text" class="form-control" name="warehouseSelect" id="warehouseSelect" value="{{ old('warehouseSelect')}}" disabled/>
                                 </div>                               
                                 <div class="mb-4 col-lg-2">
-                                    <label class="form-label" for="blremise">Remise</label>
-                                    <input type="number" class="form-control" name="blremise" id="blremise" value="{{ old('blremise')}}"/>
+                                    <label class="form-label" for="bcremise">Remise</label>
+                                    <input type="number" class="form-control" name="bcremise" id="bcremise" value="{{ old('bcremise')}}"/>
                                 </div>
                                 <div class="mb-4 col-lg-1">
-                                    <label class="form-label" for="bltva">TVA</label>
-                                    <input type="number" class="form-control" name="bltva" id="bltva" value="{{ old('bltva')}}"/>
+                                    <label class="form-label" for="bctva">TVA</label>
+                                    <input type="number" class="form-control" name="bctva" id="bctva" value="{{ old('bctva')}}"/>
                                 </div>
                                 <div class="mb-4 col-lg-6">
-                                    <label class="form-label" for="blimage">Image bon livraison</label>
-                                    <input type="file" class="form-control" name="blimage" id="blimage" value="{{ old('blimage')}}"/>
+                                    <label class="form-label" for="bcimage">Image bon change</label>
+                                    <input type="file" class="form-control" name="bcimage" id="bcimage" value="{{ old('bcimage')}}"/>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="mb-3 col-lg-6">
                                     <div class="mb-4">
-                                        <label class="form-label" for="blnote">Notes</label>
-                                        <textarea class="form-control" name="blnote" id="blnote" rows="4"></textarea>
+                                        <label class="form-label" for="bcnote">Notes</label>
+                                        <textarea class="form-control" name="bcnote" id="bcnote" rows="4"></textarea>
                                     </div>
                                 </div>
                                 <div class="mb-3 col-lg-6">
@@ -121,8 +121,9 @@
                             </div>
                         </div>
                         <input type="hidden" class="form-control" name="fournisseurId" id="fournisseurId"/>
+                        <input type="hidden" class="form-control" name="warehouseId" id="warehouseId"/>
                         <div class="card-footer text-center">
-                            <button onclick="sendLivraison()" class="btn btn-warning fw-bold text-white">Ajouter le bon de livraison</button>
+                            <button onclick="sendLivraison()" class="btn btn-warning fw-bold text-white">Ajouter le bon de change</button>
                         </div>
                     </span>
                 </div>
@@ -142,24 +143,27 @@
 
 <script>
     
-const bonCommandeSelect = document.getElementById('blboncommande');
-const numeroInput = document.getElementById('blnumero');
-const dateInput = document.getElementById('bldate');
-const noteTextarea = document.getElementById('blnote');
+const bonRetourId = document.getElementById('bcbonretour');
+const numeroInput = document.getElementById('bcnumero');
+const dateInput = document.getElementById('bcdate');
+const noteTextarea = document.getElementById('bcnote');
+const tvaInput = document.getElementById('bctva');
 const tableBody = document.getElementById('bltable').getElementsByTagName('tbody')[0];
 const warehouseSelect = document.getElementById('warehouseSelect');
-const imageInput = document.getElementById('blimage');
+const warehouseInput = document.getElementById('warehouseId');
+const imageInput = document.getElementById('bcimage');
 const backendUrl = "{{ app('backendUrl') }}";
 
-warehouseSelect.disabled = true;
+bonRetourId.addEventListener('change', function() {
+const bonRetourId = this.value;
 
-bonCommandeSelect.addEventListener('change', function() {
-const bonCommandeId = this.value;
-
-    fetch(backendUrl + `/boncommande/${bonCommandeId}`)
+    fetch(backendUrl + `/bonretourachat/${bonRetourId}`)
     .then(response => response.json())
     .then(data => {
-        console.log(data.Articles);
+        
+        tvaInput.value = data.TVA;
+        warehouseSelect.value = data.nom_Warehouse;
+        warehouseInput.value = data.warehouse_id;
         tableBody.innerHTML = '';
 
         const fournisseurId = data.fournisseur_id;
@@ -230,25 +234,6 @@ const bonCommandeId = this.value;
             calculTotalHt();
         });
 
-        fetch(backendUrl + '/warehouse')
-        .then(response => response.json())
-        .then(warehouses => {
-            warehouseSelect.innerHTML = '';
-
-            const emptyOption = document.createElement('option');
-            emptyOption.value = '';
-            emptyOption.textContent = 'Selectionner un Entrepôt';
-            warehouseSelect.appendChild(emptyOption);
-
-            warehouses.forEach(warehouse => {
-                const option = document.createElement('option');
-                option.value = warehouse.id;
-                option.textContent = warehouse.nom_Warehouse;
-                warehouseSelect.appendChild(option);
-            });
-
-            warehouseSelect.disabled = false;
-        });
     });
 });
 
@@ -260,8 +245,8 @@ let totalTtcGlobalCell = document.querySelector('[data-summary-field="totalttc"]
 
 function updateGlobalTotals() {
 
-    let remiseInput = document.querySelector('[name="blremise"]')
-    let tvaInput = document.querySelector('[name="bltva"]');
+    let remiseInput = document.querySelector('[name="bcremise"]')
+    let tvaInput = document.querySelector('[name="bctva"]');
     remiseInput.addEventListener("input", updateGlobalTotals);
     tvaInput.addEventListener("input", updateGlobalTotals);
     let totalHtGlobal = 0;
@@ -312,10 +297,10 @@ function updateGlobalTotals() {
 //     const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
 //     const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
 //     const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
-//     const bonCommandeId = bonCommandeSelect.value;
+//     const bonRetourId = bonRetourId.value;
 //     const dateBonLivraison = dateInput.value;
 //     const noteBonLivraison = noteTextarea.value;
-//     const tvaBonLivraison = document.getElementById('bltva').value;
+//     const tvaBonLivraison = document.getElementById('bctva').value;
 //     const fournisseurId = document.getElementById('fournisseurId').value;
 //     const warehouseId = document.getElementById('warehouseSelect').value;
 //     const selectedImage = imageInput.files[0];
@@ -353,7 +338,7 @@ function updateGlobalTotals() {
 //     //     fournisseur_id: fournisseurId,
 //     //     Commentaire: noteBonLivraison,
 //     //     TVA : tvaBonLivraison,
-//     //     bonCommande_id: bonCommandeId,
+//     //     bonCommande_id: bonRetourId,
 //     //     warehouse_id : warehouseId,
 //     //     attachement: selectedImage ? selectedImage : null,
 //     //     Articles: articles,
@@ -402,14 +387,14 @@ function sendLivraison() {
     formData.append('Total_HT', totalHtGlobalCell.textContent.replace("dhs", "").trim());
     formData.append('Total_TVA', totalTvaGlobalCell.textContent.replace("dhs", "").trim());
     formData.append('Confirme', 0);
-    formData.append('isChange', 0);
+    formData.append('isChange', 1);
     formData.append('remise', totalRemiseCell.textContent.replace("dhs", "").trim());
     formData.append('date_Blivraison', dateInput.value);
     formData.append('Total_TTC', totalTtcGlobalCell.textContent.replace("dhs", "").trim());
     formData.append('fournisseur_id', document.getElementById('fournisseurId').value);
-    formData.append('TVA', document.getElementById('bltva').value);
-    formData.append('bonCommande_id', bonCommandeSelect.value);
-    formData.append('warehouse_id', document.getElementById('warehouseSelect').value);
+    formData.append('TVA', document.getElementById('bctva').value);
+    formData.append('bonretourAchat_id', bonRetourId.value);
+    formData.append('warehouse_id', document.getElementById('warehouseId').value);
 
     const selectedImage = imageInput.files[0];
     formData.append('attachement', selectedImage);
@@ -430,6 +415,7 @@ function sendLivraison() {
         formData.append(`Articles[${i}][Total_HT]`, totalHt);
     }
     console.log(formData)
+    console.log(bonRetourId.value)
     
     $.ajax({
         url: backendUrl + '/bonlivraison',
@@ -447,7 +433,7 @@ function sendLivraison() {
                 },
                 closeOnClickOutside: false
             }).then(function() {
-                window.location.href = "{{ env('APP_URL') }}/bon-livraison-achat/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/bon-change-achat/detail/" + response.id;
             });
         },
         error: function(response) {

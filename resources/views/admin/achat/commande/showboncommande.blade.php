@@ -173,6 +173,7 @@
                             </div>
                         </div>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
+                        <button class="btn btn-danger fw-bold text-white col-12 mb-2" id="annulationButton">Annuler</button>
                         <button id="genererBonLivraisonButton" class="btn btn-light fw-bold text-secondary col-12">Generer Bon Livraison</button>
                         @if( $dataBonCommande['bonLivraison_id'] != null )
                             <a href="{{ route('showLivraison', $dataBonCommande["bonLivraison_id"] )}}" id="goLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
@@ -204,12 +205,12 @@ $(document).ready(function() {
     
     if (confirme == 1) {
         $('#accordionImprimer, #accordionTelecharger').show();
-        $('#confirmationButton').hide();
+        $('#confirmationButton, #annulationButton').hide();
         $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
         $statutBadge.removeClass('bg-danger').addClass('bg-success');
     } else {
         $('#accordionImprimer, #accordionTelecharger').hide();
-        $('#confirmationButton').show();
+        $('#confirmationButton, #annulationButton').show();
         $statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
         $statutBadge.removeClass('bg-success').addClass('bg-danger');
     }
@@ -232,36 +233,118 @@ $(document).ready(function() {
     $('#confirmationButton').on('click', function() {
         let bonCommandeId = '{{ $dataBonCommande["id"] }}';
         
-        $.ajax({
-            url: backendUrl +'/boncommande/confirme/' + bonCommandeId,
-            method: 'PUT',
-            success: function(response) {
-                swal({
-                    title: 'Confirmation réussie',
-                    text: response.message,
-                    icon: 'success',
-                    buttons: false,
-                    timer: 1500,
-                }).then(function() {
-                    $('#accordionImprimer, #accordionTelecharger').show();
-                    $('#confirmationButton').hide();
-                    $statutBadge.removeClass('bg-danger').addClass('bg-success');
-                    $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
-                    $('#genererBonLivraisonButton').show();
-                });
+        swal({
+            title: 'Confirmation',
+            text: 'Voulez-vous vraiment confirmer le bon de commande ?',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Non',
+                    value: false,
+                    visible: true,
+                    className: '',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Oui',
+                    value: true,
+                    visible: true,
+                    className: 'bg-success',
+                    closeModal: true
+                }
             },
-            error: function(xhr, status, error) {
-                swal({
-                    title: 'Erreur',
-                    text: 'Une erreur s\'est produite lors de la confirmation du bon de commande.',
-                    icon: 'error',
-                    buttons: false,
-                    timer: 2000,
+            dangerMode: true,
+        }).then(function(confirm) {
+            if (confirm) {
+                $.ajax({
+                    url: backendUrl + '/boncommande/confirme/' + bonCommandeId,
+                    method: 'PUT',
+                    success: function(response) {
+                        swal({
+                            title: 'Confirmation réussie',
+                            text: response.message,
+                            icon: 'success',
+                            buttons: false,
+                            timer: 1500,
+                        }).then(function() {
+                            $('#accordionImprimer, #accordionTelecharger').show();
+                            $('#confirmationButton, #annulationButton').hide();
+                            $statutBadge.removeClass('bg-danger').addClass('bg-success');
+                            $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
+                            $('#genererBonLivraisonButton').show();
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        swal({
+                            title: 'Erreur',
+                            text: 'Une erreur s\'est produite lors de la confirmation du bon de commande.',
+                            icon: 'error',
+                            buttons: false,
+                            timer: 2000,
+                        });
+                        console.error(error);
+                    }
                 });
-                console.error(error);
+            } 
+        });
+    });
+
+    $('#annulationButton').on('click', function() {
+        let bonCommandeId = '{{ $dataBonCommande["id"] }}';
+        
+        swal({
+            title: 'Annulation',
+            text: 'Voulez-vous vraiment annuler le bon de commande ?',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Non',
+                    value: false,
+                    visible: true,
+                    className: '',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Oui',
+                    value: true,
+                    visible: true,
+                    className: 'bg-success',
+                    closeModal: true
+                }
+            },
+            dangerMode: true,
+        }).then(function(confirm) {
+            if (confirm) {
+                $.ajax({
+                    url: backendUrl + '/boncommande/' + bonCommandeId,
+                    method: 'DELETE',
+                    success: function(response) {
+                        swal({
+                            title: 'Annulation réussie',
+                            text: 'Le bon de commande a été annulé.',
+                            icon: 'success',
+                            buttons: false,
+                            timer: 1500,
+                        }).then(function() {
+                            window.location.href = "{{ env('APP_URL') }}/bon-commande-achat";
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        swal({
+                            title: 'Erreur',
+                            text: 'Une erreur s\'est produite lors de l\'annulation du bon de commande.',
+                            icon: 'error',
+                            buttons: false,
+                            timer: 2000,
+                        });
+                        console.error(error);
+                    }
+                });
             }
         });
     });
+
+
 
     $('#genererBonLivraisonButton').on('click', function() {
         let url = '{{ route("createLivraison") }}';

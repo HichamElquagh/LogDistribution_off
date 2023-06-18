@@ -87,12 +87,6 @@
                                         <label class="form-label" for="brnote">Notes</label>
                                         <textarea class="form-control" name="brnote" id="brnote" rows="4"></textarea>
                                     </div>
-                                    <div>
-                                        <input class="form-check-input" type="checkbox" id="brconfirme">
-                                        <label class="form-check-label ms-2" for="formCheck1">
-                                            Confirmer le bon retour
-                                        </label>
-                                    </div>
                                 </div>
                                 <div class="mb-3 col-lg-6">
                                     <table id="summary" class="table stacked mb-0">
@@ -287,15 +281,12 @@ function sendRetour() {
         };
         articles.push(article);
     }
-    let confirmation;
-    if(document.getElementById('brconfirme').checked) confirmation = 1;
-    else confirmation = 0;
 
     let retour = {
         Numero_bonRetour: numeroBonRetour,
         Total_HT: totalHtGlobal,
         Total_TVA: totalTvaGlobal,
-        Confirme: confirmation,
+        Confirme: 0,
         date_BRetour: dateBonRetour,
         Total_TTC: totalTtcGlobal,
         Commentaire: noteBonRetour,

@@ -2,12 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CaisseController;
+use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\admin\StockController;
 use App\Http\Controllers\admin\BanqueController;
 use App\Http\Controllers\admin\DepenseController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\TransfertController;
 use App\Http\Controllers\admin\WareHouseController;
 use App\Http\Controllers\admin\Vente\ClientController;
+use App\Http\Controllers\admin\Personnel\RoleController;
+use App\Http\Controllers\admin\Secteur\CamionController;
+use App\Http\Controllers\admin\Achat\BonChangeController;
+use App\Http\Controllers\admin\Secteur\SecteurController;
 use App\Http\Controllers\admin\Secteur\VendeurController;
 use App\Http\Controllers\admin\Article\ArticlesController;
 use App\Http\Controllers\admin\Secteur\BonSortieController;
@@ -19,11 +25,6 @@ use App\Http\Controllers\admin\Personnel\EmployesController;
 use App\Http\Controllers\admin\Secteur\BonSecteurController;
 use App\Http\Controllers\admin\Vente\FactureVenteController;
 use App\Http\Controllers\admin\Personnel\MagaziniersController;
-use App\Http\Controllers\admin\Personnel\RoleController;
-use App\Http\Controllers\admin\Secteur\CamionController;
-use App\Http\Controllers\admin\Secteur\SecteurController;
-use App\Http\Controllers\admin\TransfertController;
-use App\Http\Controllers\EntrepriseController;
 
 Route::controller(DashboardController::class)->group(function() {
     Route::get('/', 'Index')->name('adminDashboard');
@@ -69,6 +70,13 @@ Route::controller(App\Http\Controllers\admin\Achat\BonLivraisonController::class
         Route::get('/', 'ListeBonLivraison')->name('listeLivraison');
         Route::get('/nouveau', 'CreateBonLivraison')->name('createLivraison');
         Route::get('/detail/{id}', 'ShowBonLivraison')->name('showLivraison');
+    });
+});
+
+Route::controller(BonChangeController::class)->group(function() {
+    Route::prefix('/bon-change-achat')->group(function() {
+        Route::get('/nouveau', 'CreateBonChange')->name('createchange');
+        Route::get('/detail/{id}', 'ShowBonChange')->name('showchange');
     });
 });
 

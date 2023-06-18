@@ -87,12 +87,6 @@
                                         <label class="form-label" for="facturenote">Notes</label>
                                         <textarea class="form-control" name="facturenote" id="facturenote" rows="4"></textarea>
                                     </div>
-                                    <div>
-                                        <input class="form-check-input" type="checkbox" id="factureconfirm">
-                                        <label class="form-check-label ms-2" for="formCheck1">
-                                            Confirmer la facture
-                                        </label>
-                                    </div>
                                 </div>
                                 <div class="mb-3 col-lg-6">
                                     <table id="summary" class="table stacked mb-0">
@@ -318,15 +312,12 @@ function sendFacture() {
         };
         articles.push(article);
     }
-    let confirmation;
-    if(document.getElementById('factureconfirm').checked) confirmation = 1;
-    else confirmation = 0;
 
     let facture = {
         numero_FactureVente: numeroFacture,
         Total_HT: totalHtGlobal,
         Total_TVA: totalTvaGlobal,
-        Confirme: confirmation,
+        Confirme: 0,
         remise: totalRemiseGlobal,
         date_FactureVente: dateFacture,
         Total_TTC: totalTtcGlobal,
