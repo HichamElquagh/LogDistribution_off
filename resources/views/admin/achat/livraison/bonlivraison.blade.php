@@ -75,13 +75,23 @@
                                             {{\Carbon\Carbon::parse($bonlivraison['date_Blivraison'])->isoFormat("LL") }}
                                         </td>
                                         <td>
-                                            <a  href="{{route("showLivraison",$bonlivraison['id'])}}"
-                                                class="btn btn-outline-primary btn-sm mb-2"
-                                                data-bs-toggle="tooltip"
-                                                data-bs-placement="top"
-                                                data-bs-title="Détails">
-                                                <i class="fas fa-info-circle"></i>
-                                            </a>
+                                            @if( $bonlivraison['isChange'] == 0)
+                                                <a  href="{{route("showLivraison",$bonlivraison['id'])}}"
+                                                    class="btn btn-outline-primary btn-sm mb-2"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    data-bs-title="Détails">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            @else
+                                                <a  href="{{route("showchange",$bonlivraison['id'])}}"
+                                                    class="btn btn-outline-primary btn-sm mb-2"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    data-bs-title="Détails">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

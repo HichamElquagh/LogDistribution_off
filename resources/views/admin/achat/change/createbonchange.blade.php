@@ -74,7 +74,7 @@
                             <div class="row">
                                 <div class="mb-4 col-lg-3">
                                     <label class="form-label" for="warehouseSelect">Entrepôt</label>
-                                    <select class="form-select" name="warehouseSelect" id="warehouseSelect"></select>
+                                    <input type="text" class="form-control" name="warehouseSelect" id="warehouseSelect" value="{{ old('warehouseSelect')}}" disabled/>
                                 </div>                               
                                 <div class="mb-4 col-lg-2">
                                     <label class="form-label" for="bcremise">Remise</label>
@@ -121,6 +121,7 @@
                             </div>
                         </div>
                         <input type="hidden" class="form-control" name="fournisseurId" id="fournisseurId"/>
+                        <input type="hidden" class="form-control" name="warehouseId" id="warehouseId"/>
                         <div class="card-footer text-center">
                             <button onclick="sendLivraison()" class="btn btn-warning fw-bold text-white">Ajouter le bon de change</button>
                         </div>
@@ -146,20 +147,23 @@ const bonRetourId = document.getElementById('bcbonretour');
 const numeroInput = document.getElementById('bcnumero');
 const dateInput = document.getElementById('bcdate');
 const noteTextarea = document.getElementById('bcnote');
+const tvaInput = document.getElementById('bctva');
 const tableBody = document.getElementById('bltable').getElementsByTagName('tbody')[0];
 const warehouseSelect = document.getElementById('warehouseSelect');
+const warehouseInput = document.getElementById('warehouseId');
 const imageInput = document.getElementById('bcimage');
 const backendUrl = "{{ app('backendUrl') }}";
 
-warehouseSelect.disabled = true;
-
 bonRetourId.addEventListener('change', function() {
-const bonCommandeId = this.value;
+const bonRetourId = this.value;
 
-    fetch(backendUrl + `/boncommande/${bonCommandeId}`)
+    fetch(backendUrl + `/bonretourachat/${bonRetourId}`)
     .then(response => response.json())
     .then(data => {
-        console.log(data.Articles);
+        
+        tvaInput.value = data.TVA;
+        warehouseSelect.value = data.nom_Warehouse;
+        warehouseInput.value = data.warehouse_id;
         tableBody.innerHTML = '';
 
         const fournisseurId = data.fournisseur_id;
@@ -230,25 +234,6 @@ const bonCommandeId = this.value;
             calculTotalHt();
         });
 
-        fetch(backendUrl + '/warehouse')
-        .then(response => response.json())
-        .then(warehouses => {
-            warehouseSelect.innerHTML = '';
-
-            const emptyOption = document.createElement('option');
-            emptyOption.value = '';
-            emptyOption.textContent = 'Selectionner un Entrepôt';
-            warehouseSelect.appendChild(emptyOption);
-
-            warehouses.forEach(warehouse => {
-                const option = document.createElement('option');
-                option.value = warehouse.id;
-                option.textContent = warehouse.nom_Warehouse;
-                warehouseSelect.appendChild(option);
-            });
-
-            warehouseSelect.disabled = false;
-        });
     });
 });
 
@@ -312,7 +297,7 @@ function updateGlobalTotals() {
 //     const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
 //     const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
 //     const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
-//     const bonCommandeId = bonRetourId.value;
+//     const bonRetourId = bonRetourId.value;
 //     const dateBonLivraison = dateInput.value;
 //     const noteBonLivraison = noteTextarea.value;
 //     const tvaBonLivraison = document.getElementById('bctva').value;
@@ -353,7 +338,7 @@ function updateGlobalTotals() {
 //     //     fournisseur_id: fournisseurId,
 //     //     Commentaire: noteBonLivraison,
 //     //     TVA : tvaBonLivraison,
-//     //     bonCommande_id: bonCommandeId,
+//     //     bonCommande_id: bonRetourId,
 //     //     warehouse_id : warehouseId,
 //     //     attachement: selectedImage ? selectedImage : null,
 //     //     Articles: articles,
@@ -409,7 +394,7 @@ function sendLivraison() {
     formData.append('fournisseur_id', document.getElementById('fournisseurId').value);
     formData.append('TVA', document.getElementById('bctva').value);
     formData.append('bonretourAchat_id', bonRetourId.value);
-    formData.append('warehouse_id', document.getElementById('warehouseSelect').value);
+    formData.append('warehouse_id', document.getElementById('warehouseId').value);
 
     const selectedImage = imageInput.files[0];
     formData.append('attachement', selectedImage);
@@ -430,6 +415,7 @@ function sendLivraison() {
         formData.append(`Articles[${i}][Total_HT]`, totalHt);
     }
     console.log(formData)
+    console.log(bonRetourId.value)
     
     $.ajax({
         url: backendUrl + '/bonlivraison',

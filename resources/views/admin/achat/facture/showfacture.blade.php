@@ -158,12 +158,6 @@
                         </a>
                     </div>
                     <div class="card-body">
-                        <div id="accordionImprimer">
-                            <button class="btn btn-warning text-white fw-bold col-12 mb-2 imp"  id="imprimerAcButton">Imprimer</button>
-                        </div>
-                        <div id="accordionTelecharger">
-                            <button class="btn btn-light text-secondary fw-bold col-12 mb-2" id="telechargerAcButton">Télécharger</button>
-                        </div>
                         <div id="accordionPaiement">
                             <button class="btn btn-light text-secondary fw-bold col-12 mb-2" id="paiementButton">Ajouter Paiement</button>
                         </div>
@@ -810,7 +804,7 @@ $(document).ready(function() {
                 delais_cheque: dateCheque,
                 imgCheque: imgCheque,
                 factureAchat_id: factureId,
-                journal_id: 2,
+                // journal_id: 2,
                 bank_id: 1,
                 etat_cheque: 'portfeuille'
             };
@@ -823,7 +817,7 @@ $(document).ready(function() {
                 num_virement: virementNr,
                 montant: montantTransaction,
                 factureAchat_id: factureId,
-                journal_id: 2,
+                // journal_id: 2,
                 bank_id: 1
             };
         } 
@@ -834,7 +828,7 @@ $(document).ready(function() {
                 modePaiement: modePaiement,
                 montant: montantTransaction,
                 factureAchat_id: factureId,
-                journal_id: 2,
+                // journal_id: 2,
             };
         }
         console.log(transactionData)
@@ -885,15 +879,6 @@ $(document).ready(function() {
                 });
             }
         });
-    });
-
-    $('#imprimerAcButton').on('click', function() {
-        let url = backendUrl +'/printf/' + factureId + '/false';    
-        window.open(url, '_blank');
-    });
-    $('#telechargerAcButton').on('click', function() {
-        let url = backendUrl +'/printf/' + factureId + '/true';    
-        window.location.href = url;
     });
 
     $('#factureimage').on('click', function() {

@@ -14,4 +14,14 @@ class BonChangeController extends Controller
 
         return view('admin.achat.change.createbonchange',compact('dataBr'));
     }
+
+    public function ShowBonChange($id){
+        $bonchange = Http::get(app('backendUrl').'/bonlivraison/'.$id);
+        $dataBonChange = $bonchange->json();
+
+        $societe = Http::get(app('backendUrl').'/societe');
+        $dataSociete = $societe->json();
+
+        return view('admin.achat.change.showbonchange',compact('dataBonChange','dataSociete'));
+    }
 }

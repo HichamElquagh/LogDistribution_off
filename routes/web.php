@@ -75,7 +75,7 @@ Route::controller(App\Http\Controllers\admin\Achat\BonLivraisonController::class
 Route::controller(BonChangeController::class)->group(function() {
     Route::prefix('/bon-change-achat')->group(function() {
         Route::get('/nouveau', 'CreateBonChange')->name('createchange');
-        // Route::get('/detail/{id}', 'ShowBonChange')->name('showChange');
+        Route::get('/detail/{id}', 'ShowBonChange')->name('showchange');
     });
 });
 

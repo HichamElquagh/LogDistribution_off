@@ -134,10 +134,10 @@
                         <div id="accordionTelecharger">
                             <button class="btn btn-light text-secondary fw-bold col-12 mb-2" id="telechargerAcButton">Télécharger</button>
                         </div>
-                        {{-- <button id="genererFacture" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Facture Avoir</button> --}}
-                        {{-- @if( $dataBonRetour['facture_id'] != null )
-                            <a href="{{ route('showFacture', $dataBonRetour["facture_id"] )}}" id="goFacture" class="btn btn-light fw-bold text-secondary mb-2 col-12">Facture Avoir</a>
-                        @endif --}}
+                        <button id="genererBonChange" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Change</button>
+                        @if( $dataBonRetour['bonLivraisonChange_id'] != null )
+                            <a href="{{ route('showchange', $dataBonRetour["bonLivraisonChange_id"] )}}" id="goChange" class="btn btn-light fw-bold text-secondary mb-2 col-12">Bon Change</a>
+                        @endif
                         <a href="{{ route('showLivraison', $dataBonRetour["bonLivraison_id"] )}}" id="retourBonLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
                         <button class="btn btn-danger fw-bold text-white col-12 mb-2" id="annulationButton">Annuler</button>
@@ -159,7 +159,7 @@
 <script>
 
 $(document).ready(function() {
-    $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').hide();
+    $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison, #genererBonChange').hide();
 
     let confirme = {{ $dataBonRetour['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
@@ -180,22 +180,22 @@ $(document).ready(function() {
         console.log($statutBadge)
     }
 
-    // $.ajax({
-    //     url: backendUrl +'/getblf',
-    //     method: 'GET',
-    //     success: function(response) { 
-    //        response.forEach(e => {
+    $.ajax({
+        url: backendUrl +'/getchangebr',
+        method: 'GET',
+        success: function(response) { 
+           response.forEach(e => {
             
-    //         console.log(e.id)
-    //             if (e.id == existe) {
-    //                 $('#genererFacture').show();
-    //             }
-    //         });
-    //     },
-    //     error: function(xhr, status, error) {
-    //         console.error(error);
-    //     }
-    // }); 
+            console.log(e.id)
+                if (e.id == existe) {
+                    $('#genererBonChange').show();
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    }); 
 
     $('#confirmationButton').on('click', function() {
         let bonRetourId = '{{ $dataBonRetour["id"] }}';
@@ -234,7 +234,7 @@ $(document).ready(function() {
                             buttons: false,
                             timer: 1500,
                         }).then(function() {
-                            $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').show();
+                            $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison, #genererBonChange').show();
                             $('#confirmationButton, #annulationButton').hide();
                             $statutBadge.removeClass('bg-danger').addClass('bg-success');
                             $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
@@ -321,6 +321,11 @@ $(document).ready(function() {
         let url = backendUrl +'/printbretour/' + bonRetourId + '/false';
         
         window.open(url, '_blank');
+    });
+
+    $('#genererBonChange').on('click', function() {
+        let url = '{{ route("createchange") }}';
+        window.location.href = url;
     });
 });
 
