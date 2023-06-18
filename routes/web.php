@@ -53,6 +53,7 @@ Route::controller(EmployesController::class)->group(function() {
 
 Route::controller(FournisseursController::class)->group(function() {
     Route::get('/fournisseurs', 'ListeFournisseur')->name('achatFournisseur');
+    Route::get('/Detail/{id}', 'detailFournisseur')->name('detailFournisseur');
 });
 
 Route::controller(App\Http\Controllers\admin\Achat\BonCommandeController::class)->group(function() {

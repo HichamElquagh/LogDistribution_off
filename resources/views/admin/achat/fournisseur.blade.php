@@ -198,7 +198,7 @@
                         row.append('<td>' + fournisseur.Telephone + '</td>');
                         // row.append('<td>' + fournisseur.created_at + '</td>');
                         row.append('<td>' +
-                            '<a   onclick="editfournisseur('+ fournisseur.id +')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
+                            '<a href="/Detail/' + fournisseur.id + '" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
                             '<i class="fas fa-info-circle"></i></a>' +
                             '<div><button  onclick="deletefournisseur('+ fournisseur.id +')"   class="btn btn-outline-danger btn-sm"> <i class="fas fa-trash-alt"></i></button></div>' +
                             '</td>');
