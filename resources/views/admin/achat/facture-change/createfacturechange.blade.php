@@ -1,7 +1,7 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Facture Achat | Log Dist Du Nord
+    Facture Change Achat | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Facture Achat</h4>
+                    <h4 class="mb-sm-0">Facture Change Achat</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Facture Achat</li>
+                            <li class="breadcrumb-item active">Facture Change Achat</li>
                         </ol>
                     </div>
 
@@ -29,7 +29,7 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        Créer une facture
+                        Créer une facture change
                         <a href="{{ route('achatFacture')}}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
@@ -39,15 +39,15 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="facturenumero">Numéro du facture</label>
+                                    <label class="form-label" for="facturenumero">Numéro du facture change</label>
                                     <input type="text" class="form-control" name="facturenumero" id="facturenumero" value="{{ old('facturenumero')}}"/>
                                 </div>
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="facturebonlivraison">Bon livraison</label>
-                                    <select class="form-select" name="facturebonlivraison" id="facturebonlivraison">
-                                        <option>Selectionner un bon livraison</option>
-                                        @foreach($dataBl as $bl)
-                                            <option value="{{$bl['id']}}">{{$bl['Numero_bonLivraison']}}</option>
+                                    <label class="form-label" for="facturebonchange">Bon change</label>
+                                    <select class="form-select" name="facturebonchange" id="facturebonchange">
+                                        <option>Selectionner un bon change</option>
+                                        @foreach($dataBc as $bc)
+                                            <option value="{{$bc['id']}}">{{$bc['Numero_bonLivraison']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -72,10 +72,10 @@
                                 </tbody>
                             </table>
                             <div class="row">
-                                <div class="mb-4 col-lg-2">
+                                {{-- <div class="mb-4 col-lg-2">
                                     <label class="form-label" for="facturecondit">Condition Paiement</label>
                                     <input type="number" class="form-control" name="facturecondit" id="facturecondit" value=""/>
-                                </div>
+                                </div> --}}
                                 <div class="mb-4 col-lg-2">
                                     <label class="form-label" for="factureremise">Remise</label>
                                     <input type="number" class="form-control" name="factureremise" id="factureremise" value=""/>
@@ -84,7 +84,7 @@
                                     <label class="form-label" for="facturetva">TVA</label>
                                     <input type="number" class="form-control" name="facturetva" id="facturetva" value=""/>
                                 </div>
-                                <div class="mb-4 col-lg-6">
+                                <div class="mb-4 col-lg-8">
                                     <label class="form-label" for="factureimage">Image facture</label>
                                     <input type="file" class="form-control" name="factureimage" id="factureimage" value="{{ old('factureimage')}}"/>
                                 </div>
@@ -142,19 +142,19 @@
 
 <script>
     
-    const bonLivraisonSelect = document.getElementById('facturebonlivraison');
+    const bonChangeSelect = document.getElementById('facturebonchange');
     const numeroInput = document.getElementById('facturenumero');
     const dateInput = document.getElementById('facturedate');
     const noteTextarea = document.getElementById('facturenote');
     const tableBody = document.getElementById('facturetable').getElementsByTagName('tbody')[0];
     const imageInput = document.getElementById('factureimage');
-    const conditionInput = document.getElementById('facturecondit');
+    // const conditionInput = document.getElementById('facturecondit');
     const backendUrl = "{{ app('backendUrl') }}";
 
-    bonLivraisonSelect.addEventListener('change', function() {
-        const bonLivraisonId = this.value;
+    bonChangeSelect.addEventListener('change', function() {
+        const bonChangeId = this.value;
 
-        fetch(backendUrl +`/bonlivraison/${bonLivraisonId}`)
+        fetch(backendUrl +`/bonlivraison/${bonChangeId}`)
         .then(response => response.json())
         .then(data => {
             console.log(data.Articles);
@@ -295,7 +295,7 @@ function updateGlobalTotals() {
 //     const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
 //     const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
 //     const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
-//     const bonLivraisonId = bonLivraisonSelect.value;
+//     const bonChangeId = bonChangeSelect.value;
 //     const dateFacture = dateInput.value;
 //     const noteFacture = noteTextarea.value;
 //     const tvaFacture = document.getElementById('facturetva').value;
@@ -335,7 +335,7 @@ function updateGlobalTotals() {
 //         fournisseur_id: fournisseurId,
 //         Commentaire: noteFacture,
 //         TVA : tvaFacture,
-//         bonLivraison_id: bonLivraisonId,
+//         bonLivraison_id: bonChangeId,
 //         Code_journal: 'Achat',
 //         Articles: articles,
 //     };
@@ -380,17 +380,16 @@ function sendFacture() {
     formData.append('Total_TVA', totalTvaGlobalCell.textContent.replace("dhs", "").trim());
     formData.append('Confirme', 0);
     // formData.append('hasAvoirs', 0);
-    // formData.append('isChange', 0);
+    formData.append('isChange', 1);
     formData.append('remise', totalRemiseCell.textContent.replace("dhs", "").trim());
     formData.append('date_Facture', dateInput.value);
     formData.append('Total_TTC', totalTtcGlobalCell.textContent.replace("dhs", "").trim());
     formData.append('fournisseur_id', document.getElementById('fournisseurId').value);
     formData.append('Commentaire', noteTextarea.value);
-    formData.append('conditionPaiement', conditionInput.value);
+    // formData.append('conditionPaiement', conditionInput.value);
     formData.append('TVA', document.getElementById('facturetva').value);
-    formData.append('bonLivraison_id', bonLivraisonSelect.value);
+    formData.append('bonLivraison_id', bonChangeSelect.value);
     formData.append('Code_journal', 'Achat');
-    console.log(conditionInput.value)
     const selectedImage = imageInput.files[0];
     formData.append('attachement', selectedImage);
 
@@ -430,7 +429,7 @@ function sendFacture() {
                 },
                 closeOnClickOutside: false
             }).then(function () {
-                window.location.href = "{{ env('APP_URL') }}/facture-achat/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/facture-change-achat/detail/" + response.id;
             });
         },
         error: function (response) {

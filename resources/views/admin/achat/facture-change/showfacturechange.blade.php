@@ -1,7 +1,7 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Bon de Change | Log Dist Du Nord
+    Facture Change | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Bon de Change</h4>
+                    <h4 class="mb-sm-0">Facture Change</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Bon de Change</li>
+                            <li class="breadcrumb-item active">Facture Change</li>
                         </ol>
                     </div>
 
@@ -42,11 +42,11 @@
                                 @endforeach
                             </div>
                             <div>
-                                <h4 class="fw-semibold mb-2">BON CHANGE {{$dataBonChange['Numero_bonLivraison']}}</h4>
+                                <h4 class="fw-semibold mb-2">FACTURE CHANGE {{$dataFactureChange['numero_Facture']}}</h4>
                                 <div class="mb-4 pt-1 d-flex">
                                     <span class="pe-2">Date: </span>
                                     <span class="fw-semibold pe-3">
-                                        {{\Carbon\Carbon::parse($dataBonChange['date_Blivraison'])->isoFormat("LL") }}
+                                        {{\Carbon\Carbon::parse($dataFactureChange['date_Facture'])->isoFormat("LL") }}
                                     </span>
                                     <span class="statut-dispo d-flex align-items-center badge text-white">
 
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="">
                                     @php
-                                        $fournisseurs = Http::get(app('backendUrl').'/fournisseurs/'.$dataBonChange['fournisseur_id']);
+                                        $fournisseurs = Http::get(app('backendUrl').'/fournisseurs/'.$dataFactureChange['fournisseur_id']);
                                         $dataFournisseur = $fournisseurs->json()['Fournisseur Requested'];
                                     @endphp
                                     <h6 class="mb-3">Envoyé par:</h6>
@@ -78,7 +78,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($dataBonChange['Articles'] as $article)
+                                @foreach($dataFactureChange['Articles'] as $article)
                                     <tr>
                                         <td class="text-nowrap" width="300">{{$article['reference']}}</td>
                                         <td class="text-nowrap" width="600">{{$article['article_libelle']}}</td>
@@ -101,10 +101,10 @@
                                         <p class="mb-0 pb-3 fw-bold">Total TTC</p>
                                     </td>
                                     <td class="ps-2 pe-5 py-4 text-end" width="800">
-                                        <p class="fw-semibold mb-2 pt-3">{{number_format($dataBonChange['Total_HT'], 2, ',', ' ')}} Dhs</p>
-                                        <p class="fw-semibold mb-2">{{number_format($dataBonChange['remise'], 2, ',', ' ')}} Dhs</p>
-                                        <p class="fw-semibold mb-2">{{number_format($dataBonChange['Total_TVA'], 2, ',', ' ')}} Dhs</p>
-                                        <p class="fw-semibold mb-0 pb-3">{{number_format($dataBonChange['Total_TTC'], 2, ',', ' ')}} Dhs</p>
+                                        <p class="fw-semibold mb-2 pt-3">{{number_format($dataFactureChange['Total_HT'], 2, ',', ' ')}} Dhs</p>
+                                        <p class="fw-semibold mb-2">{{number_format($dataFactureChange['remise'], 2, ',', ' ')}} Dhs</p>
+                                        <p class="fw-semibold mb-2">{{number_format($dataFactureChange['Total_TVA'], 2, ',', ' ')}} Dhs</p>
+                                        <p class="fw-semibold mb-0 pb-3">{{number_format($dataFactureChange['Total_TTC'], 2, ',', ' ')}} Dhs</p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -115,7 +115,7 @@
                         <div class="row">
                             <div class="col-12 text-center">
                                 <span class="fw-bold">Note : </span>
-                                <span>{{$dataBonChange['Commentaire']}}</span>
+                                <span>{{$dataFactureChange['Commentaire']}}</span>
                             </div>
                         </div>
                     </div>
@@ -125,16 +125,16 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         Actions
-                        <a href="{{ route('listeLivraison') }}" class="btn btn-outline-secondary btn-sm" type="submit">
+                        <a href="{{ route('achatFacture') }}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>
                     <div class="card-body">
-                        <button id="genererFacture" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Facture Change</button>
-                        {{-- @if( $dataBonChange['facture_id'] != null )
-                            <a href="{{ route('showFacture', $dataBonChange["facture_id"] )}}" id="goFacture" class="btn btn-light fw-bold text-secondary mb-2 col-12">Facture</a>
+                        {{-- <button id="genererFacture" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Facture Change</button> --}}
+                        {{-- @if( $dataFactureChange['facture_id'] != null )
+                            <a href="{{ route('showFacture', $dataFactureChange["facture_id"] )}}" id="goFacture" class="btn btn-light fw-bold text-secondary mb-2 col-12">Facture</a>
                         @endif --}}
-                        <a href="{{ route('showRetour', $dataBonChange['bonRetourChange_id'] )}}" id="retourBonRetour" class="btn btn-warning fw-bold text-white col-12">Bon Retour</a>
+                        <a href="{{ route('showRetour', $dataFactureChange['bonLivraison_id'] )}}" id="retourBonChange" class="btn btn-warning fw-bold text-white col-12">Bon Change</a>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
                         <button class="btn btn-danger fw-bold text-white col-12 mb-2" id="annulationButton">Annuler</button>
                     </div>
@@ -145,8 +145,8 @@
                         Image
                     </div>
                     <div class="card-body">
-                        <img class="img-fluid image-pointer" id="livraisonImage" src="" alt="">
-                        @if( $dataBonChange['attachement'] == null )
+                        <img class="img-fluid image-pointer" id="factureimage" src="" alt="">
+                        @if( $dataFactureChange['attachement'] == null )
                             <button class="btn btn-warning fw-bold text-white col-12 mb-2" id="imageButton" disabled>Ajouter l'image</button>
                         @endif
                     </div>           
@@ -167,55 +167,52 @@
 <script>
 
 $(document).ready(function() {
-    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonRetour, #genererFacture, #genererBonRetour, #imageCard').hide();
+    $('#accordionImprimer, #accordionTelecharger, #accordionPaiement, #retourBonChange, #imageCard').hide();
 
-    let confirme = {{ $dataBonChange['Confirme'] }};
+    let confirme = {{ $dataFactureChange['Confirme'] }};
+    let etatPaiement = '{{ $dataFactureChange['EtatPaiement']}}'; 
+    let ttcFacture = {{ $dataFactureChange['Total_TTC']}};
     let $statutBadge = $('.statut-dispo');
-    let existe = {{ $dataBonChange['id'] }};
-    let imageName = '{{ $dataBonChange['attachement'] }}';
+    let $badgeFacture = $('.statut-paye');
+    let factureId = {{ $dataFactureChange["id"] }};
+    let imageName = '{{ $dataFactureChange['attachement'] }}';
     const backendUrl = "{{ app('backendUrl') }}";
-    
+
     if (confirme == 1) {
-        $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonRetour, #imageCard').show();
+        $('#accordionImprimer, #accordionTelecharger, #retourBonChange, #imageCard').show();
         $('#confirmationButton, #annulationButton').hide();
         $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
-        $statutBadge.removeClass('bg-danger').addClass('bg-success');
-        console.log($statutBadge)
+        $statutBadge.removeClass('bg-danger').addClass('bg-success');       
+        
     } else {
-        $('#accordionImprimer, #accordionTelecharger, #retourBonRetour, #imageCard').hide();
+        $('#accordionImprimer, #accordionTelecharger, #accordionPaiement, #imageCard').hide();
         $('#confirmationButton, #annulationButton').show();
         $statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
         $statutBadge.removeClass('bg-success').addClass('bg-danger');
-        console.log($statutBadge)
     }
 
-    const livraisonImage = document.getElementById('livraisonImage');
-    const imageUrl = backendUrl +'/getimage/bonLivraisonAchat/' + imageName;
-    livraisonImage.src = imageUrl;
+    afficherBadgePaiement(etatPaiement);
 
-    $.ajax({
-        url: backendUrl +'/getblcf',
-        method: 'GET',
-        success: function(response) { 
-           response.forEach(e => {
-            
-            console.log(e.id)
-                if (e.id == existe) {
-                    $('#genererFacture').show();
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
+    function afficherBadgePaiement(etatPaiement) {
+
+        if (etatPaiement === "impaye") {
+            $badgeFacture.html('<span class="fw-bold">Statut :</span><span class=" badge bg-danger text-white ms-2"><i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Impayé</span>');
+        } else if (etatPaiement === "En Cours") {
+            $badgeFacture.html('<span class="fw-bold">Statut :</span><span class=" badge bg-info text-white ms-2"><i class="ri-radio-button-line align-middle font-size-14 text-white pe-1"></i> EnCours</span>');         
+        } else if (etatPaiement === "Paye") {
+            $badgeFacture.html('<span class="fw-bold">Statut :</span><span class=" badge bg-success text-white ms-2"><i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Payé</span>');
         }
-    }); 
+    }
+
+    const factureImage = document.getElementById('factureimage');
+    const imageUrl = backendUrl +'/getimage/FactureAchat/' + imageName;
+    factureImage.src = imageUrl;
 
     $('#confirmationButton').on('click', function() {
-        let bonLivraisonId = '{{ $dataBonChange["id"] }}';
 
         swal({
             title: 'Confirmation',
-            text: 'Voulez-vous vraiment confirmer le bon de livraison ?',
+            text: 'Voulez-vous vraiment confirmer la facture change ?',
             icon: 'warning',
             buttons: {
                 cancel: {
@@ -237,27 +234,26 @@ $(document).ready(function() {
         }).then(function(confirm) {
             if (confirm) {
                 $.ajax({
-                    url: backendUrl + '/bonlivraison/confirme/' + bonLivraisonId,
+                    url: backendUrl + '/facture/confirme/' + factureId,
                     method: 'PUT',
                     success: function(response) {
                         swal({
                             title: 'Confirmation réussie',
-                            text: 'Le bon de livraison a été confirmé.',
+                            text: 'La facture change a été confirmé.',
                             icon: 'success',
                             buttons: false,
                             timer: 1500,
                         }).then(function() {
-                            $('#accordionImprimer, #accordionTelecharger, #genererFacture, #retourBonRetour, #genererBonRetour, #imageCard').show();
+                            $('#accordionImprimer, #accordionTelecharger, #accordionPaiement, #retourBonChange, #imageCard').show();
                             $('#confirmationButton, #annulationButton').hide();
                             $statutBadge.removeClass('bg-danger').addClass('bg-success');
-                            $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
-                            $('#genererBonReceptionButton').show();
+                            $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');     
                         });
                     },
                     error: function(xhr, status, error) {
                         swal({
                             title: 'Erreur',
-                            text: 'Une erreur s\'est produite lors de la confirmation du bon de livraison.',
+                            text: 'Une erreur s\'est produite lors de la confirmation du facture.',
                             icon: 'error',
                             buttons: false,
                             timer: 2000,
@@ -271,11 +267,10 @@ $(document).ready(function() {
 
 
     $('#annulationButton').on('click', function() {
-        let bonLivraisonId = '{{ $dataBonChange["id"] }}';
 
         swal({
             title: 'Annulation',
-            text: 'Voulez-vous vraiment annuler le bon de livraison ?',
+            text: 'Voulez-vous vraiment annuler la facture change ?',
             icon: 'warning',
             buttons: {
                 cancel: {
@@ -297,23 +292,23 @@ $(document).ready(function() {
         }).then(function(confirm) {
             if (confirm) {
                 $.ajax({
-                    url: backendUrl + '/bonlivraison/' + bonLivraisonId,
+                    url: backendUrl + '/facture/' + factureId,
                     method: 'DELETE',
                     success: function(response) {
                         swal({
                             title: 'Annulation réussie',
-                            text: 'Le bon de livraison a été annulé.',
+                            text: 'La facture change a été annulé.',
                             icon: 'success',
                             buttons: false,
                             timer: 1500,
                         }).then(function() {
-                            window.location.href = "{{ env('APP_URL') }}/bon-livraison-achat";
+                            window.location.href = "{{ env('APP_URL') }}/facture-change-achat";
                         });
                     },
                     error: function(xhr, status, error) {
                         swal({
                             title: 'Erreur',
-                            text: 'Une erreur s\'est produite lors de l\'annulation du bon de livraison.',
+                            text: 'Une erreur s\'est produite lors de l\'annulation du facture.',
                             icon: 'error',
                             buttons: false,
                             timer: 2000,
@@ -323,24 +318,6 @@ $(document).ready(function() {
                 });
             } 
         });
-    });
-
-
-    $('#genererFacture').on('click', function() {
-        let url = '{{ route("createFacture") }}';
-        window.location.href = url;
-    });
-
-    $('#genererBonRetour').on('click', function() {
-        let url = '{{ route("createRetour") }}';
-        window.location.href = url;
-    });
-
-    $('#genererBonReceptionButton').on('click', function() {
-        let bonLivraisonId = '{{ $dataBonChange["id"] }}';
-        let url = backendUrl +'/printbr/' + bonLivraisonId + '/false';
-        
-        window.open(url, '_blank');
     });
 
     $('#livraisonImage').on('click', function() {

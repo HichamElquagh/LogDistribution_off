@@ -12,7 +12,7 @@ class BonChangeController extends Controller
         $bonRetour = Http::get(app('backendUrl').'/getchangebr');
         $dataBr = $bonRetour->json();
 
-        return view('admin.achat.change.createbonchange',compact('dataBr'));
+        return view('admin.achat.livraison-change.createbonchange',compact('dataBr'));
     }
 
     public function ShowBonChange($id){
@@ -22,6 +22,6 @@ class BonChangeController extends Controller
         $societe = Http::get(app('backendUrl').'/societe');
         $dataSociete = $societe->json();
 
-        return view('admin.achat.change.showbonchange',compact('dataBonChange','dataSociete'));
+        return view('admin.achat.livraison-change.showbonchange',compact('dataBonChange','dataSociete'));
     }
 }

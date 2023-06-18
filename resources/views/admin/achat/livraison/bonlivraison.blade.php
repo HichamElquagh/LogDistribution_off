@@ -27,7 +27,7 @@
 
         <div class="d-flex mb-3 justify-content-end">
             <a href="{{route('createLivraison')}}" class="btn btn-warning fw-bold text-white me-2" id="createBtn">Créer un bon de livraison</a>
-            <a href="{{route('createchange')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de change</a>
+            <a href="{{route('createChange')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de change</a>
         </div>
 
         <div class="row">
@@ -84,7 +84,7 @@
                                                     <i class="fas fa-info-circle"></i>
                                                 </a>
                                             @else
-                                                <a  href="{{route("showchange",$bonlivraison['id'])}}"
+                                                <a  href="{{route("showChange",$bonlivraison['id'])}}"
                                                     class="btn btn-outline-primary btn-sm mb-2"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
