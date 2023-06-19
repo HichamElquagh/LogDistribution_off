@@ -50,9 +50,11 @@
                                     <label class="form-label" for="bcclient">Transporteur</label>
                                     <select class="form-select" name="transporteur" id="transporteur">
                                         <option value="">Selectionner un Transporteur</option>
-                                        @foreach($allTransporteur as $transporteur)
-                                            <option value="{{ $transporteur[0]['id'] }}">{{ $transporteur[0]['Nom'] }}</option>
-                                        @endforeach
+                                        {{-- @if ($allTransporteur['data']) --}}
+                                            @foreach($allTransporteur as $transporteur)
+                                                <option value="{{ $transporteur['id'] }}">{{ $transporteur['Nom'] }}</option>
+                                            @endforeach
+                                        {{-- @endif --}}
                                     </select>
                                 </div>
                                 

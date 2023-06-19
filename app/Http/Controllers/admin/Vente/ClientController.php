@@ -12,4 +12,8 @@ class ClientController extends Controller
 
         return view('admin.vente.client');
     }
+    public function ShowClient(){
+
+        return view('admin.vente.showclient');
+    }
 }

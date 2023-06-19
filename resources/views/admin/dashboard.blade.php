@@ -135,8 +135,9 @@
                 </div>
             </div>
         </div>
+        @include('admin.charts');
 
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-xl-6">
 
                 <div class="card">
@@ -240,7 +241,7 @@
                 </div><!-- end card -->
             </div>
             <!-- end col -->
-        </div>
+        </div> --}}
         <!-- end row -->
           <!--
         <div class="row">

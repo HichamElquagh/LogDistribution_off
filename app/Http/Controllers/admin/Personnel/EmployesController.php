@@ -11,7 +11,7 @@ class EmployesController extends Controller
     public function ListeEmploye(){
         
         $employes = Http::get(app('backendUrl').'/employee');
-        $dataEmploye = collect($employes->json()['data']);
+        $dataEmploye = collect($employes->json());
 
         // $SoloEmploye = $dataEmploye->filter(function ($employe) {
         //     return $employe['role_name'] != 'Magazinier';
