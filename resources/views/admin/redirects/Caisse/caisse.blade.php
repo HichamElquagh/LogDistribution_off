@@ -45,7 +45,7 @@ Caisse | Log Dist Du Nord
 
                             <div class="mb-3 col-lg-4" id="soldelabel">
                                 <label class="form-label" for="soldcaise" >Solde</label>
-                                <input type="text" class="form-control" name="soldcaise" id="soldcaise" value="{{ old('soldcaise')}}"/>
+                                <input type="text" disabled class="form-control" name="soldcaise" id="soldcaise" placeholder="0 DHs" value=""/>
                                 @error('nomBank')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror

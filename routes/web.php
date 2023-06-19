@@ -131,6 +131,7 @@ Route::controller(App\Http\Controllers\admin\Achat\PaiementController::class)->g
 
 Route::controller(ClientController::class)->group(function() {
     Route::get('/clients', 'ListeClient')->name('venteClient');
+    Route::get('/detail/{id}', 'ShowClient')->name('showClient');
 });
 
 Route::controller(App\Http\Controllers\admin\Vente\BonCommandeController::class)->group(function() {

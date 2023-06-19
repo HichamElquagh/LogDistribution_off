@@ -201,8 +201,8 @@ function displaydataClient() {
         row.append('<td>' + client.telephone_Client + '</td>');
         row.append("<td>" + moment(client.created_at).format("LL") + "</td>");
         row.append('<td>' +
-                    '<button onclick="editclient(' +client.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                    '<i class="ri-edit-line"></i></button>' +
+            '<a href="/detail/' + client.id + '" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
+                '<i class="fas fa-info-circle"></i></a>' +
                     '<div class="mx-1"><button onclick="deleteclient(' +client.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div>' +
                     '</td>');
         tbody.append(row);
