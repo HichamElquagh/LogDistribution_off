@@ -25,6 +25,7 @@ use App\Http\Controllers\admin\Personnel\EmployesController;
 use App\Http\Controllers\admin\Secteur\BonSecteurController;
 use App\Http\Controllers\admin\Vente\FactureVenteController;
 use App\Http\Controllers\admin\Personnel\MagaziniersController;
+use App\Http\Controllers\admin\Achat\FactureAchatChangeController;
 
 Route::controller(DashboardController::class)->group(function() {
     Route::get('/', 'Index')->name('adminDashboard');
@@ -75,8 +76,15 @@ Route::controller(App\Http\Controllers\admin\Achat\BonLivraisonController::class
 
 Route::controller(BonChangeController::class)->group(function() {
     Route::prefix('/bon-change-achat')->group(function() {
-        Route::get('/nouveau', 'CreateBonChange')->name('createchange');
-        Route::get('/detail/{id}', 'ShowBonChange')->name('showchange');
+        Route::get('/nouveau', 'CreateBonChange')->name('createChange');
+        Route::get('/detail/{id}', 'ShowBonChange')->name('showChange');
+    });
+});
+
+Route::controller(FactureAchatChangeController::class)->group(function() {
+    Route::prefix('/facture-change-achat')->group(function() {
+        Route::get('/nouveau', 'CreateFactureAchatChange')->name('createChangeFacture');
+        Route::get('/detail/{id}', 'ShowFactureAchatChange')->name('showChangeFacture');
     });
 });
 
