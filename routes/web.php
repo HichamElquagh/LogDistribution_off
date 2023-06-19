@@ -25,6 +25,7 @@ use App\Http\Controllers\admin\Personnel\EmployesController;
 use App\Http\Controllers\admin\Secteur\BonSecteurController;
 use App\Http\Controllers\admin\Vente\FactureVenteController;
 use App\Http\Controllers\admin\Personnel\MagaziniersController;
+use App\Http\Controllers\admin\Achat\FactureAvoirAchatController;
 use App\Http\Controllers\admin\Achat\FactureAchatChangeController;
 
 Route::controller(DashboardController::class)->group(function() {
@@ -101,6 +102,14 @@ Route::controller(FactureAchatController::class)->group(function() {
         Route::get('/', 'ListeFactureAchat')->name('achatFacture');
         Route::get('/nouveau', 'CreateFactureAchat')->name('createFacture');
         Route::get('/detail/{id}', 'ShowFacture')->name('showFacture');
+    });
+});
+
+Route::controller(FactureAvoirAchatController::class)->group(function() {
+    Route::prefix('/facture-avoir-achat')->group(function() {
+        Route::get('/', 'ListeFactureAvoirAchat')->name('achatFactureAvoir');
+        Route::get('/nouveau', 'CreateFactureAvoirAchat')->name('createFactureAvoir');
+        Route::get('/detail/{id}', 'ShowFactureAvoirAchat')->name('showFactureAvoir');
     });
 });
 

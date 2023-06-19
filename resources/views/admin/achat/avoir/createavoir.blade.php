@@ -1,7 +1,7 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Facture Change Achat | Log Dist Du Nord
+    Facture Avoir | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Facture Change Achat</h4>
+                    <h4 class="mb-sm-0">Facture Avoir</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Facture Change Achat</li>
+                            <li class="breadcrumb-item active">Facture Avoir</li>
                         </ol>
                     </div>
 
@@ -29,8 +29,8 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        Créer une facture change
-                        <a href="{{ route('achatFacture')}}" class="btn btn-outline-secondary btn-sm" type="submit">
+                        Créer une facture avoir
+                        <a href="{{ route('achatFactureAvoir')}}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>
@@ -39,15 +39,15 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="facturenumero">Numéro du facture change</label>
+                                    <label class="form-label" for="facturenumero">Numéro du facture avoir</label>
                                     <input type="text" class="form-control" name="facturenumero" id="facturenumero" value="{{ old('facturenumero')}}"/>
                                 </div>
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="facturebonchange">Bon change</label>
+                                    <label class="form-label" for="facturebonchange">Bon Retour</label>
                                     <select class="form-select" name="facturebonchange" id="facturebonchange">
                                         <option>Selectionner un bon change</option>
-                                        @foreach($dataBc as $bc)
-                                            <option value="{{$bc['id']}}">{{$bc['Numero_bonLivraison']}}</option>
+                                        @foreach($dataBr as $br)
+                                            <option value="{{$br['id']}}">{{$br['Numero_bonRetour']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -291,21 +291,21 @@ function updateGlobalTotals() {
 function sendFacture() {
     const formData = new FormData();
 
-    formData.append('numero_Facture', numeroInput.value);
+    formData.append('numero_avoirsAchat', numeroInput.value);
     formData.append('Total_HT', totalHtGlobalCell.textContent.replace("dhs", "").trim());
     formData.append('Total_TVA', totalTvaGlobalCell.textContent.replace("dhs", "").trim());
     formData.append('Confirme', 0);
     // formData.append('hasAvoirs', 0);
-    formData.append('isChange', 1);
+    // formData.append('isChange', 1);
     formData.append('remise', totalRemiseCell.textContent.replace("dhs", "").trim());
-    formData.append('date_Facture', dateInput.value);
+    formData.append('date_avoirs', dateInput.value);
     formData.append('Total_TTC', totalTtcGlobalCell.textContent.replace("dhs", "").trim());
     formData.append('fournisseur_id', document.getElementById('fournisseurId').value);
     formData.append('Commentaire', noteTextarea.value);
     // formData.append('conditionPaiement', conditionInput.value);
     formData.append('TVA', document.getElementById('facturetva').value);
-    formData.append('bonLivraison_id', bonChangeSelect.value);
-    formData.append('Code_journal', 'Achat');
+    formData.append('bonretourAchat_id', bonChangeSelect.value);
+    // formData.append('Code_journal', 'Achat');
     const selectedImage = imageInput.files[0];
     formData.append('attachement', selectedImage);
 
@@ -330,7 +330,7 @@ function sendFacture() {
     console.log(formData);
 
     $.ajax({
-        url: backendUrl + '/facture',
+        url: backendUrl + '/avoirsachat',
         type: 'POST',
         data: formData,
         processData: false,

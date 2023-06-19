@@ -118,6 +118,13 @@
                                 <span>Facture</span>
                             </a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('achatFactureAvoir') }}" class="waves-effect">
+                                <i class="ri-newspaper-line"></i>
+                                <span>Avoir</span>
+                            </a>
+                        </li>
 {{-- 
                         <li>
                             <a href="{{ route('achatPaiement') }}" class="waves-effect">
