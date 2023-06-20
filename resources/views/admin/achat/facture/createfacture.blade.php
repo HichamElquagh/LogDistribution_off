@@ -71,20 +71,34 @@
 
                                 </tbody>
                             </table>
+                            <table id="avoirTable" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>Total TTC</th>
+                                    </tr>
+                                </thead>
+                            </table>
                             <div class="row">
                                 <div class="mb-4 col-lg-2">
                                     <label class="form-label" for="facturecondit">Condition Paiement</label>
                                     <input type="number" class="form-control" name="facturecondit" id="facturecondit" value=""/>
                                 </div>
-                                <div class="mb-4 col-lg-2">
+                                <div class="mb-4 col-lg-1">
                                     <label class="form-label" for="factureremise">Remise</label>
                                     <input type="number" class="form-control" name="factureremise" id="factureremise" value=""/>
                                 </div>
-                                <div class="mb-4 col-lg-2">
+                                <div class="mb-4 col-lg-1">
                                     <label class="form-label" for="facturetva">TVA</label>
                                     <input type="number" class="form-control" name="facturetva" id="facturetva" value=""/>
                                 </div>
-                                <div class="mb-4 col-lg-6">
+                                <div class="mb-3 col-lg-3">
+                                    <label class="form-label" for="factureavoir">Avoir</label>
+                                    <select class="form-select" name="factureavoir" id="factureavoir" disabled>
+                                        <option>Selectionner une avoir</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4 col-lg-5">
                                     <label class="form-label" for="factureimage">Image facture</label>
                                     <input type="file" class="form-control" name="factureimage" id="factureimage" value="{{ old('factureimage')}}"/>
                                 </div>
@@ -105,7 +119,7 @@
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-normal">Remise</th>
-                                                <td width="50" class="text-end" data-summary-field="remise" class="fw-normal">0,00 dhs</td>
+                                                <td width="50" class="text-end fw-normal" data-summary-field="remise">0,00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-normal">Total TVA Global</th>
@@ -113,7 +127,15 @@
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-bold">Total TTC Global</th>
-                                                <td width="50" class="text-end" data-summary-field="totalttc" class="fw-bold">0,00 dhs</td>
+                                                <td width="50" class="text-end fw-bold" data-summary-field="totalttc">0,00 dhs</td>
+                                            </tr>
+                                            <tr style="display: none" id="totalAvoirRow">
+                                                <th width="50" class="fw-normal">Total Avoirs Global</th>
+                                                <td width="50" class="text-end" data-summary-field="totalAvoir">- 0,00 dhs</td>
+                                            </tr>
+                                            <tr style="display: none" id="totalPayerRow">
+                                                <th width="50" class="fw-bold">Total À Payé</th>
+                                                <td width="50" class="text-end fw-bold" data-summary-field="totalPayé">0,00 dhs</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -130,6 +152,27 @@
         </div>
 
     </div> 
+</div>
+
+<!-- Button trigger modal -->
+<span id="showModalPopup" class="hide" data-bs-toggle="modal" data-bs-target="#exampleModal"></span>
+  
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Erreur</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Cet Avoir a déjà été sélectionné. Veuillez sélectionner une autre avoir si elle existe!.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-warning text-white" data-bs-dismiss="modal">Ok</button>
+        </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -148,6 +191,7 @@
     const noteTextarea = document.getElementById('facturenote');
     const tableBody = document.getElementById('facturetable').getElementsByTagName('tbody')[0];
     const imageInput = document.getElementById('factureimage');
+    const factureAvoirSelect = document.getElementById('factureavoir');
     const conditionInput = document.getElementById('facturecondit');
     const backendUrl = "{{ app('backendUrl') }}";
 
@@ -157,7 +201,6 @@
         fetch(backendUrl +`/bonlivraison/${bonLivraisonId}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data.Articles);
             tableBody.innerHTML = '';
 
             const fournisseurId = data.fournisseur_id;
@@ -234,31 +277,87 @@
 
             updateGlobalTotals();
         })
+
+        factureAvoirSelect.innerHTML = '<option value="">Sélectionner une avoir</option>';
+    
+        fetch(backendUrl + `/getunlinkedavoirs/${bonLivraisonId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                factureAvoirSelect.disabled = false;
+            } else {
+                factureAvoirSelect.disabled = true;
+            }
+            
+            data.forEach(avoir => {
+                const option = document.createElement('option');
+                option.value = avoir.id;
+                option.textContent = avoir.numero_avoirsAchat;
+                factureAvoirSelect.appendChild(option);
+            });
+        });
     });
 
-let totalHtGlobalCell = document.querySelector('[data-summary-field="totalht"]');
-let totalRemiseCell = document.querySelector('[data-summary-field="remise"]');
-let totalTvaGlobalCell = document.querySelector('[data-summary-field="totaltva"]');
-let totalTtcGlobalCell = document.querySelector('[data-summary-field="totalttc"]');
+    let selectedAvoirIds = [];
+    let table = document.querySelector("#avoirTable");
+    let totalHtGlobalCell = document.querySelector('[data-summary-field="totalht"]');
+    let totalRemiseCell = document.querySelector('[data-summary-field="remise"]');
+    let totalTvaGlobalCell = document.querySelector('[data-summary-field="totaltva"]');
+    let totalTtcGlobalCell = document.querySelector('[data-summary-field="totalttc"]');
+    let totalAvoirGlobalCell = document.querySelector('[data-summary-field="totalAvoir"]');
+    let totalPayerCell = document.querySelector('[data-summary-field="totalPayé"]');
+    let totalAvoirTtc = 0;
+    let totalAvoirRow = document.querySelector('#totalAvoirRow');
+    let totalPayerRow = document.querySelector('#totalPayerRow');
 
-function updateGlobalTotals() {
+    factureAvoirSelect.addEventListener("change", function(){
+        
+        let avoirId = this.value;
 
-    let remiseInput = document.querySelector('[name="factureremise"]')
-    let tvaInput = document.querySelector('[name="facturetva"]');
-    remiseInput.addEventListener("input", updateGlobalTotals);
-    tvaInput.addEventListener("input", updateGlobalTotals);
-    let totalHtGlobal = 0;
-    let totalTvaGlobal = 0;
-    let totalTtcGlobal = 0;
+        if (selectedAvoirIds.includes(avoirId)) {
+            document.querySelector("#showModalPopup").click();
+            return;
+        }
 
-    let rows = tableBody.rows;
-    
-    for (let i = 0; i < rows.length; i++) {
-        let cells = rows[i].cells;
-        let totalHt = parseFloat(cells[5].textContent.replace("dhs", "").trim());
+        fetch(backendUrl +'/avoirsachat/' + avoirId)
+            .then(response => response.json())
+            .then(data => {
+            let row = table.insertRow();
+            
+            let idCell = row.insertCell();
+            let totalHTCell = row.insertCell();
 
-        totalHtGlobal += totalHt;
-        totalTvaGlobal += totalHt * (tvaInput.value / 100);
+            idCell.innerHTML = data["data"].id;
+            totalHTCell.innerHTML = data["data"].Total_TTC;
+
+            selectedAvoirIds.push(avoirId); 
+            totalAvoirTtc += parseFloat(data["data"].Total_TTC); // Ajouter le montant de l'avoir au totalAvoirTtc
+            
+            totalAvoirGlobalCell.textContent = "- " +totalAvoirTtc.toFixed(2) + " dhs";
+            totalAvoirRow.style.display = "table-row";
+            updateGlobalTotals();
+        });
+    });
+
+    function updateGlobalTotals() {
+        let remiseInput = document.querySelector('[name="factureremise"]');
+        let tvaInput = document.querySelector('[name="facturetva"]');
+        remiseInput.addEventListener("input", updateGlobalTotals);
+        tvaInput.addEventListener("input", updateGlobalTotals);
+        let totalHtGlobal = 0;
+        let totalTvaGlobal = 0;
+        let totalTtcGlobal = 0;
+        let totalAPayer = 0;
+
+        let rows = tableBody.rows;
+
+        for (let i = 0; i < rows.length; i++) {
+            let cells = rows[i].cells;
+            let totalHt = parseFloat(cells[5].textContent.replace(" dhs", "").trim());
+
+            totalHtGlobal += totalHt;
+            totalTvaGlobal += totalHt * (tvaInput.value / 100);
+        }
 
         let remise = parseFloat(remiseInput.value);
 
@@ -272,178 +371,130 @@ function updateGlobalTotals() {
         } else {
             totalTtcGlobal = totalHtGlobal + totalTvaGlobal;
         }
-    }
 
-    totalHtGlobalCell.textContent = totalHtGlobal.toFixed(2) + " dhs";
+        totalHtGlobalCell.textContent = totalHtGlobal.toFixed(2) + " dhs";
 
-    if (remiseInput.value && parseFloat(remiseInput.value) > totalHtGlobal) {
-        totalRemiseCell.textContent = totalHtGlobal.toFixed(2) + " dhs";
-    } else if (remiseInput.value) {
-        totalRemiseCell.textContent = parseFloat(remiseInput.value).toFixed(2) + " dhs";
-    } else {
-        totalRemiseCell.textContent = "0.00 dhs";
-    }
-    
-    totalTvaGlobalCell.textContent = totalTvaGlobal.toFixed(2) + " dhs";
-    totalTtcGlobalCell.textContent = totalTtcGlobal.toFixed(2) + " dhs";
-}
-
-// function sendFacture() {
-
-//     const numeroFacture = numeroInput.value;
-//     const totalHtGlobal = totalHtGlobalCell.textContent.replace("dhs", "").trim();
-//     const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
-//     const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
-//     const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
-//     const bonLivraisonId = bonLivraisonSelect.value;
-//     const dateFacture = dateInput.value;
-//     const noteFacture = noteTextarea.value;
-//     const tvaFacture = document.getElementById('facturetva').value;
-//     const fournisseurId = document.getElementById('fournisseurId').value;
-
-//     let articles = [];
-//     let rows = tableBody.rows;
-//     for (let i = 0; i < rows.length; i++) {
-//         let cells = rows[i].cells;
-//         let articleId = cells[0].textContent;
-//         let reference = cells[1].textContent;
-//         let articleName = cells[2].textContent;
-//         let prixUnitaire = cells[3].querySelector("input[name='prixUnitaire']").value;
-//         let quantite = cells[4].querySelector("input[name='quantite']").value;
-//         let totalHt = cells[5].textContent.replace("dhs", "").trim();
-
-//         let article = {
-//             article_id: articleId,
-//             reference: reference,
-//             article_libelle: articleName,
-//             Prix_unitaire: prixUnitaire,
-//             Quantity: quantite,
-//             Total_HT: totalHt,
-//         };
-//         articles.push(article);
-//     }
-
-//     let facture = {
-//         numero_Facture: numeroFacture,
-//         Total_HT: totalHtGlobal,
-//         Total_TVA: totalTvaGlobal,
-//         Confirme: 0,
-//         remise: totalRemiseGlobal,
-//         date_Facture: dateFacture,
-//         Total_TTC: totalTtcGlobal,
-//         Total_Rester: totalTtcGlobal,
-//         fournisseur_id: fournisseurId,
-//         Commentaire: noteFacture,
-//         TVA : tvaFacture,
-//         bonLivraison_id: bonLivraisonId,
-//         Code_journal: 'Achat',
-//         Articles: articles,
-//     };
-   
-//     console.log(facture);
-
-//     $.ajax({
-//         url: backendUrl +'/facture',
-//         type: 'POST',
-//         data: facture,
-//         success: function(response) {
-//             swal({
-//                 title: response.message,
-//                 icon: "success",
-//                 button: {
-//                     text: "OK",
-//                     className: "btn btn-success" 
-//                 },
-//                 closeOnClickOutside: false
-//             }).then(function() {
-//                 window.location.href = "{{ env('APP_URL') }}/facture-achat/detail/" + response.id;
-//             });
-//         },
-//         error: function(response) {
-//             swal({
-//                 title: response.responseJSON.message,
-//                 icon: "warning",
-
-//                 button: "OK",
-//                 dangerMode: true,
-//                 closeOnClickOutside: false
-//             });
-//         }        
-//     });
-// }
-
-function sendFacture() {
-    const formData = new FormData();
-
-    formData.append('numero_Facture', numeroInput.value);
-    formData.append('Total_HT', totalHtGlobalCell.textContent.replace("dhs", "").trim());
-    formData.append('Total_TVA', totalTvaGlobalCell.textContent.replace("dhs", "").trim());
-    formData.append('Confirme', 0);
-    // formData.append('hasAvoirs', 0);
-    // formData.append('isChange', 0);
-    formData.append('remise', totalRemiseCell.textContent.replace("dhs", "").trim());
-    formData.append('date_Facture', dateInput.value);
-    formData.append('Total_TTC', totalTtcGlobalCell.textContent.replace("dhs", "").trim());
-    formData.append('fournisseur_id', document.getElementById('fournisseurId').value);
-    formData.append('Commentaire', noteTextarea.value);
-    formData.append('conditionPaiement', conditionInput.value);
-    formData.append('TVA', document.getElementById('facturetva').value);
-    formData.append('bonLivraison_id', bonLivraisonSelect.value);
-    formData.append('Code_journal', 'Achat');
-    console.log(conditionInput.value)
-    const selectedImage = imageInput.files[0];
-    formData.append('attachement', selectedImage);
-
-    let rows = tableBody.rows;
-    for (let i = 0; i < rows.length; i++) {
-        let cells = rows[i].cells;
-        let articleId = cells[0].textContent;
-        let reference = cells[1].textContent;
-        let articleName = cells[2].textContent;
-        let prixUnitaire = cells[3].querySelector("input[name='prixUnitaire']").value;
-        let quantite = cells[4].querySelector("input[name='quantite']").value;
-        let totalHt = cells[5].textContent.replace("dhs", "").trim();
-
-        formData.append(`Articles[${i}][article_id]`, articleId);
-        formData.append(`Articles[${i}][reference]`, reference);
-        formData.append(`Articles[${i}][article_libelle]`, articleName);
-        formData.append(`Articles[${i}][Prix_unitaire]`, prixUnitaire);
-        formData.append(`Articles[${i}][Quantity]`, quantite);
-        formData.append(`Articles[${i}][Total_HT]`, totalHt);
-    }
-
-    console.log(formData);
-
-    $.ajax({
-        url: backendUrl + '/facture',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            swal({
-                title: response.message,
-                icon: "success",
-                button: {
-                    text: "OK",
-                    className: "btn btn-success"
-                },
-                closeOnClickOutside: false
-            }).then(function () {
-                window.location.href = "{{ env('APP_URL') }}/facture-achat/detail/" + response.id;
-            });
-        },
-        error: function (response) {
-            swal({
-                title: response.responseJSON.message,
-                icon: "warning",
-                button: "OK",
-                dangerMode: true,
-                closeOnClickOutside: false
-            });
+        if (remise && remise > totalHtGlobal) {
+            totalRemiseCell.textContent = totalHtGlobal.toFixed(2) + " dhs";
+        } else if (remise) {
+            totalRemiseCell.textContent = remise.toFixed(2) + " dhs";
+        } else {
+            totalRemiseCell.textContent = "0.00 dhs";
         }
-    });
-}
+
+        totalTvaGlobalCell.textContent = totalTvaGlobal.toFixed(2) + " dhs";
+        totalTtcGlobalCell.textContent = totalTtcGlobal.toFixed(2) + " dhs";
+
+        let totalAvoirGlobal = 0;
+        let avoirRows = table.rows;
+
+        for (let i = 1; i < avoirRows.length; i++) {
+            let avoirCell = avoirRows[i].cells[1];
+            let totalAvoir = parseFloat(avoirCell.textContent.replace("- ", "").replace(" dhs", ""));
+            totalAvoirGlobal += totalAvoir;
+        }
+
+        totalAPayer = totalTtcGlobal - totalAvoirGlobal;
+        totalPayerCell.textContent = totalAPayer.toFixed(2) + " dhs";
+
+        if (selectedAvoirIds.length > 0) {
+            totalPayerRow.style.display = "table-row";
+        }
+    }
+
+
+    function sendFacture() {
+        const formData = new FormData();
+
+        formData.append('numero_Facture', numeroInput.value);
+        formData.append('Total_HT', totalHtGlobalCell.textContent.replace("dhs", "").trim());
+        formData.append('Total_TVA', totalTvaGlobalCell.textContent.replace("dhs", "").trim());
+        formData.append('Confirme', 0);
+        let hasAvoirs = selectedAvoirIds.length > 0 ? 1 : 0;
+        formData.append('hasAvoirs', hasAvoirs);
+        // formData.append('isChange', 0);
+        formData.append('remise', totalRemiseCell.textContent.replace("dhs", "").trim());
+        formData.append('date_Facture', dateInput.value);
+        formData.append('Total_TTC', totalTtcGlobalCell.textContent.replace("dhs", "").trim());
+        formData.append('fournisseur_id', document.getElementById('fournisseurId').value);
+        formData.append('Commentaire', noteTextarea.value);
+        formData.append('conditionPaiement', conditionInput.value);
+        formData.append('TVA', document.getElementById('facturetva').value);
+        formData.append('bonLivraison_id', bonLivraisonSelect.value);
+        formData.append('Code_journal', 'Achat');
+        const selectedImage = imageInput.files[0];
+        formData.append('attachement', selectedImage);
+
+        let rows = tableBody.rows;
+        for (let i = 0; i < rows.length; i++) {
+            let cells = rows[i].cells;
+            let articleId = cells[0].textContent;
+            let reference = cells[1].textContent;
+            let articleName = cells[2].textContent;
+            let prixUnitaire = cells[3].querySelector("input[name='prixUnitaire']").value;
+            let quantite = cells[4].querySelector("input[name='quantite']").value;
+            let totalHt = cells[5].textContent.replace("dhs", "").trim();
+
+            formData.append(`Articles[${i}][article_id]`, articleId);
+            formData.append(`Articles[${i}][reference]`, reference);
+            formData.append(`Articles[${i}][article_libelle]`, articleName);
+            formData.append(`Articles[${i}][Prix_unitaire]`, prixUnitaire);
+            formData.append(`Articles[${i}][Quantity]`, quantite);
+            formData.append(`Articles[${i}][Total_HT]`, totalHt);
+        }
+
+        let avoirRows = table.rows;
+        let selectedAvoirs = [];
+
+        for (let i = 0; i < avoirRows.length; i++) {
+            let cells = avoirRows[i].cells;
+            let avoirId = cells[0].textContent;
+
+            if (avoirId && avoirId !== "id") {
+                selectedAvoirs.push(avoirId);
+                formData.append(`Avoirs[${i}]`, avoirId);
+            }
+        }
+
+        const entries = formData.entries();
+        const data = {};
+
+        for (let pair of entries) {
+        data[pair[0]] = pair[1];
+        }
+
+        console.log(data);
+
+        $.ajax({
+            url: backendUrl + '/facture',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                swal({
+                    title: response.message,
+                    icon: "success",
+                    button: {
+                        text: "OK",
+                        className: "btn btn-success"
+                    },
+                    closeOnClickOutside: false
+                }).then(function () {
+                    window.location.href = "{{ env('APP_URL') }}/facture-achat/detail/" + response.id;
+                });
+            },
+            error: function (response) {
+                swal({
+                    title: response.responseJSON.message,
+                    icon: "warning",
+                    button: "OK",
+                    dangerMode: true,
+                    closeOnClickOutside: false
+                });
+            }
+        });
+    }
 
 
 </script>

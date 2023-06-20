@@ -142,7 +142,7 @@
 
 <script>
     
-    const bonChangeSelect = document.getElementById('facturebonchange');
+    const bonRetourSelect = document.getElementById('facturebonchange');
     const numeroInput = document.getElementById('facturenumero');
     const dateInput = document.getElementById('facturedate');
     const noteTextarea = document.getElementById('facturenote');
@@ -151,10 +151,10 @@
     // const conditionInput = document.getElementById('facturecondit');
     const backendUrl = "{{ app('backendUrl') }}";
 
-    bonChangeSelect.addEventListener('change', function() {
+    bonRetourSelect.addEventListener('change', function() {
         const bonChangeId = this.value;
 
-        fetch(backendUrl +`/bonlivraison/${bonChangeId}`)
+        fetch(backendUrl +`/bonretourachat/${bonChangeId}`)
         .then(response => response.json())
         .then(data => {
             console.log(data.Articles);
@@ -304,7 +304,7 @@ function sendFacture() {
     formData.append('Commentaire', noteTextarea.value);
     // formData.append('conditionPaiement', conditionInput.value);
     formData.append('TVA', document.getElementById('facturetva').value);
-    formData.append('bonretourAchat_id', bonChangeSelect.value);
+    formData.append('bonretourAchat_id', bonRetourSelect.value);
     // formData.append('Code_journal', 'Achat');
     const selectedImage = imageInput.files[0];
     formData.append('attachement', selectedImage);
@@ -345,7 +345,7 @@ function sendFacture() {
                 },
                 closeOnClickOutside: false
             }).then(function () {
-                window.location.href = "{{ env('APP_URL') }}/facture-change-achat/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/facture-avoir-achat/detail/" + response.id;
             });
         },
         error: function (response) {

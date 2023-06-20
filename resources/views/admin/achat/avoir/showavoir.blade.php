@@ -302,7 +302,7 @@ $(document).ready(function() {
                             buttons: false,
                             timer: 1500,
                         }).then(function() {
-                            window.location.href = "{{ env('APP_URL') }}/facture-change-achat";
+                            window.location.href = "{{ env('APP_URL') }}/facture-avoir-achat";
                         });
                     },
                     error: function(xhr, status, error) {
