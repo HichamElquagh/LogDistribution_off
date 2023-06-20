@@ -33,7 +33,7 @@ Depenses | Log Dist Du Nord
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-centered mb-0 align-middle table-hover table-nowrap text-center">
+                            <table id="datatable-buttons"  class="table table-centered mb-0 align-middle table-hover table-nowrap text-center">
                                 <thead>
                                     <tr>
                                         <th>id</th>
@@ -44,8 +44,7 @@ Depenses | Log Dist Du Nord
                                 </thead>
 
                                 <tbody class="text-center">
-                                            <tr>
-                                            </tr>
+                                            
 
                                 </tbody>
                             </table>

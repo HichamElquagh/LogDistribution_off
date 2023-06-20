@@ -95,7 +95,7 @@
                                 
                             </div>
                            
-                            <table id="bctable" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>Reference</th>
@@ -106,8 +106,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
-                                    <tr>                                   
-                                    </tr>
+                                   
                                 </tbody>
                             </table>
 
@@ -227,7 +226,7 @@ $('#bcarticle').change(function() {
             success: function(articleData) {
                 // console.log(articleData);
                 // Get the existing table body
-                var tableBody = $('#bctable tbody');
+                var tableBody = $('#table tbody');
 
                 // Check if the article is already added to the table
                 var existingArticle = tableBody.find('tr[data-articleid="' + articleData['Article Requested'].id + '"]');
@@ -262,14 +261,14 @@ $('#bcarticle').change(function() {
 });
 
 // Delete button click event within the table
-$('#bctable').on('click', '.btn-delete-row', function() {
+$('#table').on('click', '.btn-delete-row', function() {
     var row = $(this).closest('tr');
     removeRow(row);
 });
 
 // Function to populate the table with the selected articles
 function populateTable() {
-    var tableBody = $('#bctable tbody');
+    var tableBody = $('#table tbody');
     tableBody.empty();
 
     // Loop through the selected articles and add rows to the table
@@ -304,7 +303,7 @@ function storeTransfert() {
     var articles = [];
 
     // Get the table body and loop through each row
-    var tableBody = $('#bctable tbody');
+    var tableBody = $('#table tbody');
     tableBody.find('tr').each(function() {
         var row = $(this);
         var articleId = row.attr('data-articleid');

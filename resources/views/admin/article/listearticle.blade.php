@@ -126,9 +126,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-
                         <div class="table-responsive">
-                            <table class="table table-centered mb-0 align-middle table-hover table-nowrap text-center">
+                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>id</th>
@@ -156,12 +155,7 @@
                                     </tr>
                                 </thead>
                                 
-                                <tbody class="text-center">
-                                
-                                            <tr>
-                                            
-                                            </tr>
-
+                                <tbody class="text-center ">
                                 </tbody>
                             </table>
                         </div>
@@ -176,6 +170,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 
 <script>
       
@@ -202,46 +197,42 @@
   }
 
   function displaydataArticles() {
-    $.ajax({
-      url: backendUrl + "/articles",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        console.log(data
-        );
-        var articleData = data.data ;
-        var tbody = $(".table tbody");
-        tbody.empty(); // Clear the existing table body
+  $.ajax({
+    url: backendUrl + "/articles",
+    type: "GET",
+    dataType: "json",
+    success: function(data) {
+      var articleData = data.data;
+      var table = $("#datatable-buttons").DataTable();
+      
+      // Clear the existing table data
+      table.clear().draw();
 
-        // Loop over the data array
-        for (var i = 0; i < articleData.length; i++) {
-          var article = articleData[i];
-          var row = $("<tr></tr>");
-          row.append('<td class="text-warning fw-bold">#' + article.id + "</td>");
-          row.append("<td>" + article.article_libelle + "</td>");
-          row.append("<td>" + article.reference + "</td>");
-          row.append("<td>" + article.fournisseur + "</td>");
-          row.append("<td>" + article.category + "</td>");
-          row.append("<td>" + numeral(article.prix_unitaire).format("0,0.00") + "</td>");
-          row.append("<td>" + numeral(article.prix_public).format("0,0.00") + "</td>");
-          row.append("<td>" + numeral(article.demi_grossiste).format("0,0.00") + "</td>");
-          row.append("<td>" + numeral(article.client_Fedele).format("0,0.00") + "</td>");
-          row.append("<td>" + article.unite + "</td>");
-          row.append("<td>" + moment(article.created_at).format("LL") + "</td>");
-          row.append('<td class="d-flex ">' +
-            '<button onclick="editArticle(' + article.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-            '<i class="ri-edit-line"></i></button>' +
-            '<div class="mx-1"><button onclick="deleteArticle(' + article.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div>' +
-            '</td>');
-
-          tbody.append(row);
-        }
-      },
-      error: function(data) {
-        swal(data.responseJSON.message, "", "warning");
+      // Loop over the data array and add rows to the DataTable
+      for (var i = 0; i < articleData.length; i++) {
+        var article = articleData[i];
+        table.row.add([
+          '<td class="text-warning fw-bold">#' + article.id + '</td>',
+          article.article_libelle,
+          article.reference,
+          article.fournisseur,
+          article.category,
+          numeral(article.prix_unitaire).format("0,0.00"),
+          numeral(article.prix_public).format("0,0.00"),
+          numeral(article.demi_grossiste).format("0,0.00"),
+          numeral(article.client_Fedele).format("0,0.00"),
+          article.unite,
+          moment(article.created_at).format("LL"),
+          '<td class="d-flex"><button onclick="editArticle(' + article.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails"><i class="ri-edit-line"></i></button><div class="mx-1"><button onclick="deleteArticle(' + article.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div></td>'
+        ]).draw(false);
       }
-    });
-  }
+    },
+    error: function(data) {
+      swal(data.responseJSON.message, "", "warning");
+    }
+  });
+}
+
 
   function storeArticle() {
     var articleLibelle = $('#articlelibelle').val();

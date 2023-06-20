@@ -150,8 +150,7 @@
                             </thead>
                             
                             <tbody class="text-center">
-                                    <tr>
-                                    </tr>
+                                    
                             </tbody>
                         </table>
                     </div>
@@ -163,8 +162,9 @@
 </div>
 
 @endsection
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
@@ -176,46 +176,44 @@
     displaydataEmploye();
   });
   
- function displaydataEmploye() {
-    $.ajax({
-      url:  backendUrl +"/employee",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-    var dataEmploye = data.data;
-    var tbody = $(".table tbody");
-    tbody.empty(); // Clear the existing table body
 
-    for (var i = 0; i < dataEmploye.length; i++) {
-        var employe = dataEmploye[i];
-        var row = $("<tr></tr>");
 
-        row.append('<td class="text-warning fw-bold">#' + employe.id + '</td>');
-        row.append('<td>' + employe.Nom + '</td>');
-        row.append('<td>' + employe.code_employee + '</td>');
-        row.append('<td>' + employe.CIN_employee + '</td>');
-        row.append('<td>' + employe.matricule_employee + '</td>');
-        row.append('<td>' + employe.role_name + '</td>');
-        row.append('<td>' + employe.adresse_employee.substring(0, 20) + '</td>');
-        row.append('<td>' + employe.email_employee + '</td>');
-        row.append('<td>' + employe.telephone_employee + '</td>');
-        row.append('<td>' + moment(employe.date_embauche).format("LL") + '</td>');
-        row.append(
-            '<td class="d-flex">' +
-            '<button onclick="editEmploye(' + employe.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-            '<i class="ri-edit-line"></i></button>' +
-            '<div class="mx-1"><button onclick="deleteEmploye(' + employe.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div>' +
-            '</td>'
-        );
+  
+  
+  function displaydataEmploye() {
+  $.ajax({
+    url: backendUrl + "/employee",
+    type: "GET",
+    dataType: "json",
+    success: function(data) {
+      var table = $("#datatable-buttons").DataTable();
+      // Clear the existing table data
+      table.clear().draw();
 
-        tbody.append(row);
-    }
-},
-      error: function(data) {
-        swal(data.responseJSON.message, "", "warning");
+      // Loop over the data array and add rows to the DataTable
+      for (var i = 0; i < data.length; i++) {
+        var employe = data[i];
+        table.row.add([
+          '#' + employe.id,
+          employe.nom_employee,
+          employe.code_employee,
+          employe.CIN_employee,
+          employe.matricule_employee,
+          employe.role_name,
+          employe.adresse_employee.substring(0, 20),
+          employe.email_employee,
+          employe.telephone_employee,
+          moment(employe.date_embauche).format("LL"),
+          '<td class="d-flex"><button onclick="editEmploye(' + employe.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails"><i class="ri-edit-line"></i></button><div class="mx-1"><button onclick="deleteEmploye(' + employe.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div></td>'
+        ]).draw(false);
       }
-    });
-  }
+    },
+    error: function(data) {
+      swal(data.responseJSON.message, "", "warning");
+    }
+  });
+}
+
 
   function  changeBtn() {
             $('input[type="text"]').each(function() {

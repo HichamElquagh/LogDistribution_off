@@ -16,7 +16,10 @@ class ArticlesController extends Controller
         $fournisseurs = Http::get(app('backendUrl').'/fournisseurs');
         $dataFournisseurs = $fournisseurs->json();
 
-        return view('admin.article.listearticle',compact('dataCategory','dataFournisseurs'));
+        $bonCommandes = Http::get(app('backendUrl').'/boncommande');
+        $dataBc = $bonCommandes->json()['data'];
+
+        return view('admin.article.listearticle',compact('dataCategory','dataFournisseurs','dataBc'));
     }
 
     public function StoreArticle(Request $request){

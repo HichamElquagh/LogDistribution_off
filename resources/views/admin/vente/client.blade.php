@@ -129,7 +129,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                       <div class="table-responsive">
+                        <div class="table-responsive"> 
                         <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                                 <tr>
@@ -149,10 +149,6 @@
                             </thead>
                             
                             <tbody class="text-center">
-                                
-                                        <tr>
-                                           
-                                        </tr>
                             </tbody>
                         </table>
                     </div>
@@ -182,34 +178,33 @@ function displaydataClient() {
     type: "GET",
     dataType: "json",
     success: function(data) {
-        console.log(data);
-      var tbody = $(".table tbody");
-      tbody.empty(); // Clear the existing table body
-      // Loop through the data and create table rows
-      for (var i = 0; i < data.length; i++) {
-        var client = data[i];
-        var row = $("<tr></tr>");
-        row.append('<td>' + client.id + '</td>');
-        row.append('<td>' + client.nom_Client + '</td>');
-        row.append('<td>' + client.code_Client + '</td>');
-        row.append('<td>' + client.CIN_Client + '</td>');
-        row.append('<td>' + client.ICE_Client + '</td>');
-        row.append('<td>' + client.RC_Client + '</td>');
-        row.append('<td>' + client.Pattent_Client + '</td>');
-        row.append('<td>' + client.adresse_Client + '</td>');
-        row.append('<td>' + client.email_Client + '</td>');
-        row.append('<td>' + client.telephone_Client + '</td>');
-        row.append("<td>" + moment(client.created_at).format("LL") + "</td>");
-        row.append('<td>' +
-            '<a href="/detail/' + client.id + '" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                '<i class="fas fa-info-circle"></i></a>' +
-                    '<div class="mx-1"><button onclick="deleteclient(' +client.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div>' +
-                    '</td>');
-        tbody.append(row);
+      var clientData = data;
+      var table = $("#datatable-buttons").DataTable();
+      
+      // Clear the existing table data
+      table.clear().draw();
+
+      // Loop over the data array and add rows to the DataTable
+      for (var i = 0; i < clientData.length; i++) {
+        var client = clientData[i];
+        table.row.add([
+          '<td class="text-warning fw-bold">#' + client.id + '</td>',
+          client.nom_Client,
+          client.code_Client,
+          client.CIN_Client,
+          client.ICE_Client,
+          client.RC_Client,
+          client.Pattent_Client,
+          client.adresse_Client,
+          client.email_Client,
+          client.telephone_Client,
+          moment(client.created_at).format("LL"),
+          '<td class="d-flex"><a href="/detail/' + client.id + '" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails"><i class="fas fa-info-circle"></i></a><div class="mx-1"><button onclick="deleteClient(' + client.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div></td>'
+        ]).draw(false);
       }
     },
     error: function(data) {
-        swal("Error", "Failed to fetch data from the API.", "error");
+      swal(data.responseJSON.message, "", "warning");
     }
   });
 }

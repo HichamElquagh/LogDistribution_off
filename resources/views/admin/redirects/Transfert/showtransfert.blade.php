@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="table-responsive border-top mt-4">
-                        <table class="table m-0 text-center">
+                        <table id="datatable-buttons" class="table m-0 text-center">
                             <thead>
                                 <tr>
                                     <th>Référence</th>

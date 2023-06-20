@@ -119,7 +119,6 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-    
                         <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                                 <tr>
@@ -138,7 +137,6 @@
                             </thead>
                             
                             <tbody class="text-center">
-                              <tr></tr>
                             </tbody>
                         </table>
                     </div>
@@ -150,6 +148,7 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 
 
 <script>
@@ -173,45 +172,57 @@
             $("#myLargeModalLabel").text('Ajouter un fournisseur');
        }
 
-        function dislaydatafornisseur() {
-            $.ajax({
-                    url: backendUrl + '/fournisseurs',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        // console.log(data);
-                    var tbody = $('.table tbody');
-                    tbody.empty(); // Clear the existing table body
+       function dislaydatafornisseur() {
+  $.ajax({
+    url: backendUrl + "/fournisseurs",
+    type: "GET",
+    dataType: "json",
+    success: function(data) {
+      var fournisseurData = data;
+      var table = $("#datatable-buttons").DataTable();
+      
+      // Clear the existing table data
+      table.clear().draw();
 
-                    for(var i = 0 ; i < data.length ; i++){ 
-                        
-                        var fournisseur = data[i];
-                        var row = $('<tr></tr>');
-                        row.append('<td class="text-warning fw-bold">#' + fournisseur.id + '</td>');
-                        row.append('<td>' + fournisseur.code_fournisseur + '</td>');
-                        row.append('<td>' + fournisseur.fournisseur + '</td>');
-                        row.append('<td>' + fournisseur.ICE + '</td>');
-                        row.append('<td>' + fournisseur.IF + '</td>');
-                        row.append('<td>' + fournisseur.RC + '</td>');
-                        row.append('<td>' + fournisseur.Adresse + '</td>');
-                        row.append('<td>' + fournisseur.email + '</td>');
-                        row.append('<td>' + fournisseur.Telephone + '</td>');
-                        // row.append('<td>' + fournisseur.created_at + '</td>');
-                        row.append('<td>' +
-                            '<a href="/Detail/' + fournisseur.id + '" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                            '<i class="fas fa-info-circle"></i></a>' +
-                            '<div><button  onclick="deletefournisseur('+ fournisseur.id +')"   class="btn btn-outline-danger btn-sm"> <i class="fas fa-trash-alt"></i></button></div>' +
-                            '</td>');
-                    
-                        tbody.append(row);
-                    }
-                },
-                error: function() {
-                    console.error("Error fetching data.");
-                }
-                });
+      // Loop over the data array and add rows to the DataTable
+      for (var i = 0; i < fournisseurData.length; i++) {
+        var fournisseur = fournisseurData[i];
+        table.row.add([
+          '<td class="text-warning fw-bold">#' + fournisseur.id + '</td>',
+          fournisseur.code_fournisseur,
+          fournisseur.fournisseur,
+          fournisseur.ICE,
+          fournisseur.IF,
+          fournisseur.RC,
+          fournisseur.Adresse,
+          fournisseur.email,
+          fournisseur.Telephone,
+          '<td class="d-flex align-items-start">' +
+    '<div class="mb-1">' +
+        '<a href="/Detail/' + fournisseur.id + '" class="btn btn-outline-primary btn-sm me-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
+            '<i class="fas fa-info-circle"></i>' +
+        '</a>' +
+        '<button onclick="editfournisseur(' + fournisseur.id + ')" class="btn btn-outline-primary btn-sm">' +
+            '<i class="ri-edit-line"></i>' +
+        '</button>' +
+    '</div>' +
+    '<div class="ms-1">' +
+        '<button onclick="deleteFournisseur(' + fournisseur.id + ')" class="btn btn-outline-danger btn-sm">' +
+            '<i class="fas fa-trash-alt"></i>' +
+        '</button>' +
+    '</div>' +
+'</td>'
 
-            }   
+        ]).draw(false);
+      }
+    },
+    error: function() {
+      console.error("Error fetching data.");
+    }
+  });
+}
+
+
     
 
             function storefournisseur() {

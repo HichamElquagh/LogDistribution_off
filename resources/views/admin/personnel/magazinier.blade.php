@@ -150,8 +150,7 @@
                             </thead>
                             
                             <tbody class="text-center">
-                                    <tr>
-                                    </tr>
+                                
                             </tbody>
                         </table>
                     </div>
